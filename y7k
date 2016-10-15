@@ -14,5 +14,6 @@ $app = new Symfony\Component\Console\Application('Y7K CLI', '0.0.0');
 // Install Commands
 $app->add(new \Y7K\Cli\Commands\Create());
 $app->add(new \Y7K\Cli\Commands\Install\Craft());
+$app->add(new \Y7K\Cli\Commands\Install\Laravel());
 
 $app->run();

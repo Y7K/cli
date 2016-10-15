@@ -112,29 +112,32 @@ class Command extends \Symfony\Component\Console\Command\Command
 
     }
 
-    protected function unzip($zip, $path, $subfolders = '/', $fromGitHub = true)
+    protected function unzip($zip, $path, $subfolders = '/', $fromGitHub = true, $exclude = [])
     {
 
         // build the temporary folder path
-        $tmp = substr($this->tmp(preg_replace('!.zip$!', '', $zip)),5);
+        $tmp = substr($this->tmp(preg_replace('!.zip$!', '', $zip)), 5);
 
         // extract the zip file
         Util::unzip($zip, $tmp);
 
         $source = $tmp;
 
-        if($fromGitHub) {
+        if ($fromGitHub) {
             // get the list of directories within our tmp folder
             $dirs = glob($tmp . '/*');
 
             // get the source directory from the tmp folder
-            if(isset($dirs[0]) && is_dir($dirs[0])) {
+            if (isset($dirs[0]) && is_dir($dirs[0])) {
                 $source = $dirs[0];
             } else {
                 throw new RuntimeException('The source directory could not be found');
             }
         }
 
+        foreach ($exclude as $excluded) {
+            $this->deleteDirectory($source . '/' . $excluded);
+        }
 
         if (!is_array($subfolders)) $subfolders = [$subfolders];
 
@@ -163,17 +166,36 @@ class Command extends \Symfony\Component\Console\Command\Command
 
     }
 
+    protected function deleteDirectory($dir)
+    {
+        if (is_dir($dir)) {
+            $objects = scandir($dir);
+            foreach ($objects as $object) {
+                if ($object != "." && $object != "..") {
+                    if (is_dir($dir . "/" . $object))
+                        $this->deleteDirectory($dir . "/" . $object);
+                    else
+                        if(file_exists($dir . "/" . $object)) unlink($dir . "/" . $object);
+                }
+            }
+            rmdir($dir);
+        } else {
+            if(file_exists($dir)) unlink($dir);
+        }
+    }
+
     protected function copyDirectory($path, $source, $subfolder = '')
     {
         $newSource = $source . $subfolder;
 
         foreach ((array)array_diff(scandir($newSource), ['.', '..']) as $name) {
 
-            $destinationName = $path . $subfolder . '/' . $name;
+            $filename = $subfolder . '/' . $name;
+            $destinationName = $path . $filename;
             $sourceName = $newSource . '/' . $name;
 
-            if(is_dir($sourceName) && file_exists($destinationName)) {
-                $this->copyDirectory($path, $source,  $subfolder . '/' . $name);
+            if (is_dir($sourceName) && file_exists($destinationName)) {
+                $this->copyDirectory($path, $source, $subfolder . '/' . $name);
             } else if (!rename($sourceName, $destinationName)) {
                 throw new RuntimeException($name . ' could not be copied');
             }
@@ -189,19 +211,20 @@ class Command extends \Symfony\Component\Console\Command\Command
             'path' => null,
             'output' => null,
             'success' => 'Done!',
-            'subfolders' => 'base',
+            'subfolders' => '/',
             'checkPath' => true,
+            'exclude' => [],
             'url' => null,
         ], $params);
 
         // check for a valid path
-        if($options['checkPath']) $this->checkPath($options['path']);
+        if ($options['checkPath']) $this->checkPath($options['path']);
 
         // create the file name for the temporary zip file
         $zip = $this->tmp('y7k-' . str_replace('/', '-', $options['repo']) . '-' . uniqid() . '.zip');
 
         // download the file
-        if($options['url']) {
+        if ($options['url']) {
             $this->downloadFromWeb([
                 'url' => $options['url'],
                 'zip' => $zip,
@@ -217,7 +240,7 @@ class Command extends \Symfony\Component\Console\Command\Command
         }
 
         // unzip the file
-        $this->unzip($zip, $options['path'], $options['subfolders'], !$options['url']);
+        $this->unzip($zip, $options['path'], $options['subfolders'], !$options['url'], $options['exclude']);
 
         // yay, everything is setup
         if ($options['output'] && $options['success']) {
@@ -233,12 +256,12 @@ class Command extends \Symfony\Component\Console\Command\Command
         $composer = $this->findComposer();
 
         $commands = array_map(function ($value) use ($composer) {
-            return $composer.' '.$value;
+            return $composer . ' ' . $value;
         }, $commands);
 
         if ($input->getOption('no-ansi')) {
             $commands = array_map(function ($value) {
-                return $value.' --no-ansi';
+                return $value . ' --no-ansi';
             }, $commands);
         }
         $process = new Process(implode(' && ', $commands), $path, null, null, null);
@@ -257,8 +280,8 @@ class Command extends \Symfony\Component\Console\Command\Command
      */
     protected function findComposer()
     {
-        if (file_exists(getcwd().'/composer.phar')) {
-            return '"'.PHP_BINARY.'" composer.phar';
+        if (file_exists(getcwd() . '/composer.phar')) {
+            return '"' . PHP_BINARY . '" composer.phar';
         }
         return 'composer';
     }
