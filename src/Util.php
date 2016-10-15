@@ -2,6 +2,7 @@
 
 namespace Y7K\Cli;
 
+use Dotenv\Dotenv;
 use ZipArchive;
 use RuntimeException;
 use RecursiveDirectoryIterator;
@@ -32,10 +33,13 @@ class Util
     public static function download($url, $progress = null)
     {
 
+        $dotenv = new Dotenv(__DIR__ . '/..');
+        $dotenv->load();
+
         $curl = curl_init();
 
-        curl_setopt($curl, CURLOPT_USERPWD, "jorisnoo:65d7d48f7d8875d6e8c11da671add20c35bbc765");
-        
+        curl_setopt($curl, CURLOPT_USERPWD, getenv('GITHUB_USER') . ':' . getenv('GITHUB_TOKEN'));
+
         $t_vers = curl_version();
         curl_setopt( $curl, CURLOPT_USERAGENT, 'curl/' . $t_vers['version'] );
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);

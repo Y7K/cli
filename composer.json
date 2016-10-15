@@ -12,7 +12,8 @@
         "php": ">=5.6.0",
         "ext-curl": "*",
         "ext-zip": "*",
-        "symfony/console": "^3.1"
+        "symfony/console": "^3.1",
+        "vlucas/phpdotenv": "^2.4"
     },
     "bin": [
         "Y7K"
