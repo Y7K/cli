@@ -31,10 +31,16 @@ class Craft extends Command
             'path' => $this->dir() . '/' . $input->getArgument('path'),
             'output' => $output,
             'subfolders' => ['base', 'platforms/craft'],
-            'success' => 'The craft code is installed!',
+            'success' => 'The craft boilerplate is installed!',
         ]);
 
-        $output->writeln('Loading Craft CMS App folder...');
+        $this->install([
+            'url' => 'http://craftcms.com/latest.zip?accept_license=yes',
+            'path' => $this->dir() . '/' . $input->getArgument('path') . '/craft/app',
+            'output' => $output,
+            'subfolders' => ['craft/app'],
+            'success' => 'The craft app folder is installed!',
+        ]);
 
     }
 

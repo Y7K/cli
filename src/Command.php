@@ -71,7 +71,47 @@ class Command extends \Symfony\Component\Console\Command\Command
 
     }
 
-    protected function unzip($zip, $path, $subfolders = '/')
+    protected function downloadFromWeb($params)
+    {
+
+        $options = array_merge([
+            'url' => null,
+            'zip' => null,
+            'output' => null
+        ], $params);
+
+        extract($options);
+
+        if (!$zip) {
+            throw new RuntimeException('Please provide a zip file');
+        }
+
+        if (!$url) {
+            throw new RuntimeException('Please provide a url');
+        }
+
+        // generate some usable output
+        if ($output) {
+            $output->writeln('<info>Downloading from: ' . $url . '</info>');
+        }
+
+        // send the remote request
+        $download = Util::download($url, function ($resource, $total, $downloaded) use ($output) {
+
+            if (!$output) return null;
+
+            if ($downloaded && $total) {
+                $output->write('Downloaded: ' . round($downloaded / $total, 2) * 100 . "%\r");
+            }
+
+        });
+
+        // write the result to the disk
+        file_put_contents($zip, $download);
+
+    }
+
+    protected function unzip($zip, $path, $subfolders = '/', $fromGitHub = true)
     {
 
         // build the temporary folder path
@@ -80,15 +120,20 @@ class Command extends \Symfony\Component\Console\Command\Command
         // extract the zip file
         Util::unzip($zip, $tmp);
 
-        // get the list of directories within our tmp folder
-        $dirs = glob($tmp . '/*');
+        $source = $tmp;
 
-        // get the source directory from the tmp folder
-        if(isset($dirs[0]) && is_dir($dirs[0])) {
-            $source = $dirs[0];
-        } else {
-            throw new RuntimeException('The source directory could not be found');
+        if($fromGitHub) {
+            // get the list of directories within our tmp folder
+            $dirs = glob($tmp . '/*');
+
+            // get the source directory from the tmp folder
+            if(isset($dirs[0]) && is_dir($dirs[0])) {
+                $source = $dirs[0];
+            } else {
+                throw new RuntimeException('The source directory could not be found');
+            }
         }
+
 
         if (!is_array($subfolders)) $subfolders = [$subfolders];
 
@@ -125,7 +170,7 @@ class Command extends \Symfony\Component\Console\Command\Command
 
             $destinationName = $path . $subfolder . '/' . $name;
             $sourceName = $newSource . '/' . $name;
-            
+
             if(is_dir($sourceName) && file_exists($destinationName)) {
                 $this->copyDirectory($path, $source,  $subfolder . '/' . $name);
             } else if (!rename($sourceName, $destinationName)) {
@@ -143,25 +188,35 @@ class Command extends \Symfony\Component\Console\Command\Command
             'path' => null,
             'output' => null,
             'success' => 'Done!',
-            'subfolders' => 'base'
+            'subfolders' => 'base',
+            'checkPath' => true,
+            'url' => null,
         ], $params);
 
         // check for a valid path
-        $this->checkPath($options['path']);
+        if($options['checkPath']) $this->checkPath($options['path']);
 
         // create the file name for the temporary zip file
         $zip = $this->tmp('y7k-' . str_replace('/', '-', $options['repo']) . '-' . uniqid() . '.zip');
 
         // download the file
-        $this->downloadFromGitHub([
-            'repo' => $options['repo'],
-            'branch' => $options['branch'],
-            'zip' => $zip,
-            'output' => $options['output'],
-        ]);
+        if($options['url']) {
+            $this->downloadFromWeb([
+                'url' => $options['url'],
+                'zip' => $zip,
+                'output' => $options['output'],
+            ]);
+        } else {
+            $this->downloadFromGitHub([
+                'repo' => $options['repo'],
+                'branch' => $options['branch'],
+                'zip' => $zip,
+                'output' => $options['output'],
+            ]);
+        }
 
         // unzip the file
-        $this->unzip($zip, $options['path'], $options['subfolders']);
+        $this->unzip($zip, $options['path'], $options['subfolders'], !$options['url']);
 
         // yay, everything is setup
         if ($options['output'] && $options['success']) {
