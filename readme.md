@@ -11,8 +11,10 @@
     export PATH=$PATH:$HOME/path/to/cli
     ```
     to your `.bash_profile` to `.zshrc` file.
+    
+    This will allow you to run the `y7k` command globally.
 
-4. Create a [Personal GitHub Access Token](https://github.com/settings/tokens) and add it along with your GitHub usernate to the `.env` file.
+4. Create a [Personal GitHub Access Token](https://github.com/settings/tokens) and add it along with your GitHub Username to the `.env` file.
 
 ## Update
 
@@ -31,7 +33,7 @@ Installs a new Project.
 y7k install
 ```
 
-This will launch the installation process. You will be prompted for a name and to configure the project stack.
+Launches the installation process. You will be prompted for a name and to configure the project stack.
 You can specify the directory with the second argument and a platform with the `--platform` option:
 
 ```
