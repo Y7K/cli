@@ -3,6 +3,7 @@
 namespace Y7K\Cli;
 
 use RuntimeException;
+use Symfony\Component\Process\Process;
 use Y7K\Cli\Util;
 
 class Command extends \Symfony\Component\Console\Command\Command
@@ -225,6 +226,41 @@ class Command extends \Symfony\Component\Console\Command\Command
             $options['output']->writeln('');
         }
 
+    }
+
+    protected function runComposerCommands($input, $output, $path, $commands)
+    {
+        $composer = $this->findComposer();
+
+        $commands = array_map(function ($value) use ($composer) {
+            return $composer.' '.$value;
+        }, $commands);
+
+        if ($input->getOption('no-ansi')) {
+            $commands = array_map(function ($value) {
+                return $value.' --no-ansi';
+            }, $commands);
+        }
+        $process = new Process(implode(' && ', $commands), $path, null, null, null);
+        if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
+            $process->setTty(true);
+        }
+        $process->run(function ($type, $line) use ($output) {
+            $output->write($line);
+        });
+    }
+
+    /**
+     * Get the composer command for the environment.
+     *
+     * @return string
+     */
+    protected function findComposer()
+    {
+        if (file_exists(getcwd().'/composer.phar')) {
+            return '"'.PHP_BINARY.'" composer.phar';
+        }
+        return 'composer';
     }
 
 }

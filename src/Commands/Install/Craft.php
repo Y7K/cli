@@ -25,10 +25,12 @@ class Craft extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
+        $path = $input->getArgument('path');
+
         $this->install([
             'repo' => 'y7k/plate',
             'branch' => 'develop',
-            'path' => $this->dir() . '/' . $input->getArgument('path'),
+            'path' => $this->dir() . '/' . $path,
             'output' => $output,
             'subfolders' => ['base', 'platforms/craft'],
             'success' => 'The craft boilerplate is installed!',
@@ -36,11 +38,18 @@ class Craft extends Command
 
         $this->install([
             'url' => 'http://craftcms.com/latest.zip?accept_license=yes',
-            'path' => $this->dir() . '/' . $input->getArgument('path') . '/craft/app',
+            'path' => $this->dir() . '/' . $path . '/craft/app',
             'output' => $output,
             'subfolders' => ['craft/app'],
             'success' => 'The craft app folder is installed!',
         ]);
+
+        $commands = [
+            'install --no-scripts',
+            'run-script post-root-package-install'
+        ];
+
+        $this->runComposerCommands($input, $output, $path, $commands);
 
     }
 
