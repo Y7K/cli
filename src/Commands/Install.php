@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Create extends Command
+class Install extends Command
 {
 
     protected function configure()
@@ -24,7 +24,7 @@ class Create extends Command
         $this->setName('create')
             ->setDescription('Creates a new project')
             ->addArgument('path', InputArgument::OPTIONAL, 'Directory to install into')
-            ->addOption('platform', 'p', InputOption::VALUE_OPTIONAL, 'Set to decide, which type to install (static, craft, laravel)')
+            ->addOption('platform', 'p', InputOption::VALUE_OPTIONAL, 'Set to decide, which type to install (craft, laravel)')
 //            ->addOption('dev', null, InputOption::VALUE_NONE, 'Set to download the dev version from the develop branch')
         ;
     }
@@ -51,13 +51,13 @@ class Create extends Command
 
         // Get which package to install
         $platform = $input->getOption('platform');
-        $platforms = ['static', 'craft', 'laravel'];
+        $platforms = ['craft', 'laravel'];
 
         if (!in_array($platform, $platforms)) {
             $question = new ChoiceQuestion(
-                'Please select which type of application you\'re bulding (Defaults to Craft):',
-                array('Static', 'Craft', 'Laravel'),
-                1
+                'Please select which type of application you\'re building (Defaults to Craft):',
+                array('Craft', 'Laravel'),
+                0
             );
             $question->setErrorMessage('Type %s is invalid.');
             $platform = $helper->ask($input, $output, $question);
@@ -69,7 +69,6 @@ class Create extends Command
         ]);
 
         $returnCode = $command->run($arguments, $output);
-
     }
 
 
