@@ -1,5 +1,5 @@
-# Kirby CLI
-
+# Y7K CLI
+<!--
 Kirby's command line interface helps you with regular tasks like the installation of the Kirby starterkit and updating your Kirby installation. It also offers a comfortable way to install templates, snippets, controllers and blueprints.
 
 ## Requirements
@@ -268,3 +268,4 @@ Bastian Allgeier
 <bastian@getkirby.com>  
 <https://getkirby.com>  
 <http://twitter.com/getkirby>
+-->
