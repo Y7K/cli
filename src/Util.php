@@ -1,6 +1,6 @@
 <?php
 
-namespace Kirby\Cli;
+namespace Y7K\Cli;
 
 use ZipArchive;
 use RuntimeException;
@@ -34,11 +34,11 @@ class Util {
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    
+
     if(is_callable($progress)) {
       curl_setopt($curl, CURLOPT_BUFFERSIZE, 128);
       curl_setopt($curl, CURLOPT_NOPROGRESS, false);
-      curl_setopt($curl, CURLOPT_PROGRESSFUNCTION, $progress);      
+      curl_setopt($curl, CURLOPT_PROGRESSFUNCTION, $progress);
     }
 
     $content = curl_exec($curl);
@@ -61,7 +61,7 @@ class Util {
 
       $iterator = new RecursiveDirectoryIterator($item, RecursiveDirectoryIterator::SKIP_DOTS);
       $files    = new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::CHILD_FIRST);
-      
+
       foreach($files as $file) {
         if($file->isDir()) {
           rmdir($file->getRealPath());

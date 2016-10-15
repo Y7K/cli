@@ -1,0 +1,17 @@
+#!/usr/bin/env php
+<?php
+
+if(file_exists(__DIR__ . '/../../autoload.php')) {
+  require __DIR__ . '/../../autoload.php';
+} else {
+  require __DIR__ . '/vendor/autoload.php';
+}
+
+ini_set('display_errors', 1);
+
+$app = new Symfony\Component\Console\Application('Y7K CLI', '0.0.0');
+
+// Install Commands
+$app->add(new Y7K\Cli\Commands\Install());
+
+$app->run();

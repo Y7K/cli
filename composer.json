@@ -1,33 +1,20 @@
 {
-    "name": "getkirby/cli",
-    "description": "Kirby CLI",
-    "keywords": ["cli", "kirby", "cms"],
-    "homepage": "https://getkirby.com",
+    "name": "y7k/cli",
+    "description": "Y7K CLI",
+    "homepage": "https://Y7K.com",
     "license": "MIT",
-    "support": {
-        "email": "support@getkirby.com",
-        "issues": "https://github.com/getkirby/cli/issues",
-        "forum": "https://forum.getkirby.com",
-        "source": "https://github.com/getkirby/cli"
-    },
-    "authors": [
-        {
-            "name": "Bastian Allgeier",
-            "email": "bastian@getkirby.com"
-        }
-    ],
     "autoload": {
         "psr-4": {
-            "Kirby\\Cli\\": "src/"
+            "Y7K\\Cli\\": "src/"
         }
     },
     "require": {
-        "php": ">=5.5.0",
+        "php": ">=5.6.0",
         "ext-curl": "*",
         "ext-zip": "*",
-        "symfony/console": "*"
+        "symfony/console": "^3.1"
     },
     "bin": [
-        "kirby"
+        "Y7K"
     ]
 }
