@@ -21,11 +21,10 @@ class Install extends Command
 
     protected function configure()
     {
-        $this->setName('create')
+        $this->setName('install')
             ->setDescription('Creates a new project')
             ->addArgument('path', InputArgument::OPTIONAL, 'Directory to install into')
             ->addOption('platform', 'p', InputOption::VALUE_OPTIONAL, 'Set to decide, which type to install (craft, laravel)')
-//            ->addOption('dev', null, InputOption::VALUE_NONE, 'Set to download the dev version from the develop branch')
         ;
     }
 
