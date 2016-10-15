@@ -35,7 +35,7 @@ class Command extends \Symfony\Component\Console\Command\Command
     {
 
         $options = array_merge([
-            'repo' => 'y7k/craft-plate',
+            'repo' => 'y7k/plate',
             'branch' => 'master',
             'zip' => null,
             'output' => null
@@ -77,15 +77,11 @@ class Command extends \Symfony\Component\Console\Command\Command
         // build the temporary folder path
         $tmp = substr($this->tmp(preg_replace('!.zip$!', '', $zip)),5);
 
-        var_dump($tmp);
-
         // extract the zip file
-        var_dump(Util::unzip($zip, $tmp));
+        Util::unzip($zip, $tmp);
 
         // get the list of directories within our tmp folder
         $dirs = glob($tmp . '/*');
-
-        var_dump($dirs, $tmp);
 
         // get the source directory from the tmp folder
         if(isset($dirs[0]) && is_dir($dirs[0])) {
@@ -110,11 +106,7 @@ class Command extends \Symfony\Component\Console\Command\Command
             if (!is_dir($path)) mkdir($path);
 
             // extract the content of the directory to the final path
-            foreach ((array)array_diff(scandir($subSource), ['.', '..']) as $name) {
-                if (!rename($subSource . '/' . $name, $path . '/' . $name)) {
-                    throw new RuntimeException($name . ' could not be copied');
-                }
-            }
+            $this->copyDirectory($path, $subSource);
 
         }
         // remove the zip file
@@ -125,23 +117,40 @@ class Command extends \Symfony\Component\Console\Command\Command
 
     }
 
+    protected function copyDirectory($path, $source, $subfolder = '')
+    {
+        $newSource = $source . $subfolder;
+
+        foreach ((array)array_diff(scandir($newSource), ['.', '..']) as $name) {
+
+            $destinationName = $path . $subfolder . '/' . $name;
+            $sourceName = $newSource . '/' . $name;
+            
+            if(is_dir($sourceName) && file_exists($destinationName)) {
+                $this->copyDirectory($path, $source,  $subfolder . '/' . $name);
+            } else if (!rename($sourceName, $destinationName)) {
+                throw new RuntimeException($name . ' could not be copied');
+            }
+        }
+    }
+
     protected function install($params = [])
     {
 
         $options = array_merge([
-            'repo' => 'getkirby/starterkit',
+            'repo' => 'y7k/plate',
             'branch' => 'master',
             'path' => null,
             'output' => null,
             'success' => 'Done!',
-            'subfolders' => '/'
+            'subfolders' => 'base'
         ], $params);
 
         // check for a valid path
         $this->checkPath($options['path']);
 
         // create the file name for the temporary zip file
-        $zip = $this->tmp('kirby-' . str_replace('/', '-', $options['repo']) . '-' . uniqid() . '.zip');
+        $zip = $this->tmp('y7k-' . str_replace('/', '-', $options['repo']) . '-' . uniqid() . '.zip');
 
         // download the file
         $this->downloadFromGitHub([
