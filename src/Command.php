@@ -35,7 +35,7 @@ class Command extends \Symfony\Component\Console\Command\Command
     {
 
         $options = array_merge([
-            'repo' => 'getkirby/starterkit',
+            'repo' => 'y7k/craft-plate',
             'branch' => 'master',
             'zip' => null,
             'output' => null
@@ -48,7 +48,7 @@ class Command extends \Symfony\Component\Console\Command\Command
         }
 
         // build the download url
-        $url = 'https://github.com/' . $repo . '/archive/' . $branch . '.zip';
+        $url = 'https://api.github.com/repos/' . $repo . '/zipball/' . $branch;
 
         // generate some usable output
         if ($output) {
@@ -75,32 +75,43 @@ class Command extends \Symfony\Component\Console\Command\Command
     {
 
         // build the temporary folder path
-        $tmp = $this->tmp(preg_replace('!.zip$!', '', $zip));
+        $tmp = substr($this->tmp(preg_replace('!.zip$!', '', $zip)),5);
+
+        var_dump($tmp);
 
         // extract the zip file
-        Util::unzip($zip, $tmp);
+        var_dump(Util::unzip($zip, $tmp));
 
         // get the list of directories within our tmp folder
         $dirs = glob($tmp . '/*');
+
+        var_dump($dirs, $tmp);
+
+        // get the source directory from the tmp folder
+        if(isset($dirs[0]) && is_dir($dirs[0])) {
+            $source = $dirs[0];
+        } else {
+            throw new RuntimeException('The source directory could not be found');
+        }
 
         if (!is_array($subfolders)) $subfolders = [$subfolders];
 
         // Loop through all subfolders and extract them
         foreach ($subfolders as $subfolder) {
 
-            $source = $dirs[0] . '/' . $subfolder;
+            $subSource = $source . '/' . ltrim($subfolder, '/');
 
             // get the source directory from the tmp folder
-            if (!isset($source) || !is_dir($source)) {
-                throw new RuntimeException('The source directory could not be found');
+            if (!is_dir($subSource)) {
+                throw new RuntimeException('The subdirectory could not be found');
             }
 
             // create the folder if it does not exist yet
             if (!is_dir($path)) mkdir($path);
 
             // extract the content of the directory to the final path
-            foreach ((array)array_diff(scandir($source), ['.', '..']) as $name) {
-                if (!rename($source . '/' . $name, $path . '/' . $name)) {
+            foreach ((array)array_diff(scandir($subSource), ['.', '..']) as $name) {
+                if (!rename($subSource . '/' . $name, $path . '/' . $name)) {
                     throw new RuntimeException($name . ' could not be copied');
                 }
             }

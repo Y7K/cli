@@ -23,13 +23,13 @@ class Craft extends Command {
 
   protected function execute(InputInterface $input, OutputInterface $output) {
 
-//    $this->install([
-//      'repo'    => 'getkirby/kirby',
-//      'branch'  => $input->getOption('dev') ? 'develop' : 'master',
-//      'path'    => $this->dir() . '/kirby',
-//      'output'  => $output,
-//      'success' => 'The core is installed!',
-//    ]);
+    $this->install([
+      'repo'    => 'getkirby/starterkit',
+      'branch'  => 'master',
+      'path'    => $this->dir() . '/kirby',
+      'output'  => $output,
+      'success' => 'The core is installed!',
+    ]);
 
 
       $output->writeln('Updating the craft...' . $input->getArgument('path'));
