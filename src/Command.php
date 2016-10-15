@@ -31,7 +31,7 @@ class Command extends \Symfony\Component\Console\Command\Command
 
     }
 
-    protected function download($params)
+    protected function downloadFromGitHub($params)
     {
 
         $options = array_merge([
@@ -71,7 +71,7 @@ class Command extends \Symfony\Component\Console\Command\Command
 
     }
 
-    protected function unzip($zip, $path, $subfolders = null)
+    protected function unzip($zip, $path, $subfolders = '/')
     {
 
         // build the temporary folder path
@@ -122,7 +122,8 @@ class Command extends \Symfony\Component\Console\Command\Command
             'branch' => 'master',
             'path' => null,
             'output' => null,
-            'success' => 'Done!'
+            'success' => 'Done!',
+            'subfolders' => '/'
         ], $params);
 
         // check for a valid path
@@ -132,7 +133,7 @@ class Command extends \Symfony\Component\Console\Command\Command
         $zip = $this->tmp('kirby-' . str_replace('/', '-', $options['repo']) . '-' . uniqid() . '.zip');
 
         // download the file
-        $this->download([
+        $this->downloadFromGitHub([
             'repo' => $options['repo'],
             'branch' => $options['branch'],
             'zip' => $zip,
@@ -140,7 +141,7 @@ class Command extends \Symfony\Component\Console\Command\Command
         ]);
 
         // unzip the file
-        $this->unzip($zip, $options['path']);
+        $this->unzip($zip, $options['path'], $options['subfolders']);
 
         // yay, everything is setup
         if ($options['output'] && $options['success']) {
