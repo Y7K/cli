@@ -45,7 +45,12 @@ y7k install pr01-project --platform laravel
 
 ## Roadmap
 
-* Add 'Static' type
-* Add 'Kirby', once Version 2.4 is out
+* Add 'Static' Type
+* Add 'Kirby' (Once Version 2.4 is out)
 * Add Commands to update Craft & Plugins
+* Add Command to update Project
+
+-----
+
+Inspired by the [Kirby CLI](https://github.com/getkirby/cli)
 
