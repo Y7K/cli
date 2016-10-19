@@ -17,7 +17,7 @@ class Craft extends Command
     protected function configure()
     {
         $this->setName('install:craft')
-            ->setDescription('Installs the Craft CMS plate')
+            ->setDescription('Install Craft CMS')
             ->addArgument('path', InputArgument::REQUIRED, 'Directory to install into')//         ->addOption('dev', null, InputOption::VALUE_NONE, 'Set to download the dev version from the develop branch')
         ;
     }

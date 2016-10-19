@@ -22,7 +22,7 @@ class Install extends Command
     protected function configure()
     {
         $this->setName('install')
-            ->setDescription('Creates a new project')
+            ->setDescription('👻  Install New Project')
             ->addArgument('path', InputArgument::OPTIONAL, 'Directory to install into')
             ->addOption('platform', 'p', InputOption::VALUE_OPTIONAL, 'Set to decide, which type to install (craft, laravel)')
         ;
