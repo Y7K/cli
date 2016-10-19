@@ -27,7 +27,7 @@ git pull
 
 ### y7k install
 
-Installs a new Project.
+Install a new Project from the [Y7K Boilerplate](https://github.com/Y7K/plate).
 
 ```
 y7k install
@@ -46,7 +46,7 @@ y7k install pr01-project --platform laravel
 
 ### y7k version 
 
-Get the current Version of the Project.
+Display the current Version of the Project.
 
 ```
 y7k version
