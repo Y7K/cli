@@ -53,6 +53,15 @@ y7k version
 y7k v 
 ```
 
+### y7k bump 
+
+Bump the current Version of the Project.
+
+```
+y7k bump [major|minor|patch]
+y7k b [major|minor|patch]
+```
+
 ## Roadmap
 
 * Add 'Static' Type
