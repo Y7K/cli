@@ -31,6 +31,7 @@ Installs a new Project.
 
 ```
 y7k install
+y7k i
 ```
 
 Launches the installation process. You will be prompted for a name and to configure the project stack.
@@ -42,6 +43,15 @@ y7k install pr01-project --platform craft
 y7k install pr01-project --platform laravel
 ```
 
+
+### y7k version 
+
+Get the current Version of the Project.
+
+```
+y7k version
+y7k v 
+```
 
 ## Roadmap
 
