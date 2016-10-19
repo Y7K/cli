@@ -17,9 +17,8 @@ class Laravel extends Command
     protected function configure()
     {
         $this->setName('install:laravel')
-            ->setDescription('Install Laravel')
-            ->addArgument('path', InputArgument::REQUIRED, 'Directory to install into')
-            //         ->addOption('dev', null, InputOption::VALUE_NONE, 'Set to download the dev version from the develop branch')
+            ->setDescription('Install the Laravel Framework')
+            ->addArgument('path', InputArgument::REQUIRED, 'Where u wanna put it, bro?')
         ;
     }
 
@@ -44,7 +43,7 @@ class Laravel extends Command
             'output' => $output,
             'subfolders' => ['base', 'platforms/laravel'],
             'exclude' => ['base/composer.json', 'base/composer.lock', 'base/.gitignore'],
-            'success' => 'The laravel boilerplate is installed!',
+            'success' => 'Laravel is installed! Yay!',
             'checkPath' => false
         ]);
 

@@ -22,9 +22,9 @@ class Install extends Command
     protected function configure()
     {
         $this->setName('install')
-            ->setDescription('👻  Install New Project')
-            ->addArgument('path', InputArgument::OPTIONAL, 'Directory to install into')
-            ->addOption('platform', 'p', InputOption::VALUE_OPTIONAL, 'Set to decide, which type to install (craft, laravel)')
+            ->setDescription('👻  Install a shiny new Project')
+            ->addArgument('path', InputArgument::OPTIONAL, 'Choose a folder, I\'ll take care of the rest.')
+            ->addOption('platform', 'p', InputOption::VALUE_OPTIONAL, 'Which Type shall it be: Craft, Laravel or Plain?')
         ;
     }
 
@@ -38,7 +38,7 @@ class Install extends Command
 
         // Ask for it, if none was provided as argument
         if(!$path) {
-            $question = new Question('Please enter the name of the Project (pj01-name): ');
+            $question = new Question('Set a Name for the Project. If you go with our convention, it should be formatted like so: pj01-name.');
             $question->setValidator(function ($answer) {
                 if (!$answer) {
                     throw new \RuntimeException('Please enter a valid path to install the project to.');
@@ -47,6 +47,10 @@ class Install extends Command
             });
             $path = $helper->ask($input, $output, $question);
         }
+
+        $output->writeln('');
+        $output->writeln('Name set to <info>' . $path . '</info>. Great!');
+        $output->writeln('');
 
         // Get which package to install
         $platform = $input->getOption('platform');
@@ -61,6 +65,10 @@ class Install extends Command
             $question->setErrorMessage('Type %s is invalid.');
             $platform = $helper->ask($input, $output, $question);
         }
+
+        $output->writeln('');
+        $output->writeln('Installing the <info>' . ucfirst($platform) . '</info> Package...');
+        $output->writeln('');
 
         $command = $this->getApplication()->find('install:' . strtolower($platform));
         $arguments = new ArrayInput([

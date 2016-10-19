@@ -11,14 +11,15 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Craft extends Command
+class Plain extends Command
 {
 
     protected function configure()
     {
-        $this->setName('install:craft')
-            ->setDescription('Install Craft CMS. Plus some Y7K Magic Sugar.')
-            ->addArgument('path', InputArgument::REQUIRED, 'Where shall that Project live in?');
+        $this->setName('install:plain')
+            ->setDescription('Install Plain HTML Static File Boilerplate')
+            ->addArgument('path', InputArgument::REQUIRED, 'Directory of your choosing. Where the stuff will end up.')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -31,21 +32,14 @@ class Craft extends Command
             'branch' => 'develop',
             'path' => $this->dir() . '/' . $path,
             'output' => $output,
-            'subfolders' => ['base', 'platforms/craft'],
-            'success' => 'The craft boilerplate is installed!',
-        ]);
-
-        $this->install([
-            'url' => 'http://craftcms.com/latest.zip?accept_license=yes',
-            'path' => $this->dir() . '/' . $path . '/craft/app',
-            'output' => $output,
-            'subfolders' => ['craft/app'],
-            'success' => 'The craft app folder is installed!',
+            'subfolders' => ['base', 'platforms/plain'],
+            'success' => 'The Boilerplate code was loaded and installed!',
+            'checkPath' => false
         ]);
 
         $commands = [
             'install --no-scripts',
-            'run-script post-root-package-install'
+            'run-script post-root-package-install',
         ];
 
         $this->runComposerCommands($input, $output, $path, $commands);

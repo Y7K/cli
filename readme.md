@@ -31,7 +31,6 @@ Install a new Project from the [Y7K Boilerplate](https://github.com/Y7K/plate).
 
 ```
 y7k install
-y7k i
 ```
 
 Launches the installation process. You will be prompted for a name and to configure the project stack.
@@ -41,6 +40,7 @@ You can specify the directory with the second argument and a platform with the `
 y7k install pr01-project
 y7k install pr01-project --platform craft
 y7k install pr01-project --platform laravel
+y7k install pr01-project --platform plain
 ```
 
 
@@ -64,10 +64,8 @@ y7k b [major|minor|patch]
 
 ## Roadmap
 
-* Add 'Static' Type
 * Add 'Kirby' (Once Version 2.4 is out)
 * Add Commands to update Craft & Plugins
-* Add Command to update Project
 
 -----
 
