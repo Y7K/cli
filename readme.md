@@ -10,7 +10,7 @@
     ```
     export PATH=$PATH:$HOME/path/to/cli
     ```
-    to your `.bash_profile` to `.zshrc` file.
+    to your `.bash_profile` or `.zshrc` file.
     
     This will allow you to run the `y7k` command globally.
 
