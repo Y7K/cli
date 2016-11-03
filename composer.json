@@ -16,6 +16,11 @@
         "vlucas/phpdotenv": "^2.4",
         "symfony/process": "^3.1"
     },
+    "scripts": {
+        "project-created-cmd": [
+            "php -r \"copy('.env.example', '.env');\""
+        ]
+    },
     "bin": [
         "Y7K"
     ]
