@@ -54,12 +54,12 @@ class Install extends Command
 
         // Get which package to install
         $platform = $input->getOption('platform');
-        $platforms = ['craft', 'laravel'];
+        $platforms = ['craft', 'laravel', 'plain'];
 
         if (!in_array($platform, $platforms)) {
             $question = new ChoiceQuestion(
                 'Please select which type of application you\'re building (Defaults to Craft):',
-                array('Craft', 'Laravel'),
+                array('Craft', 'Laravel', 'Plain'),
                 0
             );
             $question->setErrorMessage('Type %s is invalid.');
