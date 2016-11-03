@@ -55,14 +55,15 @@ class Bump extends Command
         $projectVersion[$update] = (int) $projectVersion[$update] + 1;
 
         // Set Trailing numbers to Zero
-        if($update<count($projectVersion)) {
-            foreach (range($update + 1,count($projectVersion)) as $v) {
+        if($update<count($projectVersion) - 1) {
+            foreach (range($update + 1, count($projectVersion) - 1) as $v) {
                 $projectVersion[$v] = 0;
             }
         }
 
         // Save the updated Versin
         $projectData->version = implode('.', $projectVersion);
+
 
         // Write To file
         file_put_contents($projectFile, json_encode($projectData, JSON_PRETTY_PRINT));
