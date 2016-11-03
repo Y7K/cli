@@ -14,7 +14,7 @@
     
     This will allow you to run the `y7k` command globally.
 
-4. Create a [Personal GitHub Access Token](https://github.com/settings/tokens) and add it along with your GitHub Username to the `.env` file.
+4. Create a [Personal GitHub Access Token](https://github.com/settings/tokens) with `repo` privileges and add it along with your GitHub Username to the `.env` file.
 
 ## Update
 
