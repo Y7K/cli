@@ -38,7 +38,7 @@ class Install extends Command
 
         // Ask for it, if none was provided as argument
         if(!$path) {
-            $question = new Question('Set a Name for the Project. If you go with our convention, it should be formatted like so: pj01-name.');
+            $question = new Question('Set a Name for the Project (eg. pj01-name):' . PHP_EOL);
             $question->setValidator(function ($answer) {
                 if (!$answer) {
                     throw new \RuntimeException('Please enter a valid path to install the project to.');
@@ -58,7 +58,7 @@ class Install extends Command
 
         if (!in_array($platform, $platforms)) {
             $question = new ChoiceQuestion(
-                'Please select which type of application you\'re building (Defaults to Craft):',
+                'Please select which type of application you\'re building (Defaults to <info>Craft</info>):',
                 array('Craft', 'Laravel', 'Plain'),
                 0
             );
