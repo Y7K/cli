@@ -32,7 +32,7 @@ class Plain extends Command
             'branch' => 'develop',
             'path' => $this->dir() . '/' . $path,
             'output' => $output,
-            'subfolders' => ['base', 'platforms/plain'],
+            'subfolders' => ['1-base', '2-platforms/plain'],
             'success' => 'The Boilerplate code was loaded and installed!',
             'checkPath' => false
         ]);

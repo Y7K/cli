@@ -31,7 +31,7 @@ class Craft extends Command
             'branch' => 'develop',
             'path' => $this->dir() . '/' . $path,
             'output' => $output,
-            'subfolders' => ['base', 'platforms/craft'],
+            'subfolders' => ['1-base', '2-platforms/craft'],
             'success' => 'The craft boilerplate is installed!',
         ]);
 
