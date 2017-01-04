@@ -32,8 +32,8 @@ class Laravel extends Command
             'branch' => 'master',
             'path' => $this->dir() . '/' . $path,
             'output' => $output,
-            'exclude' => ['gulpfile.js', 'resources/assets'],
-            'success' => 'The Laravel is installed!',
+            'exclude' => ['gulpfile.js', 'resources/assets', 'public/css', 'public/js'],
+            'success' => 'The Laravel Boilerplate is installed!',
         ]);
 
         $this->install([
