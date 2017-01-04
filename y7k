@@ -15,7 +15,7 @@ $app = new Symfony\Component\Console\Application('Y7K CLI', '0.0.0');
 $app->add(new \Y7K\Cli\Commands\Version());
 $app->add(new \Y7K\Cli\Commands\Bump());
 
-$app->add(new \Y7K\Cli\Commands\Install());
+$app->add(new \Y7K\Cli\Commands\NewCommand());
 $app->add(new \Y7K\Cli\Commands\Install\Craft());
 $app->add(new \Y7K\Cli\Commands\Install\Laravel());
 $app->add(new \Y7K\Cli\Commands\Install\Plain());

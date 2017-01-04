@@ -25,22 +25,22 @@ git pull
 
 ## Commands
 
-### y7k install
+### y7k new
 
 Install a new Project from the [Y7K Boilerplate](https://github.com/Y7K/plate).
 
 ```
-y7k install
+y7k new
 ```
 
 Launches the installation process. You will be prompted for a name and to configure the project stack.
 You can specify the directory with the second argument and a platform with the `--platform` option:
 
 ```
-y7k install pr01-project
-y7k install pr01-project --platform craft
-y7k install pr01-project --platform laravel
-y7k install pr01-project --platform plain
+y7k new pr01-project
+y7k new pr01-project --platform craft
+y7k new pr01-project --platform laravel
+y7k new pr01-project --platform plain
 ```
 
 

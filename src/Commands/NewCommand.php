@@ -16,12 +16,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Install extends Command
+class NewCommand extends Command
 {
 
     protected function configure()
     {
-        $this->setName('install')
+        $this->setName('new')
             ->setDescription('👻  Install a shiny new Project')
             ->addArgument('path', InputArgument::OPTIONAL, 'Choose a folder, I\'ll take care of the rest.')
             ->addOption('platform', 'p', InputOption::VALUE_OPTIONAL, 'Which Type shall it be: Craft, Laravel or Plain?')
