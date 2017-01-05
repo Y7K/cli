@@ -1,6 +1,6 @@
 <?php
 
-namespace Y7K\Cli\Commands\Install;
+namespace Y7K\Cli\Commands\Install\Platform;
 
 use RuntimeException;
 
