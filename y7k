@@ -18,6 +18,7 @@ $app->add(new \Y7K\Cli\Commands\BumpCommand());
 $app->add(new \Y7K\Cli\Commands\NewCommand());
 $app->add(new \Y7K\Cli\Commands\Install\Platform\Craft());
 $app->add(new \Y7K\Cli\Commands\Install\Platform\Laravel());
+$app->add(new \Y7K\Cli\Commands\Install\Platform\Kirby());
 $app->add(new \Y7K\Cli\Commands\Install\Platform\PlainPhp());
 $app->add(new \Y7K\Cli\Commands\Install\Platform\PlainHtml());
 $app->add(new \Y7K\Cli\Commands\Install\Resources\Javascript());

@@ -24,7 +24,7 @@ class NewCommand extends Command
         $this->setName('new')
             ->setDescription('👻  Install a shiny new Project')
             ->addArgument('path', InputArgument::OPTIONAL, 'Choose a folder, I\'ll take care of the rest.')
-            ->addOption('platform', 'p', InputOption::VALUE_OPTIONAL, 'Which Type shall it be: Craft, Laravel or Plain?')
+            ->addOption('platform', 'p', InputOption::VALUE_OPTIONAL, 'Which Type shall it be: Craft, Laravel, Kirby or a static Site?')
             ->addOption('javascript', 'js', InputOption::VALUE_OPTIONAL, 'Which JavaScript Boilerplate do you need?')
         ;
     }
@@ -58,12 +58,12 @@ class NewCommand extends Command
 
         // Get which package to install
         $platform = $input->getOption('platform');
-        $platforms = ['craft', 'laravel', 'plain-php', 'plain-html'];
+        $platforms = ['craft', 'laravel', 'kirby', 'plain-php', 'plain-html'];
 
         if (!in_array($platform, $platforms)) {
             $question = new ChoiceQuestion(
                 'Please select which type of application you\'re building (Defaults to <info>Craft</info>):',
-                array('Craft', 'Laravel', 'Plain PHP', 'Plain HTML'),
+                array('Craft', 'Laravel', 'Kirby', 'Plain PHP', 'Plain HTML'),
                 0
             );
             $question->setErrorMessage('Type %s is invalid.');
@@ -81,16 +81,15 @@ class NewCommand extends Command
 
         $returnCode = $platformCommand->run($platformArguments, $output);
 
+
+        $output->writeln('');
 //        Javascript
-
-
         $jsCommand = $this->getApplication()->find('install:javascript');
         $jsArguments = new ArrayInput([
             'path'    => $path,
         ]);
 
         $returnCode = $jsCommand->run($jsArguments, $output);
-
 
 
         Util::findAndReplaceInFile($this->dir() . '/' . $path . '/package.json', '{name}', $path);

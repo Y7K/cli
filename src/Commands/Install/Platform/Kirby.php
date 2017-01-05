@@ -12,14 +12,14 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Y7K\Cli\Util;
 
-class Laravel extends Command
+class Kirby extends Command
 {
 
     protected function configure()
     {
-        $this->setName('install:laravel')
-            ->setDescription('Install the Laravel Framework')
-            ->addArgument('path', InputArgument::REQUIRED, 'Where u wanna put it, bro?')
+        $this->setName('install:kirby')
+            ->setDescription('Install Kirby CMS Boilerplate')
+            ->addArgument('path', InputArgument::REQUIRED, 'Directory of your choosing. Where the stuff will end up.')
         ;
     }
 
@@ -30,33 +30,21 @@ class Laravel extends Command
         $filepath = $this->dir() . '/' . $path;
 
         $this->install([
-            'repo' => 'laravel/laravel',
-            'branch' => 'master',
-            'path' => $filepath,
-            'output' => $output,
-            'exclude' => ['gulpfile.js', 'resources/assets', 'public/css', 'public/js'],
-            'success' => 'The Laravel Boilerplate is installed!',
-        ]);
-
-        $this->install([
             'repo' => 'y7k/plate',
             'branch' => 'develop',
             'path' => $filepath,
             'output' => $output,
-            'subfolders' => ['1-base', '2-platforms/laravel'],
-            'exclude' => ['1-base/.gitignore'],
-            'success' => 'Laravel is installed! Yay!',
+            'subfolders' => ['1-base', '2-platforms/kirby'],
+            'success' => 'The Boilerplate code was loaded and installed!',
             'checkPath' => false
         ]);
 
         Util::findAndReplaceInFile($filepath . '/.env.example', '{name}', $path);
-        Util::findAndReplaceInFile($filepath . '/composer.json', 'laravel/laravel', $path);
+        Util::findAndReplaceInFile($filepath . '/composer.json', '{name}', $path);
 
         $commands = [
             'install --no-scripts',
             'run-script post-root-package-install',
-            'run-script post-install-cmd',
-            'run-script post-create-project-cmd'
         ];
 
         $this->runComposerCommands($input, $output, $path, $commands);
