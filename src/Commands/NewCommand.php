@@ -70,10 +70,12 @@ class NewCommand extends Command
         $output->writeln('Installing the <info>' . ucfirst($platform) . '</info> Package...');
         $output->writeln('');
 
-        $command = $this->getApplication()->find('install:' . strtolower($platform));
+        $command = $this->getApplication()->find('install:' . str_replace(' ', '-', strtolower($platform)));
         $arguments = new ArrayInput([
             'path'    => $path,
         ]);
+
+        Util::findAndReplaceInFile($this->dir() . '/' . $path . '/package.json', '{name}', $path);
 
         $returnCode = $command->run($arguments, $output);
     }

@@ -41,7 +41,7 @@ class Util
         curl_setopt($curl, CURLOPT_USERPWD, getenv('GITHUB_USER') . ':' . getenv('GITHUB_TOKEN'));
 
         $t_vers = curl_version();
-        curl_setopt( $curl, CURLOPT_USERAGENT, 'curl/' . $t_vers['version'] );
+        curl_setopt($curl, CURLOPT_USERAGENT, 'curl/' . $t_vers['version']);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 
 
@@ -92,6 +92,19 @@ class Util
             return unlink($item);
         }
 
+    }
+
+
+    public static function findAndReplaceInFile($file, $find, $replace)
+    {
+        //read the entire string
+        $str = file_get_contents($file);
+
+        //replace something in the file string - this is a VERY simple example
+        $str = str_replace("$find", "$replace", $str);
+
+        //write the entire string
+        file_put_contents($file, $str);
     }
 
 }

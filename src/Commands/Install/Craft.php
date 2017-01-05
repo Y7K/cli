@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Y7K\Cli\Util;
 
 class Craft extends Command
 {
@@ -25,11 +26,12 @@ class Craft extends Command
     {
 
         $path = $input->getArgument('path');
+        $filepath = $this->dir() . '/' . $path;
 
         $this->install([
             'repo' => 'y7k/plate',
             'branch' => 'develop',
-            'path' => $this->dir() . '/' . $path,
+            'path' => $filepath,
             'output' => $output,
             'subfolders' => ['1-base', '2-platforms/craft'],
             'success' => 'The craft boilerplate is installed!',
@@ -37,11 +39,14 @@ class Craft extends Command
 
         $this->install([
             'url' => 'http://craftcms.com/latest.zip?accept_license=yes',
-            'path' => $this->dir() . '/' . $path . '/craft/app',
+            'path' => $filepath . '/craft/app',
             'output' => $output,
             'subfolders' => ['craft/app'],
             'success' => 'The craft app folder is installed!',
         ]);
+
+        Util::findAndReplaceInFile($filepath . '/.env.example', '{name}', $path);
+        Util::findAndReplaceInFile($filepath . '/composer.json', '{name}', $path);
 
         $commands = [
             'install --no-scripts',

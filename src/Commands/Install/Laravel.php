@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Y7K\Cli\Util;
 
 class Laravel extends Command
 {
@@ -26,11 +27,12 @@ class Laravel extends Command
     {
 
         $path = $input->getArgument('path');
+        $filepath = $this->dir() . '/' . $path;
 
         $this->install([
             'repo' => 'laravel/laravel',
             'branch' => 'master',
-            'path' => $this->dir() . '/' . $path,
+            'path' => $filepath,
             'output' => $output,
             'exclude' => ['gulpfile.js', 'resources/assets', 'public/css', 'public/js'],
             'success' => 'The Laravel Boilerplate is installed!',
@@ -39,13 +41,16 @@ class Laravel extends Command
         $this->install([
             'repo' => 'y7k/plate',
             'branch' => 'develop',
-            'path' => $this->dir() . '/' . $path,
+            'path' => $filepath,
             'output' => $output,
             'subfolders' => ['1-base', '2-platforms/laravel'],
             'exclude' => ['1-base/composer.json', '1-base/composer.lock', '1-base/.gitignore'],
             'success' => 'Laravel is installed! Yay!',
             'checkPath' => false
         ]);
+
+        Util::findAndReplaceInFile($filepath . '/.env.example', '{name}', $path);
+        Util::findAndReplaceInFile($filepath . '/composer.json', 'laravel/laravel', $path);
 
         $commands = [
             'install --no-scripts',
