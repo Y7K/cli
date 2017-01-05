@@ -49,7 +49,7 @@ class NewCommand extends Command
         }
 
         $output->writeln('');
-        $output->writeln('Name set to <info>' . $path . '</info>. Great!');
+        $output->writeln('Name set to <info>' . $path . '</info>.');
         $output->writeln('');
 
         // Get which package to install
