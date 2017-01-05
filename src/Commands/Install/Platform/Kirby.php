@@ -44,6 +44,7 @@ class Kirby extends Command
 
         $commands = [
             'install --no-scripts',
+            'install --no-scripts',
             'run-script post-root-package-install',
         ];
 
