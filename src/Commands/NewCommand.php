@@ -25,6 +25,7 @@ class NewCommand extends Command
             ->setDescription('👻  Install a shiny new Project')
             ->addArgument('path', InputArgument::OPTIONAL, 'Choose a folder, I\'ll take care of the rest.')
             ->addOption('platform', 'p', InputOption::VALUE_OPTIONAL, 'Which Type shall it be: Craft, Laravel or Plain?')
+            ->addOption('javascript', 'js', InputOption::VALUE_OPTIONAL, 'Which JavaScript Boilerplate do you need?')
         ;
     }
 
@@ -52,6 +53,9 @@ class NewCommand extends Command
         $output->writeln('Name set to <info>' . $path . '</info>.');
         $output->writeln('');
 
+
+//        Platform
+
         // Get which package to install
         $platform = $input->getOption('platform');
         $platforms = ['craft', 'laravel', 'plain-php', 'plain-html'];
@@ -70,12 +74,24 @@ class NewCommand extends Command
         $output->writeln('Installing the <info>' . ucfirst($platform) . '</info> Package...');
         $output->writeln('');
 
-        $command = $this->getApplication()->find('install:' . str_replace(' ', '-', strtolower($platform)));
-        $arguments = new ArrayInput([
+        $platformCommand = $this->getApplication()->find('install:' . str_replace(' ', '-', strtolower($platform)));
+        $platformArguments = new ArrayInput([
             'path'    => $path,
         ]);
 
-        $returnCode = $command->run($arguments, $output);
+        $returnCode = $platformCommand->run($platformArguments, $output);
+
+//        Javascript
+
+
+        $jsCommand = $this->getApplication()->find('install:javascript');
+        $jsArguments = new ArrayInput([
+            'path'    => $path,
+        ]);
+
+        $returnCode = $jsCommand->run($jsArguments, $output);
+
+
 
         Util::findAndReplaceInFile($this->dir() . '/' . $path . '/package.json', '{name}', $path);
     }
