@@ -11,13 +11,13 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Plain extends Command
+class PlainPhp extends Command
 {
 
     protected function configure()
     {
-        $this->setName('install:plain')
-            ->setDescription('Install Plain HTML Static File Boilerplate')
+        $this->setName('install:plain-php')
+            ->setDescription('Install Plain PHP File Boilerplate')
             ->addArgument('path', InputArgument::REQUIRED, 'Directory of your choosing. Where the stuff will end up.')
         ;
     }
@@ -32,7 +32,7 @@ class Plain extends Command
             'branch' => 'develop',
             'path' => $this->dir() . '/' . $path,
             'output' => $output,
-            'subfolders' => ['1-base', '2-platforms/plain'],
+            'subfolders' => ['1-base', '2-platforms/plain-php'],
             'success' => 'The Boilerplate code was loaded and installed!',
             'checkPath' => false
         ]);

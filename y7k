@@ -18,6 +18,7 @@ $app->add(new \Y7K\Cli\Commands\Bump());
 $app->add(new \Y7K\Cli\Commands\NewCommand());
 $app->add(new \Y7K\Cli\Commands\Install\Craft());
 $app->add(new \Y7K\Cli\Commands\Install\Laravel());
-$app->add(new \Y7K\Cli\Commands\Install\Plain());
+$app->add(new \Y7K\Cli\Commands\Install\PlainPhp());
+$app->add(new \Y7K\Cli\Commands\Install\PlainHtml());
 
 $app->run();

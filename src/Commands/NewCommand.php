@@ -54,12 +54,12 @@ class NewCommand extends Command
 
         // Get which package to install
         $platform = $input->getOption('platform');
-        $platforms = ['craft', 'laravel', 'plain'];
+        $platforms = ['craft', 'laravel', 'plain-php', 'plain-html'];
 
         if (!in_array($platform, $platforms)) {
             $question = new ChoiceQuestion(
                 'Please select which type of application you\'re building (Defaults to <info>Craft</info>):',
-                array('Craft', 'Laravel', 'Plain'),
+                array('Craft', 'Laravel', 'Plain PHP', 'Plain HTML'),
                 0
             );
             $question->setErrorMessage('Type %s is invalid.');
