@@ -75,9 +75,9 @@ class NewCommand extends Command
             'path'    => $path,
         ]);
 
-        Util::findAndReplaceInFile($this->dir() . '/' . $path . '/package.json', '{name}', $path);
-
         $returnCode = $command->run($arguments, $output);
+
+        Util::findAndReplaceInFile($this->dir() . '/' . $path . '/package.json', '{name}', $path);
     }
 
 
