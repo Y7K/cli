@@ -4,6 +4,7 @@ namespace Y7K\Cli\Commands;
 
 use RuntimeException;
 
+use Symfony\Component\Process\Process;
 use Y7K\Cli\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
@@ -63,12 +64,24 @@ class BumpCommand extends Command
 
         // Save the updated Versin
         $projectData->version = implode('.', $projectVersion);
+        $projectVersionString = $projectData->version;
 
+
+        $process = new Process('git flow release start ' . $projectVersionString);
+        $process->run();
 
         // Write To file
         file_put_contents($projectFile, json_encode($projectData, JSON_PRETTY_PRINT));
 
-        $output->writeln('<info>Version updated to ' . $projectData->version . '</info>');
+        $process = new Process('git add --all && git commit -m "Version Bump to ' . $projectVersionString . '" && git flow release finish ' . $projectVersionString);
+        if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
+            $process->setTty(true);
+        }
+        $process->run(function ($type, $line) use ($output) {
+            $output->write($line);
+        });
+
+        $output->writeln('<info>Version updated to ' . $projectVersionString . '</info>');
     }
 
 }

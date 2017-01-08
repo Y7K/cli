@@ -4,6 +4,7 @@ namespace Y7K\Cli\Commands;
 
 use RuntimeException;
 
+use Symfony\Component\Process\Process;
 use Y7K\Cli\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
@@ -36,6 +37,7 @@ class VersionCommand extends Command
         }
 
         $output->writeln($projectData->version);
+
     }
 
 }

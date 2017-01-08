@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
+use Symfony\Component\Process\Process;
 use Y7K\Cli\Command;
 use Y7K\Cli\Util;
 
@@ -25,7 +26,7 @@ class NewCommand extends Command
             ->setDescription('👻  Install a shiny new Project')
             ->addArgument('path', InputArgument::OPTIONAL, 'Choose a folder, I\'ll take care of the rest.')
             ->addOption('platform', 'p', InputOption::VALUE_OPTIONAL, 'Which Type shall it be: Craft, Laravel, Kirby or a static Site?')
-            ->addOption('javascript', 'js', InputOption::VALUE_OPTIONAL, 'Which JavaScript Boilerplate do you need?')
+            ->addOption('javascript', 'j', InputOption::VALUE_OPTIONAL, 'Which JavaScript Boilerplate do you need?')
         ;
     }
 
@@ -93,6 +94,16 @@ class NewCommand extends Command
 
 
         Util::findAndReplaceInFile($this->dir() . '/' . $path . '/package.json', '{name}', $path);
+
+        $process = new Process('cd ./' .$path .' && git init && git flow init && git add --all && git commit -m "⚡️️ Initial Commit" && npm install');
+        $process->setTimeout(120 * 3600);
+        if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
+            $process->setTty(true);
+        }
+        $process->run(function ($type, $line) use ($output) {
+            $output->write($line);
+        });
+
     }
 
 
