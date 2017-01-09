@@ -73,7 +73,10 @@ class BumpCommand extends Command
         // Write To file
         file_put_contents($projectFile, json_encode($projectData, JSON_PRETTY_PRINT));
 
-        $process = new Process('export GIT_MERGE_AUTOEDIT=no && git add --all && git commit -m "Version Bump to ' . $projectVersionString . '" && git flow release finish -m "' . $projectVersionString . '" ' . $projectVersionString . ' && unset GIT_MERGE_AUTOEDIT');
+        $emojis = ['🐸','🐵','🐰','🐨','🐯','🦁','🐤','🐣','🐥','🦆','🐌','🦎','🐍','🐫','🐳','🐬','🐋','🐡','🐙','🦑','✨','⚡️','🔥','💥','🌝','🌞','🌺','🌸','🌻','🌟','⭐️','🌈','❄️','☃️','🥑','🍒','🍉','🍋','🍓','🍍','🍆','🥒','🥕','🌽','🍟','🥘','🌮','🥙','🌯','🍜','🍝','🍣','🍱','🍢','🍡','🍧','🎂','🍮','🍿','🍭','🍦','🍪','🍩','☕️','🍻','🥂','🍷','🥃','🍾','🍹','🍸','🏆','🎖','🏅','📡','💣','🔫','🔮','🚬','🔭','💊','💉','🔑','🗝','🎉','🎊','🎀'];
+        $emoji = $emojis[array_rand($emojis)];
+
+        $process = new Process('export GIT_MERGE_AUTOEDIT=no && git add --all && git commit -m "' . $emoji . ' Bump to' . $projectVersionString . '" && git flow release finish -m "' . $projectVersionString . '" ' . $projectVersionString . ' && unset GIT_MERGE_AUTOEDIT');
         if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
             $process->setTty(true);
         }
