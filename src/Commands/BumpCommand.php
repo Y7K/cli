@@ -67,7 +67,7 @@ class BumpCommand extends Command
         $projectVersionString = $projectData->version;
 
 
-        $process = new Process('git flow release start ' . $projectVersionString);
+        $process = new Process('git checkout develop && git checkout -b release/' . $projectVersionString .' develop');
         $process->run();
 
         // Write To file
@@ -76,7 +76,12 @@ class BumpCommand extends Command
         $emojis = ['🐸','🐵','🐰','🐨','🐯','🦁','🐤','🐣','🐥','🦆','🐌','🦎','🐍','🐫','🐳','🐬','🐋','🐡','🐙','🦑','✨','⚡️','🔥','💥','🌝','🌞','🌺','🌸','🌻','🌟','⭐️','🌈','❄️','☃️','🥑','🍒','🍉','🍋','🍓','🍍','🍆','🥒','🥕','🌽','🍟','🥘','🌮','🥙','🌯','🍜','🍝','🍣','🍱','🍢','🍡','🍧','🎂','🍮','🍿','🍭','🍦','🍪','🍩','☕️','🍻','🥂','🍷','🥃','🍾','🍹','🍸','🏆','🎖','🏅','📡','💣','🔫','🔮','🚬','🔭','💊','💉','🔑','🗝','🎉','🎊','🎀'];
         $emoji = $emojis[array_rand($emojis)];
 
-        $process = new Process('export GIT_MERGE_AUTOEDIT=no && git add --all && git commit -m "' . $emoji . ' Bump Version to ' . $projectVersionString . '" && git flow release finish -m "' . $projectVersionString . '" ' . $projectVersionString . ' && unset GIT_MERGE_AUTOEDIT');
+        $process = new Process('export GIT_MERGE_AUTOEDIT=no && ' .
+            'git add --all && git commit -m "' . $emoji . ' Bump Version to ' . $projectVersionString . '" && ' .
+//            'git flow release finish -m "' . $projectVersionString . '" ' . $projectVersionString . ' && '.
+            'git checkout master && git merge release/' . $projectVersionString . ' && git tag -a ' . $projectVersionString . ' -m "' . $projectVersionString . '" &&' .
+            'git checkout develop && git merge release/' . $projectVersionString . ' && git branch -d release/' . $projectVersionString . ' &&' .
+            'unset GIT_MERGE_AUTOEDIT');
         if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
             $process->setTty(true);
         }
