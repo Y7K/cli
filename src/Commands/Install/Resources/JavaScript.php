@@ -54,7 +54,7 @@ class JavaScript extends Command
         }
 
         $output->writeln('');
-        $output->writeln('Installing the <info>' . ucfirst($type) . '</info> Boilerplate...');
+        $output->writeln('Installing the <info>' . ucfirst($type) . '</info> JS Boilerplate...');
         $output->writeln('');
 
         $folderName = explode(' ', strtolower($type))[0];
