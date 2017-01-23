@@ -107,4 +107,10 @@ class Util
         file_put_contents($file, $str);
     }
 
+
+    public static function copyFile($file, $target)
+    {
+        copy($file, $target);
+    }
+
 }

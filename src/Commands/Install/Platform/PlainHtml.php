@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Y7K\Cli\Util;
 
 class PlainHtml extends Command
 {
@@ -26,16 +27,20 @@ class PlainHtml extends Command
     {
 
         $path = $input->getArgument('path');
+        $filepath = $this->dir() . '/' . $path;
 
         $this->install([
             'repo' => 'y7k/plate',
             'branch' => 'develop',
-            'path' => $this->dir() . '/' . $path,
+            'path' => $filepath,
             'output' => $output,
             'subfolders' => ['1-base', '2-platforms/plain-html'],
             'success' => 'The Boilerplate code was loaded and installed!',
             'checkPath' => false
         ]);
+
+        Util::findAndReplaceInFile($filepath . '/.env.example', '{name}', $path);
+        Util::copyFile($filepath . '/.env.example', $filepath . '/.env');
 
     }
 
