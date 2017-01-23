@@ -22,5 +22,6 @@ $app->add(new \Y7K\Cli\Commands\Install\Platform\Kirby());
 $app->add(new \Y7K\Cli\Commands\Install\Platform\PlainPhp());
 $app->add(new \Y7K\Cli\Commands\Install\Platform\PlainHtml());
 $app->add(new \Y7K\Cli\Commands\Install\Resources\Javascript());
+$app->add(new \Y7K\Cli\Commands\Install\Resources\Stylesheets());
 
 $app->run();

@@ -27,6 +27,7 @@ class NewCommand extends Command
             ->addArgument('path', InputArgument::OPTIONAL, 'Choose a folder, I\'ll take care of the rest.')
             ->addOption('platform', 'p', InputOption::VALUE_OPTIONAL, 'Which Type shall it be: Craft, Laravel, Kirby or a static Site?')
             ->addOption('javascript', 'j', InputOption::VALUE_OPTIONAL, 'Which JavaScript Boilerplate do you need?')
+            ->addOption('stylesheets', 'c', InputOption::VALUE_OPTIONAL, 'Which SCSS Boilerplate do you need?')
         ;
     }
 
@@ -84,13 +85,25 @@ class NewCommand extends Command
 
 
         $output->writeln('');
-//        Javascript
+
+        // Javascript
         $jsCommand = $this->getApplication()->find('install:javascript');
         $jsArguments = new ArrayInput([
             'path'    => $path,
         ]);
 
         $returnCode = $jsCommand->run($jsArguments, $output);
+
+
+        $output->writeln('');
+
+        // SCSS
+        $jsCommand = $this->getApplication()->find('install:stylesheets');
+        $scssArguments = new ArrayInput([
+            'path'    => $path,
+        ]);
+
+        $returnCode = $jsCommand->run($scssArguments, $output);
 
 
         Util::findAndReplaceInFile($this->dir() . '/' . $path . '/package.json', '{name}', $path);
