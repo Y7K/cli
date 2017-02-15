@@ -21,7 +21,7 @@ class JavaScript extends Command
         $this->setName('install:javascript')
             ->setDescription('Install JavaScript Boilerplate')
             ->addArgument('path', InputArgument::REQUIRED, 'Where does the Project live in?')
-            ->addOption('type', 't', InputOption::VALUE_REQUIRED, 'Which Type do you need: Basic, SPA or Pjax?');
+            ->addOption('type', 't', InputOption::VALUE_REQUIRED, 'Which JavaScript setup do you need?');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -41,12 +41,12 @@ class JavaScript extends Command
 
         // Get which package to install
         $type = $input->getOption('type');
-        $types = ['basic', 'spa', 'pjax'];
+        $types = ['default'];
 
         if (!in_array($type, $types)) {
             $question = new ChoiceQuestion(
-                'Please select which JavaScript Boilerplate you need (Defaults to <info>Basic</info>):',
-                array('Basic', 'SPA (Single Page App)', 'Pjax (With Page-Transitions)'),
+                'Please select which JavaScript Boilerplate you need (Defaults to <info>Default</info>):',
+                array('Default'),
                 0
             );
             $question->setErrorMessage('Type %s is invalid.');

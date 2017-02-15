@@ -78,7 +78,6 @@ class BumpCommand extends Command
 
         $process = new Process('export GIT_MERGE_AUTOEDIT=no && ' .
             'git add --all && git commit -m "' . $emoji . ' Bump Version to ' . $projectVersionString . '" && ' .
-//            'git flow release finish -m "' . $projectVersionString . '" ' . $projectVersionString . ' && '.
             'git checkout master && git merge release/' . $projectVersionString . ' && git tag -a ' . $projectVersionString . ' -m "' . $projectVersionString . '" &&' .
             'git checkout develop && git merge release/' . $projectVersionString . ' && git branch -d release/' . $projectVersionString . ' &&' .
             'unset GIT_MERGE_AUTOEDIT');
