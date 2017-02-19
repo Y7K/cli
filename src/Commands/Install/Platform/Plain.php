@@ -12,13 +12,13 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Y7K\Cli\Util;
 
-class PlainHtml extends Command
+class Plain extends Command
 {
 
     protected function configure()
     {
-        $this->setName('install:plain-html')
-            ->setDescription('Install Plain HTML Static File Boilerplate')
+        $this->setName('install:plain')
+            ->setDescription('Install Plain Boilerplate')
             ->addArgument('path', InputArgument::REQUIRED, 'Directory of your choosing. Where the stuff will end up.')
         ;
     }
@@ -34,13 +34,20 @@ class PlainHtml extends Command
             'branch' => 'develop',
             'path' => $filepath,
             'output' => $output,
-            'subfolders' => ['1-base', '2-platforms/plain-html'],
+            'subfolders' => ['1-base', '2-platforms/plain'],
             'success' => 'The Boilerplate code was loaded and installed!',
             'checkPath' => false
         ]);
 
         Util::findAndReplaceInFile($filepath . '/.env.example', '{name}', $path);
-        Util::copyFile($filepath . '/.env.example', $filepath . '/.env');
+        Util::findAndReplaceInFile($filepath . '/composer.json', '{name}', $path);
+
+        $commands = [
+            'install --no-scripts',
+            'run-script post-root-package-install',
+        ];
+
+        $this->runComposerCommands($input, $output, $path, $commands);
 
     }
 
