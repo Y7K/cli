@@ -34,7 +34,7 @@ class Laravel extends Command
             'branch' => 'master',
             'path' => $filepath,
             'output' => $output,
-            'exclude' => ['gulpfile.js', 'resources/assets', 'public/css', 'public/js'],
+            'exclude' => ['resources/assets', 'public/css', 'public/js'],
             'success' => 'The Laravel Boilerplate is installed!',
         ]);
 
