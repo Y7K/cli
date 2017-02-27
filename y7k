@@ -11,10 +11,12 @@ ini_set('display_errors', 1);
 
 $app = new Symfony\Component\Console\Application('Y7K CLI', '0.0.0');
 
-// Install Commands
 $app->add(new \Y7K\Cli\Commands\VersionCommand());
 $app->add(new \Y7K\Cli\Commands\BumpCommand());
+$app->add(new \Y7K\Cli\Commands\FetchCommand());
+$app->add(new \Y7K\Cli\Commands\LinkCommand());
 
+// Install Commands
 $app->add(new \Y7K\Cli\Commands\NewCommand());
 $app->add(new \Y7K\Cli\Commands\Install\Platform\Craft());
 $app->add(new \Y7K\Cli\Commands\Install\Platform\Laravel());

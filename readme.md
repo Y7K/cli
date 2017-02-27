@@ -64,6 +64,14 @@ y7k bump [major|minor|patch]
 y7k b [major|minor|patch]
 ```
 
+### y7k storage:link 
+
+Create a symbolic link from "public/storage" to "storage/app/public".
+
+```
+y7k storage:link 
+```
+
 ## Roadmap
 
 * Add Commands to update Craft & Plugins
