@@ -40,9 +40,7 @@ You can specify the directory with the second argument and a platform with the `
 y7k new pr01-project
 y7k new pr01-project --platform craft
 y7k new pr01-project --platform laravel
-y7k new pr01-project --platform kirby
-y7k new pr01-project --platform plain-php
-y7k new pr01-project --platform plain-html
+y7k new pr01-project --platform plain
 ```
 
 
