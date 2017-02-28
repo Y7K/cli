@@ -29,7 +29,7 @@ class LinkCommand extends Command
             throw new RuntimeException('The "public/storage" directory already exists.');
         }
 
-        symlink($this->dir() . '/storage/app/public', $this->dir() . '/public/storage');
+        symlink('../storage/app/public', $this->dir() . '/public/storage');
 
         $output->writeln('The [public/storage] directory has been linked.');
 
