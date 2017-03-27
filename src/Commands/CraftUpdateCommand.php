@@ -49,6 +49,16 @@ class CraftUpdateCommand extends Command
             'success' => 'The craft app folder was updated!',
         ]);
 
+        require_once ($craftAppDir . '/info.php');
+
+        $process = new Process('git add craft/app && git commit -m "Craft Updated to Version '. CRAFT_VERSION .'"');
+        $process->run(function ($type, $line) use ($output) {
+            $output->write($line);
+        });
+
+
+        $output->writeln('Craft updated to Version ' . CRAFT_VERSION);
+
     }
 
 }
