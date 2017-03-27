@@ -57,7 +57,7 @@ class CraftUpdateCommand extends Command
         });
 
 
-        $output->writeln('Craft updated to Version ' . CRAFT_VERSION);
+        $output->writeln('<comment>' .'Craft updated to Version ' . CRAFT_VERSION.'</comment>');
 
     }
 
