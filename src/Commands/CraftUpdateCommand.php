@@ -46,7 +46,7 @@ class CraftUpdateCommand extends Command
             'path' => $craftAppDir,
             'output' => $output,
             'subfolders' => ['craft/app'],
-            'success' => 'The craft app folder has bee updated!',
+            'success' => 'The craft app folder was updated!',
         ]);
 
     }
