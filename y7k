@@ -15,6 +15,7 @@ $app->add(new \Y7K\Cli\Commands\VersionCommand());
 $app->add(new \Y7K\Cli\Commands\BumpCommand());
 //$app->add(new \Y7K\Cli\Commands\FetchCommand());
 $app->add(new \Y7K\Cli\Commands\LinkCommand());
+$app->add(new \Y7K\Cli\Commands\CraftUpdateCommand());
 
 // Install Commands
 $app->add(new \Y7K\Cli\Commands\NewCommand());

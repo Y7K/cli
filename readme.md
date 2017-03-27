@@ -70,6 +70,15 @@ Create a symbolic link from "public/storage" to "storage/app/public".
 y7k storage:link 
 ```
 
+### y7k craft:update 
+
+Update to the latest version of Craft.
+This command deletes the `craft/app` directory and replaces it with the most recent version. Make sure to log into the control panel after performing the update to ensure the database is updated, too.
+
+```
+y7k craft:update
+```
+
 ## Roadmap
 
 * Add Commands to update Craft & Plugins
