@@ -20,6 +20,7 @@ $app->add(new \Y7K\Cli\Commands\CraftUpdateCommand());
 // Install Commands
 $app->add(new \Y7K\Cli\Commands\NewCommand());
 $app->add(new \Y7K\Cli\Commands\Install\Platform\Craft());
+$app->add(new \Y7K\Cli\Commands\Install\Platform\Craft3());
 $app->add(new \Y7K\Cli\Commands\Install\Platform\Laravel());
 $app->add(new \Y7K\Cli\Commands\Install\Platform\Plain());
 $app->add(new \Y7K\Cli\Commands\Install\Resources\Javascript());
