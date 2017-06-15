@@ -33,17 +33,10 @@ class Craft3 extends Command
             'branch' => 'develop',
             'path' => $filepath,
             'output' => $output,
-            'subfolders' => ['1-base', '2-platforms/craft3'],
+            'subfolders' => ['base', 'platforms/craft3'],
             'success' => 'The craft boilerplate is installed!',
         ]);
 
-//        $this->install([
-//            'url' => 'http://craftcms.com/latest.zip?accept_license=yes',
-//            'path' => $filepath . '/craft/app',
-//            'output' => $output,
-//            'subfolders' => ['craft/app'],
-//            'success' => 'The craft app folder is installed!',
-//        ]);
 
         Util::findAndReplaceInFile($filepath . '/.env.example', '{name}', $path);
         Util::findAndReplaceInFile($filepath . '/composer.json', '{name}', $path);

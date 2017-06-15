@@ -43,8 +43,8 @@ class Laravel extends Command
             'branch' => 'develop',
             'path' => $filepath,
             'output' => $output,
-            'subfolders' => ['1-base', '2-platforms/laravel'],
-            'exclude' => ['1-base/.gitignore'],
+            'subfolders' => ['base', 'platforms/laravel'],
+            'exclude' => ['base/.gitignore'],
             'success' => 'Laravel is installed! Yay!',
             'checkPath' => false
         ]);

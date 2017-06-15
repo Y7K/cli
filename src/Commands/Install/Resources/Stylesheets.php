@@ -20,8 +20,7 @@ class Stylesheets extends Command
     {
         $this->setName('install:stylesheets')
             ->setDescription('Install SCSS Boilerplate')
-            ->addArgument('path', InputArgument::REQUIRED, 'Where does the Project live in?')
-            ->addOption('type', 't', InputOption::VALUE_REQUIRED, 'Which Type do you need: Basic or Simple?');
+            ->addArgument('path', InputArgument::REQUIRED, 'Where does the Project live in?');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -31,53 +30,41 @@ class Stylesheets extends Command
         $helper = $this->getHelper('question');
 
 
+        // Get Paths
         $path = $input->getArgument('path');
         $filepath = $this->dir() . '/' . $path;
-        $packageJson = $filepath. '/package.json';
-
-
-        $originalPackageJson = is_file($packageJson) ? json_decode(file_get_contents($packageJson), true) : NULL;
-
-
-        // Get which package to install
-        $type = $input->getOption('type');
-        $types = ['basic', 'simple'];
-
-        if (!in_array($type, $types)) {
-            $question = new ChoiceQuestion(
-                'Please select which SCSS Boilerplate you need (Defaults to <info>Basic</info>):',
-                array('Basic (For Projects)', 'Simple (For Prototypes)'),
-                0
-            );
-            $question->setErrorMessage('Type %s is invalid.');
-            $type = $helper->ask($input, $output, $question);
-        }
 
         $output->writeln('');
         $output->writeln('Installing the <info>' . ucfirst($type) . '</info> SCSS Boilerplate...');
         $output->writeln('');
 
-        $folderName = explode(' ', strtolower($type))[0];
-
-
+        // Install the repo
         $this->install([
-            'repo' => 'y7k/plate',
+            'repo' => 'y7k/style',
             'branch' => 'develop',
-            'path' => $filepath,
+            'path' => $filepath . '/resources/assets',
             'output' => $output,
-            'subfolders' => ['3-scss/' . $folderName],
+            'subfolders' => ['source' ],
             'success' => 'The SCSS boilerplate has been loaded!',
             'checkPath' => false
         ]);
 
+        // Merge the package.json files
+        $packageJson = $filepath. '/package.json';
+        $newPackageJsonFilepath = $filepath . '/resources/assets/package.json';
 
-        $newPackageJson = is_file($packageJson) ? json_decode(file_get_contents($packageJson), true) : NULL;
+        $originalPackageJson = is_file($packageJson) ? json_decode(file_get_contents($packageJson), true) : NULL;
+        $newPackageJson = is_file($newPackageJsonFilepath) ? json_decode(file_get_contents($newPackageJsonFilepath), true) : NULL;
         $mergedPackageJson = $this->mergeJsonArrays($originalPackageJson, $newPackageJson);
 
+        // Delete the js package.json
+        unlink($newPackageJsonFilepath);
+
+        // Write to project package.json
         file_put_contents($packageJson, json_encode($mergedPackageJson, JSON_PRETTY_PRINT));
-
-
     }
+
+
 
     protected function mergeJsonArrays($priority_json, $original_json_content)
     {

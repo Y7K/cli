@@ -34,7 +34,7 @@ class Plain extends Command
             'branch' => 'develop',
             'path' => $filepath,
             'output' => $output,
-            'subfolders' => ['1-base', '2-platforms/plain'],
+            'subfolders' => ['base', 'platforms/plain'],
             'success' => 'The Boilerplate code was loaded and installed!',
             'checkPath' => false
         ]);
