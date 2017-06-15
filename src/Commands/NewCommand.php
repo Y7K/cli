@@ -106,9 +106,11 @@ class NewCommand extends Command
 
 
         Util::findAndReplaceInFile($this->dir() . '/' . $path . '/package.json', '{name}', $path);
-        
 
-        $process = new Process('cd ./' .$path .' && git init && git flow init && git add --all && git commit -m "⚡️️ Initial Commit" && git branch -D master && git branch master');
+
+        // Init igt and git flow
+        $process = new Process('cd ./' .$path .' && git init && ' .
+            'printf \'master\ndevelop\nfeature/\nrelease/\nhotfix/\support/\n\n\' | git flow init && git add --all && git commit -m "⚡️️ Initial Commit" && git branch -D master && git branch master');
         $process->setTimeout(120 * 3600);
         if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
             $process->setTty(true);
