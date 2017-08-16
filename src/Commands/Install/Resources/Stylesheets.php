@@ -33,6 +33,7 @@ class Stylesheets extends Command
         // Get Paths
         $path = $input->getArgument('path');
         $filepath = $this->dir() . '/' . $path;
+        $type = 'Default';
 
         $output->writeln('');
         $output->writeln('Installing the <info>' . ucfirst($type) . '</info> SCSS Boilerplate...');
