@@ -9,7 +9,13 @@ if(file_exists(__DIR__ . '/../../autoload.php')) {
 
 ini_set('display_errors', 1);
 
-$app = new Symfony\Component\Console\Application('Y7K CLI', '0.0.0');
+
+$versionData = json_decode(file_get_contents('project.json'), true);
+$cliVersion = $versionData['version'];
+
+echo PHP_EOL;
+
+$app = new Symfony\Component\Console\Application('Y7K CLI', $cliVersion);
 
 $app->add(new \Y7K\Cli\Commands\VersionCommand());
 $app->add(new \Y7K\Cli\Commands\BumpCommand());
