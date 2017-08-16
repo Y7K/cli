@@ -31,7 +31,7 @@ class Plain extends Command
 
         $this->install([
             'repo' => 'y7k/plate',
-            'branch' => 'develop',
+            'branch' => 'master',
             'path' => $filepath,
             'output' => $output,
             'subfolders' => ['base', 'platforms/plain'],

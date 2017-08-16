@@ -42,7 +42,7 @@ class Stylesheets extends Command
         // Install the repo
         $this->install([
             'repo' => 'y7k/style',
-            'branch' => 'develop',
+            'branch' => 'master',
             'path' => $filepath . '/resources/assets',
             'output' => $output,
             'subfolders' => ['source' ],

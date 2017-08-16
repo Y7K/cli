@@ -41,7 +41,7 @@ class JavaScript extends Command
         // Install the repo
         $this->install([
             'repo' => 'y7k/scripts',
-            'branch' => 'develop',
+            'branch' => 'master',
             'path' => $filepath . '/resources/assets',
             'output' => $output,
             'subfolders' => ['source'],
