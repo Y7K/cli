@@ -7,6 +7,7 @@ use ZipArchive;
 use RuntimeException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use Symfony\Component\Yaml\Yaml;
 
 class Util
 {
@@ -112,5 +113,19 @@ class Util
     {
         copy($file, $target);
     }
+
+
+
+    public static function getCliConfig()
+    {
+        $cliFile = getcwd() . '/.y7k-cli.yml';
+
+        if (!file_exists($cliFile)) {
+            throw new RuntimeException('.y7k-cli.yml File not found!');
+        }
+
+        return Yaml::parse(file_get_contents($cliFile));
+    }
+
 
 }
