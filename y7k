@@ -9,8 +9,7 @@ if(file_exists(__DIR__ . '/../../autoload.php')) {
 
 ini_set('display_errors', 1);
 
-
-$versionData = json_decode(file_get_contents('project.json'), true);
+$versionData = json_decode(file_get_contents(__DIR__ . '/project.json'), true);
 $cliVersion = $versionData['version'];
 
 echo PHP_EOL;
