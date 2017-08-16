@@ -33,4 +33,8 @@ $app->add(new \Y7K\Cli\Commands\Install\Platform\Plain());
 $app->add(new \Y7K\Cli\Commands\Install\Resources\Javascript());
 $app->add(new \Y7K\Cli\Commands\Install\Resources\Stylesheets());
 
+// DB Commands
+$app->add(new \Y7K\Cli\Commands\Db\DbPullCommand());
+$app->add(new \Y7K\Cli\Commands\Db\DbPushCommand());
+
 $app->run();
