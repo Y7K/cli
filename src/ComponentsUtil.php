@@ -84,7 +84,7 @@ class ComponentsUtil
     public static function getComponentFile($fileUrl)
     {
         $repo = 'y7k/components';
-        $branch = 'develop';
+        $branch = 'master';
         $remoteFileUrl = 'https://raw.githubusercontent.com/'.$repo.'/'.$branch.'/'.$fileUrl;
         return Util::download($remoteFileUrl);
     }

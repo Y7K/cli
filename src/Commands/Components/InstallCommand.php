@@ -126,7 +126,7 @@ class InstallCommand extends Command
         $this->io->text('<fg=blue>Installing dependencies...</>');
 
         if (file_exists('package.json')) {
-            //Util::runCommand('npm install', $this->io);
+            Util::runCommand('npm install', $this->io);
         }
 
         $this->io->newLine();

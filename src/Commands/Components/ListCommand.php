@@ -31,7 +31,7 @@ class ListCommand extends Command
     {
 
         $repo = 'y7k/components';
-        $branch = 'develop';
+        $branch = 'master';
         $repoTreeUrl = 'https://api.github.com/repos/'.$repo.'/git/trees/'.$branch;
         $repoTree = $this->getGithubTree($repoTreeUrl);
         $componentsFolderUrl = $repoTree[array_search('components', array_column($repoTree, 'path'))]->url;
