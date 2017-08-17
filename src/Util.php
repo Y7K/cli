@@ -8,6 +8,7 @@ use RuntimeException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Process\Process;
 
 class Util
 {
@@ -139,6 +140,24 @@ class Util
             }
         }
         return $priority_json;
+    }
+
+
+
+    public static function runCommand($command, $io, $steps = 0)
+    {
+        $io->newLine();
+        $progressBar = $io->createProgressBar();
+        $process = new Process($command);
+        $process->setTimeout(120 * 3600);
+        $process->disableOutput();
+        $process->run(function ($type, $buffer) use($progressBar) {
+            $progressBar->advance();
+            $progressBar->clear();
+            echo $buffer;
+            $progressBar->display();
+        });
+        $progressBar->finish();
     }
 
 }

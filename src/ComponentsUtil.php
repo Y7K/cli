@@ -8,40 +8,45 @@ use Symfony\Component\Yaml\Yaml;
 class ComponentsUtil
 {
 
-    public static function printFiles($files, $io) {
+    public static function printFiles($files, $io, $group = true) {
 
-        $jsFiles = array_filter($files, function($path) {
-            return strpos($path, '/js/') !== false;
-        });
+        if($group) {
+            $jsFiles = array_filter($files, function($path) {
+                return strpos($path, '/js/') !== false;
+            });
 
-        $cssFiles = array_filter($files, function($path) {
-            return strpos($path, '/scss/') !== false;
-        });
+            $cssFiles = array_filter($files, function($path) {
+                return strpos($path, '/scss/') !== false;
+            });
 
-        $twigFiles = array_filter($files, function($path) {
-            return strpos($path, '.twig') !== false;
-        });
+            $twigFiles = array_filter($files, function($path) {
+                return strpos($path, '.twig') !== false;
+            });
 
-        $otherFiles = array_diff($files, $jsFiles, $cssFiles, $twigFiles);
+            $otherFiles = array_diff($files, $jsFiles, $cssFiles, $twigFiles);
 
-        if(count($jsFiles) > 0) {
-            $io->section('JS Files:');
-            $io->listing($jsFiles);
-        }
+            if(count($jsFiles) > 0) {
+                $io->section('JS Files:');
+                $io->listing($jsFiles);
+            }
 
-        if(count($cssFiles) > 0) {
-            $io->section('Stylesheets:');
-            $io->listing($cssFiles);
-        }
+            if(count($cssFiles) > 0) {
+                $io->section('Stylesheets:');
+                $io->listing($cssFiles);
+            }
 
-        if(count($twigFiles) > 0) {
-            $io->section('Twig Files:');
-            $io->listing($twigFiles);
-        }
+            if(count($twigFiles) > 0) {
+                $io->section('Twig Files:');
+                $io->listing($twigFiles);
+            }
 
-        if(count($otherFiles) > 0) {
-            $io->section('Other Files:');
-            $io->listing($otherFiles);
+            if(count($otherFiles) > 0) {
+                $io->section('Other Files:');
+                $io->listing($otherFiles);
+            }
+
+        } else {
+            $io->listing($files);
         }
 
     }
@@ -53,46 +58,81 @@ class ComponentsUtil
 
         if(count($componentConfig['npmDependencies']) > 0) {
             $io->section('NPM Dependencies:');
-            $io->listing($componentConfig['npmDependencies']);
+
+            foreach ($componentConfig['npmDependencies'] as $name => $version) {
+                $io->listing([$name . ': ' . $version]);
+            }
         }
 
         if(count($componentConfig['npmDevDependencies']) > 0) {
             $io->section('NPM Dev Dependencies:');
-            $io->listing($componentConfig['npmDevDependencies']);
+            foreach ($componentConfig['npmDevDependencies'] as $name => $version) {
+                $io->listing([$name . ': ' . $version]);
+            }
         }
 
         if(count($componentConfig['composerDependencies']) > 0) {
             $io->section('Composer Packages:');
-            $io->listing($componentConfig['composerDependencies']);
+            foreach ($componentConfig['composerDependencies'] as $name => $version) {
+                $io->listing([$name . ': ' . $version]);
+            }
         }
 
+    }
+
+
+    public static function getComponentFile($fileUrl)
+    {
+        $repo = 'y7k/components';
+        $branch = 'develop';
+        $remoteFileUrl = 'https://raw.githubusercontent.com/'.$repo.'/'.$branch.'/'.$fileUrl;
+        return Util::download($remoteFileUrl);
     }
 
 
     public static function getComponentConfig($componentName)
     {
-        $repo = 'y7k/components';
-        $branch = 'develop';
-        $file = $componentName;
-        $configFileUrl = 'https://raw.githubusercontent.com/'.$repo.'/'.$branch.'/components/'.$file . '.yml';
-        $fileContentRaw = Util::download($configFileUrl);
-        return Yaml::parse($fileContentRaw);
+        $url = 'components/' . $componentName . '.yml';
+        return Yaml::parse(self::getComponentFile($url));
     }
 
 
     public static function copyFile($fileUrl)
     {
-        $repo = 'y7k/components';
-        $branch = 'develop';
-        $remoteFileUrl = 'https://raw.githubusercontent.com/'.$repo.'/'.$branch.'/'.$fileUrl . '.yml';
+        $file = self::getComponentFile($fileUrl);
         $targetFileUrl = $fileUrl;
         $targetDirectory = dirname($targetFileUrl);
-        $file = Util::download($remoteFileUrl);
-
         if (!file_exists($targetDirectory)) {
             mkdir($targetDirectory, 0777, true);
         }
         file_put_contents($targetFileUrl, $file);
+    }
+
+
+
+    public static function applyFileMerges($destinationFile, $mergeFile)
+    {
+        if(is_file($destinationFile)) {
+            $mergeContent = ComponentsUtil::getComponentFile($mergeFile);
+
+            $start = '<<<<<<<' . PHP_EOL;
+            $end = '>>>>>>>';
+            $pattern = "/$start(.*?)$end/s";
+
+            preg_match_all($pattern, $mergeContent, $matches);
+
+
+            foreach ($matches[1] as $mergePair) {
+                $mergePairParts = explode('=======', $mergePair);
+
+                $find = ltrim($mergePairParts[0]);
+                $replace = ltrim($mergePairParts[1]);
+
+                Util::findAndReplaceInFile($destinationFile, $find, $replace);
+
+            }
+
+        }
     }
 
 }
