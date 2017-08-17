@@ -30,7 +30,7 @@ class InfoCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
-        $componentName = strtolower($input->getArgument('component'));
+        $componentName = $input->getArgument('component');
         $componentConfig = ComponentsUtil::getComponentConfig($componentName);
 
         $this->io = new SymfonyStyle($input, $output);

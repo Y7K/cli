@@ -41,7 +41,7 @@ class ListCommand extends Command
 
         if($searchQuery) {
             $componentsTree = array_filter($componentsTree, function($component) use ($searchQuery) {
-                return strpos($component->path, $searchQuery) !== false;
+                return strpos(strtolower($component->path), $searchQuery) !== false;
             });
         }
 
