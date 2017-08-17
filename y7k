@@ -42,6 +42,7 @@ $app->add(new \Y7K\Cli\Commands\Assets\AssetsPushCommand());
 
 // Component Commands
 $app->add(new \Y7K\Cli\Commands\Components\InstallCommand());
+$app->add(new \Y7K\Cli\Commands\Components\UninstallCommand());
 $app->add(new \Y7K\Cli\Commands\Components\ListCommand());
 $app->add(new \Y7K\Cli\Commands\Components\InfoCommand());
 
