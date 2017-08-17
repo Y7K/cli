@@ -128,4 +128,17 @@ class Util
     }
 
 
+
+    public static function mergeJsonArrays($priority_json, $original_json_content)
+    {
+        foreach ($original_json_content as $org_content_key => $org_content_value) {
+            if (!array_key_exists($org_content_key, $priority_json)) {
+                $priority_json[$org_content_key] = $org_content_value;
+            } elseif (!is_string($org_content_value)) {
+                $priority_json[$org_content_key] =  self::mergeJsonArrays($priority_json[$org_content_key], $org_content_value);
+            }
+        }
+        return $priority_json;
+    }
+
 }
