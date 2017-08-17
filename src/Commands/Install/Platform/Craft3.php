@@ -19,14 +19,14 @@ class Craft3 extends Command
     {
         $this->setName('install:craft3')
             ->setDescription('Install Craft 3 CMS. Plus some Y7K Magic Sugar.')
-            ->addArgument('path', InputArgument::REQUIRED, 'Where shall that Project live in?');
+            ->addArgument('path', InputArgument::OPTIONAL, 'Where shall that Project live in?');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
         $path = $input->getArgument('path');
-        $filepath = $this->dir() . '/' . $path;
+        $filepath = $this->dir() . ($path ? '/' . $path : '');
 
         $this->install([
             'repo' => 'y7k/plate',
@@ -35,6 +35,7 @@ class Craft3 extends Command
             'output' => $output,
             'subfolders' => ['base', 'platforms/craft3'],
             'success' => 'The craft boilerplate is installed!',
+            'checkPath' => false
         ]);
 
 

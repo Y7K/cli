@@ -19,7 +19,7 @@ class Plain extends Command
     {
         $this->setName('install:plain')
             ->setDescription('Install Plain Boilerplate')
-            ->addArgument('path', InputArgument::REQUIRED, 'Directory of your choosing. Where the stuff will end up.')
+            ->addArgument('path', InputArgument::OPTIONAL, 'Directory of your choosing. Where the stuff will end up.')
         ;
     }
 
@@ -27,7 +27,7 @@ class Plain extends Command
     {
 
         $path = $input->getArgument('path');
-        $filepath = $this->dir() . '/' . $path;
+        $filepath = $this->dir() . ($path ? '/' . $path : '');
 
         $this->install([
             'repo' => 'y7k/plate',

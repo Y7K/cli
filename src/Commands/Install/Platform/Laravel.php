@@ -19,7 +19,7 @@ class Laravel extends Command
     {
         $this->setName('install:laravel')
             ->setDescription('Install the Laravel Framework')
-            ->addArgument('path', InputArgument::REQUIRED, 'Where u wanna put it, bro?')
+            ->addArgument('path', InputArgument::OPTIONAL, 'Where u wanna put it, bro?')
         ;
     }
 
@@ -27,7 +27,7 @@ class Laravel extends Command
     {
 
         $path = $input->getArgument('path');
-        $filepath = $this->dir() . '/' . $path;
+        $filepath = $this->dir() . ($path ? '/' . $path : '');
 
         $this->install([
             'repo' => 'laravel/laravel',

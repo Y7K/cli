@@ -19,14 +19,14 @@ class Craft extends Command
     {
         $this->setName('install:craft')
             ->setDescription('Install Craft CMS. Plus some Y7K Magic Sugar.')
-            ->addArgument('path', InputArgument::REQUIRED, 'Where shall that Project live in?');
+            ->addArgument('path', InputArgument::OPTIONAL, 'Where shall that Project live in?');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
         $path = $input->getArgument('path');
-        $filepath = $this->dir() . '/' . $path;
+        $filepath = $this->dir() . ($path ? '/' . $path : '');
 
         $this->install([
             'repo' => 'y7k/plate',
@@ -35,6 +35,7 @@ class Craft extends Command
             'output' => $output,
             'subfolders' => ['base', 'platforms/craft'],
             'success' => 'The craft boilerplate is installed!',
+            'checkPath' => false
         ]);
 
         $this->install([
@@ -43,6 +44,7 @@ class Craft extends Command
             'output' => $output,
             'subfolders' => ['craft/app'],
             'success' => 'The craft app folder is installed!',
+            'checkPath' => false
         ]);
 
         Util::findAndReplaceInFile($filepath . '/.env.example', '{name}', $path);
