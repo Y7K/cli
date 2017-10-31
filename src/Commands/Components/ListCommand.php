@@ -25,6 +25,8 @@ class ListCommand extends Command
         $this->setName('components:list')
             ->setDescription('Lists all possible components to install')
             ->addArgument('searchQuery', InputArgument::OPTIONAL, 'Search term');
+
+        $this->setAliases(['components:search']);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
