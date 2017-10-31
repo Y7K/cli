@@ -22,8 +22,9 @@ class DbPullCommand extends Command
     protected function configure()
     {
         $this->setName('db:pull')
-            ->setDescription('Pull a database from a specified environment to local')
-            ->addArgument('environment', InputArgument::REQUIRED, 'Environment name (defined in .y7k-cli.json)');
+            ->setDescription('⬇  Pull a database from a specified environment to local')
+            ->addArgument('environment', InputArgument::REQUIRED, 'Environment name (defined in .y7k-cli.json)')
+            ->addOption('force', 'f', InputOption::VALUE_NONE, 'Answers all security questions with yes automatically');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -36,12 +37,13 @@ class DbPullCommand extends Command
         $this->validateEnvironmentConfig($environment, $sourceData);
         $this->validateEnvironmentConfig('local', $destinationData);
 
+        if(!$input->getOption('force')) {
+            $helper = $this->getHelper('question');
+            $question = new ConfirmationQuestion('This will <fg=red;options=bold>OVERWRITE</> (<options=bold>local</>) with (<options=bold>'.$environment.'</>) database. Are you sure? [yes/no]' . PHP_EOL, false);
 
-        $helper = $this->getHelper('question');
-        $question = new ConfirmationQuestion('This will <fg=red;options=bold>OVERWRITE</> (<options=bold>local</>) with (<options=bold>'.$environment.'</>) database. Are you sure? [yes/no]' . PHP_EOL, false);
-
-        if (!$helper->ask($input, $output, $question)) {
-            return;
+            if (!$helper->ask($input, $output, $question)) {
+                return;
+            }
         }
 
 

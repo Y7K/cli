@@ -22,8 +22,9 @@ class AssetsPullCommand extends Command
     protected function configure()
     {
         $this->setName('assets:pull')
-            ->addArgument('environment', InputArgument::REQUIRED, 'Environment name (defined in .y7k-cli.json)');
             ->setDescription('⬇  Pull the assets from a specified environment to local')
+            ->addArgument('environment', InputArgument::REQUIRED, 'Environment name (defined in .y7k-cli.json)')
+            ->addOption('force', 'f', InputOption::VALUE_NONE, 'Answers all security questions with yes automatically');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -37,11 +38,13 @@ class AssetsPullCommand extends Command
         $this->validateEnvironmentConfig('local', $destinationData);
 
 
-        $helper = $this->getHelper('question');
-        $question = new ConfirmationQuestion('This will <fg=red;options=bold>OVERWRITE</> (<options=bold>local</>) with (<options=bold>'.$environment.'</>) assets. Are you sure? [yes/no]' . PHP_EOL, false);
+        if(!$input->getOption('force')) {
+            $helper = $this->getHelper('question');
+            $question = new ConfirmationQuestion('This will <fg=red;options=bold>OVERWRITE</> (<options=bold>local</>) with (<options=bold>'.$environment.'</>) assets. Are you sure? [yes/no]' . PHP_EOL, false);
 
-        if (!$helper->ask($input, $output, $question)) {
-            return;
+            if (!$helper->ask($input, $output, $question)) {
+                return;
+            }
         }
 
 
