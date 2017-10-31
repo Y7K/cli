@@ -55,12 +55,17 @@ y7k v
 
 ### y7k bump 
 
-Bump the current Version of the Project.
+Bump the current Version of the Project. The version will be bumped (project.json) and the change will be commited to git.
+
+Git-Flow: New release created and merged into dev & master
+No Git-Flow: Change is commited to current branch
+`-g` flag means: Skip all git stuff
 
 ```
-y7k bump [major|minor|patch]
-y7k b [major|minor|patch]
+y7k bump [major|minor|patch] [-g]
+y7k b [major|minor|patch] [-g]
 ```
+
 
 ### y7k storage:link 
 

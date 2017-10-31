@@ -19,12 +19,12 @@ class BumpCommand extends Command
     {
         $this->setName('bump')
             ->setDescription('Bump the Project Version')
-            ->addArgument('version', InputArgument::REQUIRED, 'Major, Minor or Patch');
+            ->addArgument('version', InputArgument::REQUIRED, 'Major, Minor or Patch')
+            ->addOption('nogit', 'g', InputOption::VALUE_NONE, 'Should only the version be updated and no git actions be done?');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
 
         // Check if Porjec.json file exists
         $projectFile = $this->dir() . '/project.json';
@@ -66,28 +66,61 @@ class BumpCommand extends Command
         $projectData->version = implode('.', $projectVersion);
         $projectVersionString = $projectData->version;
 
+        exec('git branch --list develop', $res1);
+        exec('git branch --list master', $res2);
+        exec('git rev-parse --abbrev-ref HEAD', $res3);
+        $hasDevBranch = count($res1) > 0;
+        $hasMasterBranch = count($res2) > 0;
+        $currentBranch = $res3[0];
 
-        $process = new Process('git checkout develop && git checkout -b release/' . $projectVersionString .' develop');
-        $process->run();
 
-        // Write To file
-        file_put_contents($projectFile, json_encode($projectData, JSON_PRETTY_PRINT));
+        // If "nogit", skip the whole git stuff
+        $noGit = $input->getOption('nogit');
+        if(!$notGit) {
 
-//        $emojis = ['🐸','🐵','🐰','🐨','🐯','🦁','🐤','🐣','🐥','🦆','🐌','🦎','🐍','🐫','🐳','🐬','🐋','🐡','🐙','🦑','✨','⚡️','🔥','💥','🌝','🌞','🌺','🌸','🌻','🌟','⭐️','🌈','❄️','☃️','🥑','🍒','🍉','🍋','🍓','🍍','🍆','🥒','🥕','🌽','🍟','🥘','🌮','🥙','🌯','🍜','🍝','🍣','🍱','🍢','🍡','🍧','🎂','🍮','🍿','🍭','🍦','🍪','🍩','☕️','🍻','🥂','🍷','🥃','🍾','🍹','🍸','🏆','🎖','🏅','📡','💣','🔫','🔮','🚬','🔭','💊','💉','🔑','🗝','🎉','🎊','🎀'];
-//        $emoji = $emojis[array_rand($emojis)];
-        $emoji = '';
+            // If there is a "develop" and "master branch" (meaning, we're probably using git-flow), we do the following:
+            //
+            // 1. Create new release branch
+            // 2. Update the project file
+            // 3. Commit the change to the release branch
+            // 4. Merge the release branch into master
+            // 5. Merge the release branch into develop
+            if($hasDevBranch && $hasMasterBranch) {
+                $process = new Process('git checkout develop && git checkout -b release/' . $projectVersionString .' develop');
+                $process->run();
 
-        $process = new Process('export GIT_MERGE_AUTOEDIT=no && ' .
-            'git add --all && git commit -m "' . $emoji . ' Release ' . $projectVersionString . '" && ' .
-            'git checkout master && git merge release/' . $projectVersionString . ' && git tag -a ' . $projectVersionString . ' -m "' . $projectVersionString . '" &&' .
-            'git checkout develop && git merge release/' . $projectVersionString . ' && git branch -d release/' . $projectVersionString . ' &&' .
-            'unset GIT_MERGE_AUTOEDIT');
-        if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
-            $process->setTty(true);
+                file_put_contents($projectFile, json_encode($projectData, JSON_PRETTY_PRINT));
+
+                $process = new Process('export GIT_MERGE_AUTOEDIT=no && ' .
+                    'git add --all && git commit -m "Release ' . $projectVersionString . '" && ' .
+                    'git checkout master && git merge release/' . $projectVersionString . ' && git tag -a ' . $projectVersionString . ' -m "' . $projectVersionString . '" &&' .
+                    'git checkout develop && git merge release/' . $projectVersionString . ' && git branch -d release/' . $projectVersionString . ' &&' .
+                    'unset GIT_MERGE_AUTOEDIT');
+            } else {
+
+                // If there is not "master" and "develop", we simply update the file and commit to the current branch
+
+                // Write To file
+                file_put_contents($projectFile, json_encode($projectData, JSON_PRETTY_PRINT));
+
+                $process = new Process('git add --all && git commit -m "Release ' . $projectVersionString . '" && ' .
+                                       'git tag -a ' . $projectVersionString . ' -m "' . $projectVersionString . '"');
+            }
+
+            if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
+                $process->setTty(true);
+            }
+
+            // Run git processes
+            $process->run(function ($type, $line) use ($output) {
+                $output->write($line);
+            });
+
+        } else {
+            // If no git, simply update project file
+            file_put_contents($projectFile, json_encode($projectData, JSON_PRETTY_PRINT));
         }
-        $process->run(function ($type, $line) use ($output) {
-            $output->write($line);
-        });
+
 
         $output->writeln('<info>Version updated to ' . $projectVersionString . '</info>');
     }
