@@ -18,7 +18,7 @@ class Craft extends Command
     protected function configure()
     {
         $this->setName('install:craft')
-            ->setDescription('Install Craft CMS. Plus some Y7K Magic Sugar.')
+            ->setDescription('⏳  Install Craft CMS. Plus some Y7K Magic Sugar.')
             ->addArgument('path', InputArgument::OPTIONAL, 'Where shall that Project live in?');
     }
 

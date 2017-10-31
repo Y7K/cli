@@ -18,7 +18,7 @@ class ComposerUpdateCommand extends Command
     protected function configure()
     {
         $this->setName('composer:update')
-            ->setDescription('Run composer update and commit the file');
+            ->setDescription('🔃  Run composer update and commit the file');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

@@ -24,7 +24,7 @@ class InstallCommand extends Command
     protected function configure()
     {
         $this->setName('components:install')
-            ->setDescription('Install a new component into the project')
+            ->setDescription('⏳  Install a new component into the project')
             ->addArgument('component', InputArgument::REQUIRED, 'Component name');
     }
 

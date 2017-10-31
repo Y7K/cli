@@ -19,7 +19,7 @@ class JavaScript extends Command
     protected function configure()
     {
         $this->setName('install:javascript')
-            ->setDescription('Install JavaScript Boilerplate')
+            ->setDescription('⏳  Install JavaScript Boilerplate')
             ->addArgument('path', InputArgument::OPTIONAL, 'Where does the Project live in?');
     }
 

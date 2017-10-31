@@ -24,7 +24,7 @@ class UninstallCommand extends Command
     protected function configure()
     {
         $this->setName('components:uninstall')
-            ->setDescription('Removes a component from the project')
+            ->setDescription('❌  Removes a component from the project')
             ->addArgument('component', InputArgument::REQUIRED, 'Component name');
     }
 

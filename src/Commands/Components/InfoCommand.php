@@ -23,7 +23,7 @@ class InfoCommand extends Command
     protected function configure()
     {
         $this->setName('components:info')
-            ->setDescription('Shows details about a specific component')
+            ->setDescription('💡  Shows details about a specific component')
             ->addArgument('component', InputArgument::REQUIRED, 'Component name');
     }
 

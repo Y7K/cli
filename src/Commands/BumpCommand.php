@@ -18,7 +18,7 @@ class BumpCommand extends Command
     protected function configure()
     {
         $this->setName('bump')
-            ->setDescription('Bump the Project Version')
+            ->setDescription('🚠  Bump the Project Version')
             ->addArgument('version', InputArgument::REQUIRED, 'Major, Minor or Patch')
             ->addOption('nogit', 'g', InputOption::VALUE_NONE, 'Should only the version be updated and no git actions be done?');
     }

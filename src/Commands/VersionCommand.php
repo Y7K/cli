@@ -18,7 +18,7 @@ class VersionCommand extends Command
     protected function configure()
     {
         $this->setName('version')
-            ->setDescription('Get the Project Version');
+            ->setDescription('#⃣  Get the Project Version');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

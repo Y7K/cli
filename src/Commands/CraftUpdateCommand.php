@@ -18,7 +18,7 @@ class CraftUpdateCommand extends Command
     protected function configure()
     {
         $this->setName('craft:update')
-            ->setDescription('Update Craft to the latest version');
+            ->setDescription('🔃  Update Craft to the latest version');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

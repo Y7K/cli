@@ -19,7 +19,7 @@ class Stylesheets extends Command
     protected function configure()
     {
         $this->setName('install:stylesheets')
-            ->setDescription('Install SCSS Boilerplate')
+            ->setDescription('⏳  Install SCSS Boilerplate')
             ->addArgument('path', InputArgument::OPTIONAL, 'Where does the Project live in?');
     }
 

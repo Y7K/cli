@@ -23,7 +23,7 @@ class ListCommand extends Command
     protected function configure()
     {
         $this->setName('components:list')
-            ->setDescription('Lists all possible components to install')
+            ->setDescription('🔍  Lists all possible components to install')
             ->addArgument('searchQuery', InputArgument::OPTIONAL, 'Search term');
 
         $this->setAliases(['components:search']);

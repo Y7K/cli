@@ -22,7 +22,7 @@ class AssetsPushCommand extends Command
     protected function configure()
     {
         $this->setName('assets:push')
-            ->setDescription('Push the assets from local to a specified environment')
+            ->setDescription('⬆  Push the assets from local to a specified environment')
             ->addArgument('environment', InputArgument::REQUIRED, 'Environment name (defined in .y7k-cli.json)');
     }
 

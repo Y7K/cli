@@ -22,8 +22,8 @@ class AssetsPullCommand extends Command
     protected function configure()
     {
         $this->setName('assets:pull')
-            ->setDescription('Pull the assets from a specified environment to local')
             ->addArgument('environment', InputArgument::REQUIRED, 'Environment name (defined in .y7k-cli.json)');
+            ->setDescription('⬇  Pull the assets from a specified environment to local')
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

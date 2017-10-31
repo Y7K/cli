@@ -19,7 +19,7 @@ class LinkCommand extends Command
     protected function configure()
     {
         $this->setName('storage:link')
-            ->setDescription('Create a symbolic link from "public/storage" to "storage/app/public"');
+            ->setDescription('📦  Create a symbolic link from "public/storage" to "storage/app/public"');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

@@ -18,7 +18,7 @@ class Laravel extends Command
     protected function configure()
     {
         $this->setName('install:laravel')
-            ->setDescription('Install the Laravel Framework')
+            ->setDescription('⏳  Install the Laravel Framework')
             ->addArgument('path', InputArgument::OPTIONAL, 'Where u wanna put it, bro?')
         ;
     }

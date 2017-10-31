@@ -22,7 +22,7 @@ class DbPushCommand extends Command
     protected function configure()
     {
         $this->setName('db:push')
-            ->setDescription('Push the local database to a specified environment')
+            ->setDescription('⬆  Push the local database to a specified environment')
             ->addArgument('environment', InputArgument::REQUIRED, 'Environment name (defined in .y7k-cli.json)');
     }
 

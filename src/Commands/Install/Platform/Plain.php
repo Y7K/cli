@@ -18,7 +18,7 @@ class Plain extends Command
     protected function configure()
     {
         $this->setName('install:plain')
-            ->setDescription('Install Plain Boilerplate')
+            ->setDescription('⏳  Install Plain Boilerplate')
             ->addArgument('path', InputArgument::OPTIONAL, 'Directory of your choosing. Where the stuff will end up.')
         ;
     }
