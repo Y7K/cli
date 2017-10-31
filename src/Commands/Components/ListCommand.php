@@ -41,7 +41,7 @@ class ListCommand extends Command
 
         if($searchQuery) {
             $componentsTree = array_filter($componentsTree, function($component) use ($searchQuery) {
-                return strpos(strtolower($component->path), $searchQuery) !== false;
+                return strpos(strtolower($component->path), strtolower($searchQuery)) !== false;
             });
         }
 
@@ -51,12 +51,20 @@ class ListCommand extends Command
         $this->io->text('Use <fg=blue>y7k components:list [search term]</> to filter the list');
         $this->io->newLine();
         $outputTable = [];
-
         foreach ($componentsTree as $component) {
-            $fileContentRaw = Util::download($component->url);
+            $componentTree = $this->getGithubTree($component->url);
+            $configFileUrl = $componentTree[array_search('.yml', array_column($componentTree, 'path'))]->url;
+
+            $configFileNodes = array_filter($componentTree, function($node) {
+                return strpos($node->path, '.yml') !== false;
+            });
+
+            $configFileUrl = array_values($configFileNodes)[0]->url;
+
+            $fileContentRaw = Util::download($configFileUrl);
             $componentConfig = Yaml::parse(base64_decode(json_decode($fileContentRaw)->content));
-            $componentName = str_replace('.yml','', $component->path);
-            $componentTitle = $componentConfig['name'];
+            $componentName = $componentConfig['name'];
+            $componentTitle = $componentConfig['title'];
             $componentDescription = $componentConfig['description'];
             array_push($outputTable, [$componentName, $componentTitle, $componentDescription]);
         }

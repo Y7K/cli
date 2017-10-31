@@ -34,7 +34,7 @@ class InfoCommand extends Command
         $componentConfig = ComponentsUtil::getComponentConfig($componentName);
 
         $this->io = new SymfonyStyle($input, $output);
-        $this->io->title($componentConfig['name']);
+        $this->io->title($componentConfig['title']);
         $this->io->text('<fg=green>'.$componentConfig['description'].'</>');
         $this->io->newLine();
 

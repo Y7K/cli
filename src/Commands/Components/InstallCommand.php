@@ -63,7 +63,7 @@ class InstallCommand extends Command
         $this->io->progressStart(count($componentConfig['files']));
 
         foreach ($componentConfig['files'] as $fileUrl) {
-            $file = ComponentsUtil::copyFile($fileUrl);
+            $file = ComponentsUtil::copyFile($fileUrl, $componentConfig['name']);
             $this->io->progressAdvance();
         }
 
@@ -89,7 +89,7 @@ class InstallCommand extends Command
 
             $this->io->progressStart(count($componentConfig['filemerges']));
             foreach ($componentConfig['filemerges'] as $fileMerge) {
-                ComponentsUtil::applyFileMerges($fileMerge['dest'], $fileMerge['src']);
+                ComponentsUtil::applyFileMerges($fileMerge['dest'], $fileMerge['src'], $componentConfig['name']);
                 $this->io->progressAdvance();
             }
             $this->io->progressFinish();

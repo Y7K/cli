@@ -92,15 +92,20 @@ class ComponentsUtil
 
     public static function getComponentConfig($componentName)
     {
-        $url = 'components/' . $componentName . '.yml';
+        $componentFolder = strtolower($componentName);
+        $url = 'components/' . $componentFolder . '/' . $componentName . '.yml';
         return Yaml::parse(self::getComponentFile($url));
     }
 
 
-    public static function copyFile($fileUrl)
+    public static function copyFile($fileUrl, $componentName)
     {
-        $file = self::getComponentFile($fileUrl);
-        $targetFileUrl = $fileUrl;
+        $componentFolder = strtolower($componentName);
+        $sourceUrl = 'components/' . $componentFolder  . '/' . $fileUrl;
+        $targetUrl = $fileUrl;
+
+        $file = self::getComponentFile($sourceUrl);
+        $targetFileUrl = $targetUrl;
         $targetDirectory = dirname($targetFileUrl);
         if (!file_exists($targetDirectory)) {
             mkdir($targetDirectory, 0777, true);
@@ -110,10 +115,14 @@ class ComponentsUtil
 
 
 
-    public static function applyFileMerges($destinationFile, $mergeFile)
+    public static function applyFileMerges($destinationFile, $mergeFile, $componentName)
     {
         if(is_file($destinationFile)) {
-            $mergeContent = ComponentsUtil::getComponentFile($mergeFile);
+
+            $componentFolder = strtolower($componentName);
+            $mergeSourceUrl = 'components/' . $componentFolder  . '/' . $mergeFile;
+            $mergeContent = self::getComponentFile($mergeSourceUrl);
+
 
             $start = '<<<<<<<' . PHP_EOL;
             $end = '>>>>>>>';
@@ -121,13 +130,11 @@ class ComponentsUtil
 
             preg_match_all($pattern, $mergeContent, $matches);
 
-
             foreach ($matches[1] as $mergePair) {
                 $mergePairParts = explode('=======', $mergePair);
 
                 $find = ltrim($mergePairParts[0]);
                 $replace = ltrim($mergePairParts[1]);
-
                 Util::findAndReplaceInFile($destinationFile, $find, $replace);
 
             }
