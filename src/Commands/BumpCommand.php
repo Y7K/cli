@@ -76,7 +76,7 @@ class BumpCommand extends Command
 
         // If "nogit", skip the whole git stuff
         $noGit = $input->getOption('nogit');
-        if(!$notGit) {
+        if(!$noGit) {
 
             // If there is a "develop" and "master branch" (meaning, we're probably using git-flow), we do the following:
             //
