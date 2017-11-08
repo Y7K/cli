@@ -49,7 +49,7 @@ class AssetsPullCommand extends Command
 
 
         $cmd =
-        'rsync -avz --delete-excluded '.
+        'rsync -avz --delete-excluded --exclude=".*" '.
         $sourceData['sshuser']
         .'@'.
         $sourceData['host']

@@ -62,7 +62,7 @@ class AssetsPushCommand extends Command
 
 
         $cmd =
-        'rsync -avz --delete-excluded '.
+        'rsync -avz --delete-excluded --exclude=".*" '.
         $sourceData['storage']
         . '/ ' .
         $destinationData['sshuser']
