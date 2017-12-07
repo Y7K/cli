@@ -12,13 +12,14 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CraftUpdateCommand extends Command
+class Craft2UpdateCommand extends Command
 {
 
     protected function configure()
     {
-        $this->setName('craft:update')
-            ->setDescription('🔃  Update Craft to the latest version');
+        $this->setName('craft2:update')
+            ->setDescription('🔃  Update Craft 2.* to the latest version')
+            ->addOption('commit', 'c', InputOption::VALUE_NONE, 'Commit update to git directly?');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -41,7 +42,7 @@ class CraftUpdateCommand extends Command
             $output->write($line);
         });
 
-        $this->install([
+        $this->installFromRemote([
             'url' => 'http://craftcms.com/latest.zip?accept_license=yes',
             'path' => $craftAppDir,
             'output' => $output,
@@ -51,10 +52,12 @@ class CraftUpdateCommand extends Command
 
         require_once ($craftAppDir . '/info.php');
 
-        $process = new Process('git add craft/app && git commit -m "Craft Updated to Version '. CRAFT_VERSION .'"');
-        $process->run(function ($type, $line) use ($output) {
-            $output->write($line);
-        });
+        if($input->getOption('commit')) {
+            $process = new Process('git add craft/app && git commit -m "Craft Updated to Version '. CRAFT_VERSION .'"');
+            $process->run(function ($type, $line) use ($output) {
+                $output->write($line);
+            });
+        }
 
 
         $output->writeln('<comment>' .'Craft updated to Version ' . CRAFT_VERSION.'</comment>');

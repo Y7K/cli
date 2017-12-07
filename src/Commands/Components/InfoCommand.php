@@ -24,14 +24,16 @@ class InfoCommand extends Command
     {
         $this->setName('components:info')
             ->setDescription('💡  Shows details about a specific component')
-            ->addArgument('component', InputArgument::REQUIRED, 'Component name');
+            ->addArgument('component', InputArgument::REQUIRED, 'Component name')
+            ->addOption('remote', 'r', InputOption::VALUE_NONE, 'Load Components from online repository instead from local?');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
         $componentName = $input->getArgument('component');
-        $componentConfig = ComponentsUtil::getComponentConfig($componentName);
+        $isRemote = $input->getOption('remote');
+        $componentConfig = ComponentsUtil::getComponentConfig($componentName, $isRemote);
 
         $this->io = new SymfonyStyle($input, $output);
         $this->io->title($componentConfig['title']);

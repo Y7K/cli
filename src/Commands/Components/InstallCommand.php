@@ -25,7 +25,8 @@ class InstallCommand extends Command
     {
         $this->setName('components:install')
             ->setDescription('⏳  Install a new component into the project')
-            ->addArgument('component', InputArgument::REQUIRED, 'Component name');
+            ->addArgument('component', InputArgument::REQUIRED, 'Component name')
+            ->addOption('remote', 'r', InputOption::VALUE_NONE, 'Load Components from online repository instead from local?');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -34,7 +35,8 @@ class InstallCommand extends Command
         $this->output = $output;
 
         $componentName = $input->getArgument('component');
-        $componentConfig = ComponentsUtil::getComponentConfig($componentName);
+        $isRemote = $input->getOption('remote');
+        $componentConfig = ComponentsUtil::getComponentConfig($componentName, $isRemote);
 
         if(array_key_exists('404', $componentConfig)) {
             throw new RuntimeException('Component not found!');
@@ -42,8 +44,8 @@ class InstallCommand extends Command
 
         $this->io->title('Installing Component...');
 
-        $this->copyFiles($componentConfig);
-        $this->mergeFiles($componentConfig);
+        $this->copyFiles($componentConfig, $isRemote);
+        $this->mergeFiles($componentConfig, $isRemote);
         $this->installNpmDependencies($componentConfig);
         $this->installComposerDependencies($componentConfig);
 
@@ -56,14 +58,14 @@ class InstallCommand extends Command
     }
 
 
-    private function copyFiles($componentConfig)
+    private function copyFiles($componentConfig, $isRemote)
     {
         $this->io->text('<fg=blue>Copying files...</>');
 
         $this->io->progressStart(count($componentConfig['files']));
 
         foreach ($componentConfig['files'] as $fileUrl) {
-            $file = ComponentsUtil::copyFile($fileUrl, $componentConfig['name']);
+            $file = ComponentsUtil::copyFile($fileUrl, $componentConfig['name'], $isRemote);
             $this->io->progressAdvance();
         }
 
@@ -75,7 +77,7 @@ class InstallCommand extends Command
     }
 
 
-    private function mergeFiles($componentConfig)
+    private function mergeFiles($componentConfig, $isRemote)
     {
 
         $fileDestinations = array_map(create_function('$a', 'return $a[\'dest\'];'), $componentConfig['filemerges']);
@@ -89,7 +91,7 @@ class InstallCommand extends Command
 
             $this->io->progressStart(count($componentConfig['filemerges']));
             foreach ($componentConfig['filemerges'] as $fileMerge) {
-                ComponentsUtil::applyFileMerges($fileMerge['dest'], $fileMerge['src'], $componentConfig['name']);
+                ComponentsUtil::applyFileMerges($fileMerge['dest'], $fileMerge['src'], $componentConfig['name'], $isRemote);
                 $this->io->progressAdvance();
             }
             $this->io->progressFinish();

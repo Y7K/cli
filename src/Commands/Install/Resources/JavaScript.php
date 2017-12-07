@@ -4,7 +4,6 @@ namespace Y7K\Cli\Commands\Install\Resources;
 
 use RuntimeException;
 
-use Symfony\Component\Console\Question\ChoiceQuestion;
 use Y7K\Cli\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
@@ -20,22 +19,19 @@ class JavaScript extends Command
     {
         $this->setName('install:javascript')
             ->setDescription('⏳  Install JavaScript Boilerplate')
-            ->addArgument('path', InputArgument::OPTIONAL, 'Where does the Project live in?');
+            ->addArgument('path', InputArgument::OPTIONAL, 'Where is the output folder?')
+            ->addOption('remote', 'r', InputOption::VALUE_NONE, 'Load Stylesheets from online repository instead from local?');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
-        // Load Question Helper
-        $helper = $this->getHelper('question');
-
         // Get Paths
         $path = $input->getArgument('path');
         $filepath = $this->dir() . ($path ? '/' . $path : '');
-        $type = 'Default';
 
         $output->writeln('');
-        $output->writeln('Installing the <info>' . ucfirst($type) . '</info> JS Boilerplate...');
+        $output->writeln('Installing the <info>Default</info> JS Boilerplate...');
         $output->writeln('');
 
         $assetsDir = $filepath . '/resources/assets';
@@ -43,16 +39,26 @@ class JavaScript extends Command
             mkdir($assetsDir, 0777, true);
         }
 
-        // Install the repo
-        $this->install([
-            'repo' => 'y7k/scripts',
-            'branch' => 'master',
-            'path' => $assetsDir,
-            'output' => $output,
-            'subfolders' => ['source'],
-            'success' => 'The JavaScript boilerplate has been loaded!',
-            'checkPath' => false
-        ]);
+        if($input->getOption('remote')) {
+            // Install the repo
+            $this->installFromRemote([
+                'repo' => 'y7k/scripts',
+                'branch' => 'master',
+                'path' => $assetsDir,
+                'output' => $output,
+                'subfolders' => ['source'],
+                'success' => 'The JavaScript boilerplate has been loaded from remote!',
+                'checkPath' => false
+            ]);
+        } else {
+            $this->installFromLocal([
+                'sourcePath' => getenv('PATH_SCRIPTS'),
+                'subfolders' => ['source'],
+                'destPath' => $assetsDir,
+                'output' => $output,
+                'success' => 'The JavaScript boilerplate has been loaded from local!',
+            ]);
+        }
 
         // Merge the package.json files
         $packageJson = $filepath. '/package.json';

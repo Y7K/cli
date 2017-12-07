@@ -19,31 +19,47 @@ class Craft extends Command
     {
         $this->setName('install:craft')
             ->setDescription('⏳  Install Craft CMS. Plus some Y7K Magic Sugar.')
-            ->addArgument('path', InputArgument::OPTIONAL, 'Where shall that Project live in?');
+            ->addArgument('path', InputArgument::OPTIONAL, 'Where is the output folder?')
+            ->addOption('remote', 'r', InputOption::VALUE_NONE, 'Load Plate from online repository instead from local?');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
+        // Get Paths
         $path = $input->getArgument('path');
         $filepath = $this->dir() . ($path ? '/' . $path : '');
 
-        $this->install([
-            'repo' => 'y7k/plate',
-            'branch' => 'master',
-            'path' => $filepath,
-            'output' => $output,
-            'subfolders' => ['base', 'platforms/craft'],
-            'success' => 'The craft boilerplate is installed!',
-            'checkPath' => false
-        ]);
+        $output->writeln('');
+        $output->writeln('Installing the <info>Craft CMS 2.*</info> Boilerplate...');
+        $output->writeln('');
 
-        $this->install([
+        if($input->getOption('remote')) {
+            $this->installFromRemote([
+                'repo' => 'y7k/plate',
+                'branch' => 'master',
+                'path' => $filepath,
+                'output' => $output,
+                'subfolders' => ['base', 'platforms/craft'],
+                'success' => 'The Craft CMS Boilerplate has been loaded from remote!',
+                'checkPath' => false
+            ]);
+        } else {
+            $this->installFromLocal([
+                'sourcePath' => getenv('PATH_PLATE'),
+                'subfolders' => ['base', 'platforms/craft'],
+                'destPath' => $filepath,
+                'output' => $output,
+                'success' => 'The Craft CMS Boilerplate has been loaded from local!',
+            ]);
+        }
+
+        $this->installFromRemote([
             'url' => 'http://craftcms.com/latest.zip?accept_license=yes',
             'path' => $filepath . '/craft/app',
             'output' => $output,
             'subfolders' => ['craft/app'],
-            'success' => 'The craft app folder is installed!',
+            'success' => 'The craft cms (vendor) has been loaded from remote!',
             'checkPath' => false
         ]);
 
