@@ -56,7 +56,6 @@ class Laravel extends Command
         $commands = [
             'install --no-scripts',
             'run-script post-root-package-install',
-            'run-script post-install-cmd',
             'run-script post-create-project-cmd'
         ];
 
