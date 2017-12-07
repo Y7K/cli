@@ -25,6 +25,7 @@ class Craft3 extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
+        // Get Paths
         $path = $input->getArgument('path');
         $filepath = $this->dir() . ($path ? '/' . $path : '');
 

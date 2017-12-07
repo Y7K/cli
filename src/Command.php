@@ -202,7 +202,7 @@ class Command extends \Symfony\Component\Console\Command\Command
         }
     }
 
-    protected function install($params = [])
+    protected function installFromRemote($params = [])
     {
 
         $options = array_merge([

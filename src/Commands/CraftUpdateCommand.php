@@ -41,7 +41,7 @@ class CraftUpdateCommand extends Command
             $output->write($line);
         });
 
-        $this->install([
+        $this->installFromRemote([
             'url' => 'http://craftcms.com/latest.zip?accept_license=yes',
             'path' => $craftAppDir,
             'output' => $output,

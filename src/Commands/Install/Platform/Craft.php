@@ -25,6 +25,7 @@ class Craft extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
+        // Get Paths
         $path = $input->getArgument('path');
         $filepath = $this->dir() . ($path ? '/' . $path : '');
 
@@ -38,12 +39,12 @@ class Craft extends Command
             'checkPath' => false
         ]);
 
-        $this->install([
+        $this->installFromRemote([
             'url' => 'http://craftcms.com/latest.zip?accept_license=yes',
             'path' => $filepath . '/craft/app',
             'output' => $output,
             'subfolders' => ['craft/app'],
-            'success' => 'The craft app folder is installed!',
+            'success' => 'The craft cms (vendor) has been loaded from remote!',
             'checkPath' => false
         ]);
 

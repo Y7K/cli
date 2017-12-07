@@ -4,7 +4,6 @@ namespace Y7K\Cli\Commands\Install\Resources;
 
 use RuntimeException;
 
-use Symfony\Component\Console\Question\ChoiceQuestion;
 use Y7K\Cli\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
@@ -26,16 +25,12 @@ class Stylesheets extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
-        // Load Question Helper
-        $helper = $this->getHelper('question');
-
         // Get Paths
         $path = $input->getArgument('path');
         $filepath = $this->dir() . ($path ? '/' . $path : '');
-        $type = 'Default';
 
         $output->writeln('');
-        $output->writeln('Installing the <info>' . ucfirst($type) . '</info> SCSS Boilerplate...');
+        $output->writeln('Installing the <info>Default</info> SCSS Boilerplate...');
         $output->writeln('');
 
         $assetsDir = $filepath . '/resources/assets';
@@ -68,8 +63,6 @@ class Stylesheets extends Command
         // Write to project package.json
         file_put_contents($packageJson, json_encode($mergedPackageJson, JSON_PRETTY_PRINT));
     }
-
-
 
 
 }
