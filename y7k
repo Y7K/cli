@@ -9,6 +9,9 @@ if(file_exists(__DIR__ . '/../../autoload.php')) {
 
 ini_set('display_errors', 1);
 
+$dotenv = new Dotenv\Dotenv(__DIR__);
+$dotenv->load();
+
 $versionData = json_decode(file_get_contents(__DIR__ . '/project.json'), true);
 $cliVersion = $versionData['version'];
 

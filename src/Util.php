@@ -2,7 +2,6 @@
 
 namespace Y7K\Cli;
 
-use Dotenv\Dotenv;
 use ZipArchive;
 use RuntimeException;
 use RecursiveDirectoryIterator;
@@ -34,9 +33,6 @@ class Util
 
     public static function download($url, $progress = null)
     {
-
-        $dotenv = new Dotenv(__DIR__ . '/..');
-        $dotenv->load();
 
         $curl = curl_init();
 
