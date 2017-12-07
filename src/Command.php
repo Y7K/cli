@@ -251,6 +251,47 @@ class Command extends \Symfony\Component\Console\Command\Command
 
     }
 
+
+    protected function installFromLocal($params = [])
+    {
+
+        $options = array_merge([
+            'sourcePath' => null,
+            'subfolders' => [],
+            'destPath' => null,
+            'output' => null,
+            'success' => 'Done!',
+        ], $params);
+
+        $success = 0;
+        foreach ($options['subfolders'] as $subfolder) {
+            $src = $options['sourcePath'] . '/' . $subfolder;
+            $dest = $options['destPath'];
+            exec("cp -a $src/. $dest/", $output, $return);
+
+            $success += $return;
+        }
+
+
+        // yay, everything is setup
+        if ($options['output'] && $options['success']) {
+
+            if($success == 0) {
+                $options['output']->writeln('');
+                $options['output']->writeln('<comment>' . $options['success'] . '</comment>');
+                $options['output']->writeln('');
+
+            } else {
+                $options['output']->writeln('');
+                $options['output']->writeln('<error>' . 'Error installing from local source...' . '</error>');
+                $options['output']->writeln('');
+            }
+        }
+
+    }
+
+
+
     protected function runComposerCommands($input, $output, $path, $commands)
     {
         $composer = $this->findComposer();
