@@ -19,8 +19,8 @@ class Plain extends Command
     {
         $this->setName('install:plain')
             ->setDescription('⏳  Install Plain Boilerplate')
-            ->addArgument('path', InputArgument::OPTIONAL, 'Directory of your choosing. Where the stuff will end up.')
-        ;
+            ->addArgument('path', InputArgument::OPTIONAL, 'Where is the output folder?')
+            ->addOption('remote', 'r', InputOption::VALUE_NONE, 'Load Plate from online repository instead from local?');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -30,15 +30,29 @@ class Plain extends Command
         $path = $input->getArgument('path');
         $filepath = $this->dir() . ($path ? '/' . $path : '');
 
-        $this->install([
-            'repo' => 'y7k/plate',
-            'branch' => 'master',
-            'path' => $filepath,
-            'output' => $output,
-            'subfolders' => ['base', 'platforms/plain'],
-            'success' => 'The Boilerplate code was loaded and installed!',
-            'checkPath' => false
-        ]);
+        $output->writeln('');
+        $output->writeln('Installing the <info>Plain PHP</info> Boilerplate...');
+        $output->writeln('');
+
+        if($input->getOption('remote')) {
+            $this->installFromRemote([
+                'repo' => 'y7k/plate',
+                'branch' => 'master',
+                'path' => $filepath,
+                'output' => $output,
+                'subfolders' => ['base', 'platforms/plain'],
+                'success' => 'The Plain PHP Boilerplate has been loaded from remote!',
+                'checkPath' => false
+            ]);
+        } else {
+            $this->installFromLocal([
+                'sourcePath' => getenv('PATH_PLATE'),
+                'subfolders' => ['base', 'platforms/plain'],
+                'destPath' => $filepath,
+                'output' => $output,
+                'success' => 'The Plain PHP Boilerplate has been loaded from local!',
+            ]);
+        }
 
         Util::findAndReplaceInFile($filepath . '/.env.example', '{name}', $path);
         Util::findAndReplaceInFile($filepath . '/composer.json', '{name}', $path);

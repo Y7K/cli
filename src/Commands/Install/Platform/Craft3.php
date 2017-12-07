@@ -19,7 +19,8 @@ class Craft3 extends Command
     {
         $this->setName('install:craft3')
             ->setDescription('⏳  Install Craft 3 CMS. Plus some Y7K Magic Sugar.')
-            ->addArgument('path', InputArgument::OPTIONAL, 'Where shall that Project live in?');
+            ->addArgument('path', InputArgument::OPTIONAL, 'Where is the output folder?')
+            ->addOption('remote', 'r', InputOption::VALUE_NONE, 'Load Plate from online repository instead from local?');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -29,16 +30,29 @@ class Craft3 extends Command
         $path = $input->getArgument('path');
         $filepath = $this->dir() . ($path ? '/' . $path : '');
 
-        $this->install([
-            'repo' => 'y7k/plate',
-            'branch' => 'master',
-            'path' => $filepath,
-            'output' => $output,
-            'subfolders' => ['base', 'platforms/craft3'],
-            'success' => 'The craft boilerplate is installed!',
-            'checkPath' => false
-        ]);
+        $output->writeln('');
+        $output->writeln('Installing the <info>Craft 3.*</info> Boilerplate...');
+        $output->writeln('');
 
+        if($input->getOption('remote')) {
+            $this->installFromRemote([
+                'repo' => 'y7k/plate',
+                'branch' => 'master',
+                'path' => $filepath,
+                'output' => $output,
+                'subfolders' => ['base', 'platforms/craft3'],
+                'success' => 'The Craft CMS Boilerplate has been loaded from remote!',
+                'checkPath' => false
+            ]);
+        } else {
+            $this->installFromLocal([
+                'sourcePath' => getenv('PATH_PLATE'),
+                'subfolders' => ['base', 'platforms/craft3'],
+                'destPath' => $filepath,
+                'output' => $output,
+                'success' => 'The Craft CMS Boilerplate has been loaded from local!',
+            ]);
+        }
 
         Util::findAndReplaceInFile($filepath . '/.env.example', '{name}', $path);
         Util::findAndReplaceInFile($filepath . '/composer.json', '{name}', $path);
