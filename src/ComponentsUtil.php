@@ -81,7 +81,18 @@ class ComponentsUtil
     }
 
 
-    public static function getComponentFile($fileUrl)
+    public static function getComponentFile($fileUrl, $isRemote = false)
+    {
+
+        if($isRemote) {
+            return self::getComponentFileRemote($fileUrl);
+        } else {
+            return self::getComponentFileLocal($fileUrl);
+        }
+    }
+
+
+    public static function getComponentFileRemote($fileUrl)
     {
         $repo = 'y7k/components';
         $branch = 'master';
@@ -90,21 +101,29 @@ class ComponentsUtil
     }
 
 
-    public static function getComponentConfig($componentName)
+    public static function getComponentFileLocal($fileUrl)
     {
-        $componentFolder = strtolower($componentName);
-        $url = 'components/' . $componentFolder . '/' . $componentName . '.yml';
-        return Yaml::parse(self::getComponentFile($url));
+        $componentsPath = getenv('PATH_COMPONENTS');
+        $path = $componentsPath . '/' . $fileUrl;
+        return file_get_contents($path);
     }
 
 
-    public static function copyFile($fileUrl, $componentName)
+    public static function getComponentConfig($componentName, $isRemote)
+    {
+        $componentFolder = strtolower($componentName);
+        $url = 'components/' . $componentFolder . '/' . $componentName . '.yml';
+        return Yaml::parse(self::getComponentFile($url, $isRemote));
+    }
+
+
+    public static function copyFile($fileUrl, $componentName, $isRemote)
     {
         $componentFolder = strtolower($componentName);
         $sourceUrl = 'components/' . $componentFolder  . '/' . $fileUrl;
         $targetUrl = $fileUrl;
 
-        $file = self::getComponentFile($sourceUrl);
+        $file = self::getComponentFile($sourceUrl, $isRemote);
         $targetFileUrl = $targetUrl;
         $targetDirectory = dirname($targetFileUrl);
         if (!file_exists($targetDirectory)) {
@@ -114,14 +133,13 @@ class ComponentsUtil
     }
 
 
-
-    public static function applyFileMerges($destinationFile, $mergeFile, $componentName)
+    public static function applyFileMerges($destinationFile, $mergeFile, $componentName, $isRemote)
     {
         if(is_file($destinationFile)) {
 
             $componentFolder = strtolower($componentName);
             $mergeSourceUrl = 'components/' . $componentFolder  . '/' . $mergeFile;
-            $mergeContent = self::getComponentFile($mergeSourceUrl);
+            $mergeContent = self::getComponentFile($mergeSourceUrl, $isRemote);
 
 
             $start = '<<<<<<<' . PHP_EOL;

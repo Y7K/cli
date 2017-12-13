@@ -25,7 +25,8 @@ class UninstallCommand extends Command
     {
         $this->setName('components:uninstall')
             ->setDescription('❌  Removes a component from the project')
-            ->addArgument('component', InputArgument::REQUIRED, 'Component name');
+            ->addArgument('component', InputArgument::REQUIRED, 'Component name')
+            ->addOption('remote', 'r', InputOption::VALUE_NONE, 'Load Components from online repository instead from local?');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -34,7 +35,8 @@ class UninstallCommand extends Command
         $this->output = $output;
 
         $componentName = $input->getArgument('component');
-        $componentConfig = ComponentsUtil::getComponentConfig($componentName);
+        $isRemote = $input->getOption('remote');
+        $componentConfig = ComponentsUtil::getComponentConfig($componentName, $isRemote);
 
         if(array_key_exists('404', $componentConfig)) {
             throw new RuntimeException('Component not found!');

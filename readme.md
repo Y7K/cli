@@ -16,6 +16,11 @@
 
 4. Create a [Personal GitHub Access Token](https://github.com/settings/tokens) with `repo` privileges and add it along with your GitHub Username to the `.env` file.
 
+5. Update the paths of the boilerplate repositories in your `.env` file. To install from local sources, you need to specify the paths (absolute), e.g.
+
+`PATH_SCRIPTS=/Users/yourname/code/plates/scripts`
+
+
 ## Update
 
 To update the CLI, pull the latest version:
@@ -43,6 +48,11 @@ y7k new pr01-project --platform laravel
 y7k new pr01-project --platform plain
 ```
 
+Per default, everything is installed from local sources (except vendor repositories like laravel, craft cms etc.). If you want to install from the remote github versions of the plate, add `-r` or `--remote` to the command.
+
+```
+y7k new pr01-project -r
+```
 
 ### y7k version 
 
@@ -75,18 +85,175 @@ Create a symbolic link from "public/storage" to "storage/app/public".
 y7k storage:link 
 ```
 
-### y7k craft:update 
+### y7k craft2:update 
 
-Update to the latest version of Craft.
+Update to the latest version of Craft 2.*.
 This command deletes the `craft/app` directory and replaces it with the most recent version. Make sure to log into the control panel after performing the update to ensure the database is updated, too.
 
 ```
-y7k craft:update
+y7k craft2:update
 ```
+
+
+## Content Sync
+
+### y7k db:pull
+Pulls the database from a remote installation
+
+```
+y7k db:pull [ENV_NAME]
+y7k db:pull pizza
+y7k db:pull production
+y7k d:pul pizza
+```
+
+This will overwrite your local database with the one from the [ENV_NAME], defined in `.y7k-cli.yml` of the project.
+
+
+### y7k db:push
+Pushes the database to a remote installation
+
+```
+y7k db:push [ENV_NAME]
+y7k db:push pizza
+y7k db:push production
+y7k d:pus pizza
+```
+
+This will overwrite the remote database [ENV_NAME] with your local one. The remote is defined in `.y7k-cli.yml` of the project.
+
+
+### y7k assets:pull
+Pulls storage files from a remote installation
+
+```
+y7k assets:pull [ENV_NAME]
+y7k assets:pull pizza
+y7k assets:pull production
+y7k a:pul pizza
+```
+
+This will rsync files from a remote destination [ENV_NAME] to local, defined in `.y7k-cli.yml` of the project.
+
+
+### y7k assets:push
+Pushes the database to a remote installation
+
+```
+y7k assets:push [ENV_NAME]
+y7k assets:push pizza
+y7k assets:push production
+y7k a:pus pizza
+```
+
+This will rsync files from local to a remote destination [ENV_NAME], defined in `.y7k-cli.yml` of the project.
+
+
+### y7k content:pull
+Combination of `db:pull` and `assets:pull`
+
+```
+y7k content:pull [ENV_NAME]
+y7k content:pull pizza
+y7k content:pull production
+y7k c:pul pizza
+```
+
+
+
+### y7k content:push
+Combination of `db:push` and `assets:push`
+
+```
+y7k content:push [ENV_NAME]
+y7k content:push pizza
+y7k content:push production
+y7k c:pus pizza
+```
+
+
+
+## y7k components
+
+### y7k components:list
+The same as `y7k components:search`
+
+Find existing components. You can also search with a search query. It will return a list of found components
+
+
+```
+y7k components:list
+y7k components:list [SEARCH_KEY]
+y7k components:list image
+y7k components:search lightbox
+```
+
+Per default, everything is searched in local sources. If you want to search remote github repository of components, add `-r` or `--remote` to the command.
+
+```
+y7k components:list -r
+```
+
+
+### y7k components:info
+Displays information about a specific component
+
+
+```
+y7k components:info [COMPONENT]
+y7k components:info photoswipe
+```
+
+Per default, info comes from local sources. If you want to search remote github repository of components, add `-r` or `--remote` to the command.
+
+```
+y7k components:info [COMPONENT] -r
+```
+
+
+### y7k components:install
+Installs a component. It will copy files into your project. It also tries to apply file merges (update existing files) according to merging rules. Checkout the compnent with `y7k components:info [COMPONENT]` first.
+
+
+```
+y7k components:install [COMPONENT]
+y7k components:install photoswipe
+```
+
+Per default, the component is installed from local sources. If you want to install from the remote github repository of components, add `-r` or `--remote` to the command.
+
+```
+y7k components:install [COMPONENT] -r
+```
+
+
+### y7k components:uninstall
+Uninstalls a component from a project. This means, it removes all component files from your project.
+
+**Warning!**:
+
+- It does not revert file merges. Checkout this files manually to remove traces.
+- It does not uninstall NPM or Component packages, nor removes them from package.json or composer.json. You have to do this yourself.
+
+
+```
+y7k components:uninstall [COMPONENT]
+y7k components:uninstall photoswipe
+```
+
+Per default, the component is uninstalled based on the component info file from local sources. If you want to uninstall with infos from the remote github repository of components, add `-r` or `--remote` to the command.
+
+```
+y7k components:uninstall [COMPONENT] -r
+```
+
+
+
 
 ## Roadmap
 
-* Add Commands to update Craft & Plugins
+* Add component npm & composer dependencies in json format instead of installing them from component yml file.
+* Add more environment commands (like open forge, open deploybot etc.)
 
 -----
 

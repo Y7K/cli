@@ -26,6 +26,7 @@ class NewCommand extends Command
             ->setDescription('👻  Install a shiny new Project')
             ->addArgument('path', InputArgument::OPTIONAL, 'Choose a folder, I\'ll take care of the rest.')
             ->addOption('platform', 'p', InputOption::VALUE_OPTIONAL, 'Which Type shall it be: Craft, Laravel or a static Site?')
+            ->addOption('remote', 'r', InputOption::VALUE_NONE, 'Load Plate from online repository instead from local?');
         ;
     }
 
@@ -77,6 +78,7 @@ class NewCommand extends Command
         $platformCommand = $this->getApplication()->find('install:' . str_replace(' ', '-', strtolower($platform)));
         $platformArguments = new ArrayInput([
             'path'    => $path,
+            '-r'    => $input->getOption('remote'),
         ]);
 
 
@@ -89,6 +91,7 @@ class NewCommand extends Command
         $jsCommand = $this->getApplication()->find('install:javascript');
         $jsArguments = new ArrayInput([
             'path'    => $path,
+            '-r'    => $input->getOption('remote'),
         ]);
 
         $jsCommand->run($jsArguments, $output);
@@ -100,6 +103,7 @@ class NewCommand extends Command
         $scssCommand = $this->getApplication()->find('install:stylesheets');
         $scssArguments = new ArrayInput([
             'path'    => $path,
+            '-r'    => $input->getOption('remote'),
         ]);
 
         $scssCommand->run($scssArguments, $output);
