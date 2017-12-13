@@ -267,7 +267,7 @@ class Command extends \Symfony\Component\Console\Command\Command
         foreach ($options['subfolders'] as $subfolder) {
             $src = $options['sourcePath'] . '/' . $subfolder;
             $dest = $options['destPath'];
-            exec("cp -a $src/. $dest/", $output, $return);
+            exec("rsync -rv --exclude=.git $src/. $dest/", $output, $return);
 
             $success += $return;
         }
