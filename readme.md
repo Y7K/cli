@@ -253,6 +253,7 @@ y7k components:uninstall [COMPONENT] -r
 ## Roadmap
 
 * Add component npm & composer dependencies in json format instead of installing them from component yml file.
+* Make it optional to install dependencies on component install
 * Add more environment commands (like open forge, open deploybot etc.)
 
 -----
