@@ -34,22 +34,51 @@ class Laravel extends Command
             'branch' => 'master',
             'path' => $filepath,
             'output' => $output,
-            'exclude' => ['resources/assets', 'public/css', 'public/js'],
-            'success' => 'The Laravel Boilerplate is installed!',
-        ]);
-
-        $this->install([
-            'repo' => 'y7k/plate',
-            'branch' => 'master',
-            'path' => $filepath,
-            'output' => $output,
-            'subfolders' => ['base', 'platforms/laravel'],
-            'exclude' => ['base/.gitignore'],
-            'success' => 'Laravel is installed! Yay!',
+            'exclude' => ['resources/assets', 'public/css', 'public/js', 'resources/views'],
+            'success' => 'The Laravel Framework (Vendor) has been loaded from remote!',
             'checkPath' => false
         ]);
 
-        Util::findAndReplaceInFile($filepath . '/.env.example', '{name}', $path);
+
+        if($input->getOption('remote')) {
+            $this->installFromRemote([
+                'repo' => 'y7k/plate',
+                'branch' => 'master',
+                'path' => $filepath,
+                'output' => $output,
+                'subfolders' => ['base', 'platforms/laravel'],
+                'exclude' => ['base/.gitignore'],
+                'success' => 'The Laravel Boilerplate has been loaded from remote!',
+                'checkPath' => false
+            ]);
+        } else {
+            $this->installFromLocal([
+                'sourcePath' => getenv('PATH_PLATE'),
+                'subfolders' => ['base', 'platforms/laravel'],
+                'destPath' => $filepath,
+                'output' => $output,
+                'success' => 'The Laravel Boilerplate has been loaded from local!',
+            ]);
+        }
+
+        $packageJson = $filepath. '/composer.json';
+        $newPackageJsonFilepath = $filepath . '/composer.merge.json';
+
+        $originalPackageJson = is_file($packageJson) ? json_decode(file_get_contents($packageJson), true) : [];
+        $newPackageJson = is_file($newPackageJsonFilepath) ? json_decode(file_get_contents($newPackageJsonFilepath), true) : [];
+        $mergedPackageJson = Util::mergeJsonArrays($originalPackageJson, $newPackageJson);
+
+        var_dump($newPackageJson);
+        var_dump($mergedPackageJson);
+
+        // Delete the js package.json
+        unlink($newPackageJsonFilepath);
+
+        file_put_contents($packageJson, json_encode($mergedPackageJson, JSON_PRETTY_PRINT));
+
+
+//        Util::findAndReplaceInFile($filepath . '/.env.example', '{name}', $path);
+//        Util::findAndReplaceInFile($filepath . '/.env.example', '{code}', $path);
         Util::findAndReplaceInFile($filepath . '/composer.json', 'laravel/laravel', $path);
 
         $commands = [
