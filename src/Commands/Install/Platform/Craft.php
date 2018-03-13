@@ -63,8 +63,8 @@ class Craft extends Command
             'checkPath' => false
         ]);
 
-        Util::findAndReplaceInFile($filepath . '/.env.example', '{name}', $path);
-        Util::findAndReplaceInFile($filepath . '/composer.json', '{name}', $path);
+//        Util::findAndReplaceInFile($filepath . '/.env.example', '{name}', $path);
+//        Util::findAndReplaceInFile($filepath . '/composer.json', '{name}', $path);
 
         $commands = [
             'install --no-scripts',
