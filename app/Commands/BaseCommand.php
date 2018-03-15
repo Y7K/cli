@@ -20,4 +20,9 @@ abstract class BaseCommand extends Command
         return $process->getOutput();
     }
 
+    public function getWorkingDirectory()
+    {
+        return getcwd();
+    }
+
 }

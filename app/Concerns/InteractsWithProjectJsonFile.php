@@ -11,7 +11,7 @@ trait InteractsWithProjectJsonFile
 
     public function readProjectJsonData()
     {
-        $projectJsonFile = getcwd() . '/' . $this->projectJsonFilename;
+        $projectJsonFile = $this->getWorkingDirectory() . '/' . $this->projectJsonFilename;
 
         if (!file_exists($projectJsonFile)) {
             $this->abort("No {$this->projectJsonFilename} found!");
@@ -23,7 +23,7 @@ trait InteractsWithProjectJsonFile
 
     public function writeProjectJsonData()
     {
-        $projectJsonFile = getcwd() . '/' . $this->projectJsonFilename;
+        $projectJsonFile = $this->getWorkingDirectory() . '/' . $this->projectJsonFilename;
 
         file_put_contents($projectJsonFile, json_encode($this->projectJsonData, JSON_PRETTY_PRINT));
     }
