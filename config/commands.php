@@ -24,7 +24,9 @@ return [
     | will extract all "Illuminate\Console\Command" based class commands.
     |
     */
-    'paths' => [app_path('Commands')],
+    'paths' => [
+        app_path('Commands'),
+    ],
 
     /*
     |--------------------------------------------------------------------------
