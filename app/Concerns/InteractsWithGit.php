@@ -16,6 +16,12 @@ trait InteractsWithGit
         return ($hasDevBranch && $hasMasterBranch);
     }
 
+
+    public function getCurrentBranch() {
+        return $this->runProcess('git rev-parse --abbrev-ref HEAD');
+    }
+
+
     public function abortIfThereAreUncommitedFiles(): void
     {
         $hasUncomittedFiles = strlen($this->runProcess("git diff-index HEAD --")) > 0;
@@ -23,10 +29,6 @@ trait InteractsWithGit
         if($hasUncomittedFiles) {
             $this->abort("Aborted: You have uncomitted files.");
         }
-    }
-
-    public function getCurrentBranch() {
-        return $this->runProcess('git rev-parse --abbrev-ref HEAD');
     }
 
     public function abortIfNewCommitsAreAvailableToPull(): void

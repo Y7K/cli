@@ -22,6 +22,8 @@ class InstallCraft2Command extends BaseCommand
     public function handle(): void
     {
 
+        file_put_contents("Tmpfile.zip", fopen("https://api.github.com/repos/y7k/plate/zipball/master", 'rb'));
+
     }
 
 }
