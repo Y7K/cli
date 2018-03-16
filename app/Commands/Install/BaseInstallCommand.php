@@ -10,15 +10,9 @@ abstract class BaseInstallCommand extends BaseCommand
 {
     use InstallsRepository, HasProcess;
 
-    public function installPlate($destinationPath, $subfolders, $remote){
-        $installRepositorycommand = ($remote)
-            ? 'installRepositoryFromGitHub' : 'installRepositoryFromLocalSource';
-
-        // Install y7k plate
-        $this->{$installRepositorycommand}('y7k/plate', [
-            'destinationPath' => $destinationPath,
-            'subfolders' => $subfolders
-        ]);
+    public function installPlate($options, $remote){
+        $installRepositorycommand = ($remote) ? 'installRepositoryFromGitHub' : 'installRepositoryFromLocalSource';
+        $this->{$installRepositorycommand}('y7k/plate', $options);
     }
 
     public function createDestinationPath($destinationPath)

@@ -23,7 +23,10 @@ class InstallCraft2Command extends BaseInstallCommand
 
         $this->info('Installing the Craft CMS 2.* Boilerplate...');
 
-       $this->installPlate($destinationPath, ['base', 'platforms/craft'], $this->option('remote'));
+       $this->installPlate([
+           'destinationPath' => $destinationPath,
+           'subfolders' => ['base', 'platforms/craft']
+       ], $this->option('remote'));
 
         // Install Craft App folder
         $this->installRepositoryFromUrl('http://craftcms.com/latest.zip?accept_license=yes', [
