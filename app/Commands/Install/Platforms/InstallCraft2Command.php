@@ -22,24 +22,20 @@ class InstallCraft2Command extends BaseCommand
     {
         $destinationPath = $this->argument('path');
 
-        if (!mkdir($destinationPath) && !is_dir($destinationPath)) {
-            throw new \RuntimeException(sprintf('Directory "%s" already exists or could not be created', $destinationPath));
+        // Check if destination folder exists
+        if (!is_dir($destinationPath) && !mkdir($destinationPath) && !is_dir($destinationPath)) {
+            $this->abort("Directory {$destinationPath} already exists or could not be created");
         }
 
-        // check if destination folder exists
+        $installRepositorycommand = ($this->option('remote'))
+            ? 'installRepositoryFromGitHub' : 'installRepositoryFromLocalSource';
 
-        // install y7k plate
-        $this->installRepositoryFromGitHub('y7k/plate', [
+        // Install y7k plate
+        $this->{$installRepositorycommand}('y7k/plate', [
             'destinationPath' => $destinationPath,
             'subfolders' => ['base', 'platforms/craft'],
-            'excluded' => ['base/public']
+            'excluded' => ['base/project.json']
         ]);
-
-        if($this->option('remote')) {
-
-        } else {
-
-        }
 
     }
 

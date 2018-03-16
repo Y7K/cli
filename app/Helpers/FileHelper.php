@@ -67,7 +67,7 @@ class FileHelper
     }
 
 
-    public static function extractFilesToDirectory(string $sourceFolder, array $options = [])
+    public static function copyFilesToDirectory(string $sourceFolder, array $options = [])
     {
         $options = array_merge([
             'destinationPath' => null,
@@ -85,11 +85,6 @@ class FileHelper
         if(!is_array($subfolders)) $subfolders = [$subfolders];
         if(!is_array($excluded)) $excluded = [$excluded];
 
-        // Delete Excluded files
-        foreach ($excluded as $directory) {
-            self::deleteDirectory($sourceFolder . DIRECTORY_SEPARATOR . $directory);
-        }
-
         if (!is_dir($destinationPath)) {
             if (!mkdir($destinationPath) && !is_dir($destinationPath)) {
                 throw new \RuntimeException(sprintf('Directory "%s" already exists or could not be created', $destinationPath));
@@ -99,17 +94,24 @@ class FileHelper
         // Copy Directories
         foreach ($subfolders as $directory) {
 
-            $directory = $sourceFolder . DIRECTORY_SEPARATOR . $directory;
-
-            if (!is_dir($directory)) {
-                throw new \RuntimeException("The subdirectory {$directory} could not be found");
+            if($directory !== '/') {
+                $filteredExcluded = [];
+                foreach ($excluded as $excludedDir) {
+                    if(strpos($excludedDir, $directory . DIRECTORY_SEPARATOR) === 0) {
+                        $filteredExcluded[] = substr($excludedDir, strlen($directory));
+                    }
+                }
+            } else {
+                $filteredExcluded = $excluded;
             }
 
-            self::copyDirectory($directory, $destinationPath);
+            self::copyDirectory(
+                $sourceFolder . DIRECTORY_SEPARATOR . $directory,
+                $destinationPath,
+                $filteredExcluded
+            );
         }
 
-        // Remove temp folder
-        self::deleteDirectory($sourceFolder);
     }
 
 
@@ -154,43 +156,28 @@ class FileHelper
         return $content;
     }
 
-    protected static function deleteDirectory($dir)
+
+    public static function deleteDirectory($dir)
     {
-        if (is_dir($dir)) {
-            $objects = scandir($dir, SCANDIR_SORT_NONE);
-            foreach ($objects as $object) {
-                if ($object !== "." && $object !== "..") {
-                    if (is_dir($dir . "/" . $object)) {
-                        self::deleteDirectory($dir . "/" . $object);
-                    } else {
-                        if (file_exists($dir . "/" . $object)) unlink($dir . "/" . $object);
-                    }
-                }
-            }
-            rmdir($dir);
-        } else {
-            if (file_exists($dir)) {
-                unlink($dir);
-            }
+        if($dir !== "/") {
+            $process = new Process("rm -rf {$dir}");
+            $process->run();
         }
     }
 
-    protected static function copyDirectory($sourcePath, $destinationPath, $subfolder = '')
+
+    protected static function copyDirectory($sourcePath, $destinationPath, $excluded)
     {
-        $newSource = $sourcePath . $subfolder;
 
-        foreach (array_diff(scandir($newSource, SCANDIR_SORT_NONE), ['.', '..']) as $name) {
-
-            $filename = $subfolder . '/' . $name;
-            $destinationName = $destinationPath . $filename;
-            $sourceName = $newSource . '/' . $name;
-
-            if (is_dir($sourceName) && file_exists($destinationName)) {
-                self::copyDirectory($sourcePath, $destinationPath, $subfolder . '/' . $name);
-            } else if (!rename($sourceName, $destinationName)) {
-                throw new \RuntimeException("{$name} could not be copied");
-            }
+        if (!is_dir($sourcePath)) {
+            throw new \RuntimeException("The directory {$sourcePath} could not be found");
         }
+
+        $excluded[] = ".git";
+        $excludedFolders = implode(' --exclude=', $excluded);
+
+        $process = new Process("rsync -rv --exclude={$excludedFolders} {$sourcePath}/. {$destinationPath}/");
+        $process->run();
     }
 
 
