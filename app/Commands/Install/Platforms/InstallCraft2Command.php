@@ -7,8 +7,9 @@ use App\Commands\Install\BaseInstallCommand;
 class InstallCraft2Command extends BaseInstallCommand
 {
 
-    protected $signature = 'install:craft2 {path : Where is the output folder?} {--r|remote : Load plate from online repository instead of local source?}';
+    protected $signature = 'install:craft2 {path : Where is the output folder?} {--r|remote : Load from online repository instead of local source?}';
     protected $description = '⏳  Install Craft 2.* plus some Y7K sugar.';
+    protected $packageName = 'Craft 2';
 
     /**
      * Execute the console command.
@@ -21,9 +22,9 @@ class InstallCraft2Command extends BaseInstallCommand
 
         $this->createDestinationPath($destinationPath);
 
-        $this->info('Installing the Craft CMS 2.* Boilerplate...');
+        $this->info("Installing the {$this->packageName} boilerplate...");
 
-       $this->installPlate([
+       $this->installY7KRepo('plate', [
            'destinationPath' => $destinationPath,
            'subfolders' => ['base', 'platforms/craft']
        ], $this->option('remote'));
@@ -36,7 +37,7 @@ class InstallCraft2Command extends BaseInstallCommand
 
         $this->runPostInstallComposerCommands($destinationPath);
 
-        $this->info('Installed the Craft CMS 2.* Boilerplate!');
+        $this->info("Installed the {$this->packageName} boilerplate!");
     }
 
 }
