@@ -18,25 +18,27 @@ trait InstallsRepository
         $this->info("Downloading {$githubRepository} repository from GitHub...");
 
         $url = "https://api.github.com/repos/{$githubRepository}/zipball/{$branch}";
-        $this->downloadAndExtractFiles($url, $options, env('GITHUB_USER') . ":" . env('GITHUB_TOKEN'));
+        $this->downloadAndExtractFiles($url, $options, true);
     }
 
     public function installRepositoryFromUrl($url, $options)
     {
         $this->info("Downloading files from the internets...");
-        
+
         $this->downloadAndExtractFiles($url, $options);
     }
 
-    private function downloadAndExtractFiles($url, $options, $auth = false)
+    private function downloadAndExtractFiles($url, $options, $downloadFromGitHub = false)
     {
+        $auth = ($downloadFromGitHub) ? env('GITHUB_USER') . ":" . env('GITHUB_TOKEN') : false;
+
         // Download Repository as Zip
         $tempZipFile = FileHelper::downloadToZip($url,  $this->output, $auth);
         $this->info("");
 
         // Unzip content
         $this->info("Unzipping files...");
-        $tempFolder = FileHelper::unzip($tempZipFile, true);
+        $tempFolder = FileHelper::unzip($tempZipFile, $downloadFromGitHub);
 
         // Copy Files to Destination
         $this->info("Copying files to destination...");
