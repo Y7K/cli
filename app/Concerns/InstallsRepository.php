@@ -2,7 +2,7 @@
 
 namespace App\Concerns;
 
-use App\Helpers\FileDownload;
+use App\Helpers\FileHelper;
 
 trait InstallsRepository
 {
@@ -10,20 +10,33 @@ trait InstallsRepository
     public function installRepositoryFromLocalSource($sourcePath, $destPath, $subfoldersToExtract)
     {
 
+
     }
 
-    public function installRepositoryFromGitHub($githubRepository, $destPath, $subfoldersToExtract)
+    public function installRepositoryFromGitHub($githubRepository, $destinationPath, $subfoldersToExtract)
     {
         $url = 'https://api.github.com/repos/' . $githubRepository . '/zipball/master';
-        $bar = $this->output->createProgressBar(100);
 
-        $contents = FileDownload::download($url, $bar, env('GITHUB_USER') . ":" . env('GITHUB_TOKEN'));
 
-        // write the result to the disk
-//        file_put_contents('tmp.zip', $contents);
+        // Download Repository as Zip
+        $this->info("Downloading {$githubRepository} Repository from GitHub");
+        $tempZipFile = FileHelper::downloadToZip($url,  $this->output, env('GITHUB_USER') . ":" . env('GITHUB_TOKEN'));
+
+        // Unzip content
+        $this->info("");
+        $this->info("Unzipping files");
+        $tempFolder = FileHelper::unzip($tempZipFile, true);
+
+        var_dump($tempFolder);
+
     }
 
     public function installRepositoryFromUrl($url, $destPath, $subfoldersToExtract)
+    {
+
+    }
+
+    private function getTempZipFileName()
     {
 
     }
