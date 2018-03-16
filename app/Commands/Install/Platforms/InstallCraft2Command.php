@@ -27,14 +27,21 @@ class InstallCraft2Command extends BaseCommand
             $this->abort("Directory {$destinationPath} already exists or could not be created");
         }
 
+        $this->info('Installing the Craft CMS 2.* Boilerplate...');
+
         $installRepositorycommand = ($this->option('remote'))
             ? 'installRepositoryFromGitHub' : 'installRepositoryFromLocalSource';
 
         // Install y7k plate
         $this->{$installRepositorycommand}('y7k/plate', [
             'destinationPath' => $destinationPath,
-            'subfolders' => ['base', 'platforms/craft'],
-            'excluded' => ['base/project.json']
+            'subfolders' => ['base', 'platforms/craft']
+        ]);
+
+        // Install Craft App folder
+        $this->installRepositoryFromUrl('http://craftcms.com/latest.zip?accept_license=yes', [
+            'destinationPath' => $destinationPath . '/craft/app',
+            'subfolders' => ['craft/app']
         ]);
 
     }
