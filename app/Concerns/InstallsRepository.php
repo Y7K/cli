@@ -13,22 +13,25 @@ trait InstallsRepository
 
     }
 
-    public function installRepositoryFromGitHub($githubRepository, $destinationPath, $subfoldersToExtract)
+    public function installRepositoryFromGitHub($githubRepository, $options)
     {
         $url = 'https://api.github.com/repos/' . $githubRepository . '/zipball/master';
 
-
         // Download Repository as Zip
-        $this->info("Downloading {$githubRepository} Repository from GitHub");
+        $this->info("Downloading {$githubRepository} Repository from GitHub...");
         $tempZipFile = FileHelper::downloadToZip($url,  $this->output, env('GITHUB_USER') . ":" . env('GITHUB_TOKEN'));
+        $this->info("");
 
         // Unzip content
-        $this->info("");
-        $this->info("Unzipping files");
+        $this->info("Unzipping files...");
         $tempFolder = FileHelper::unzip($tempZipFile, true);
 
-        var_dump($tempFolder);
+        // Copy Files to Destination
+        $this->info("Copying files to destination...");
+        FileHelper::extractFilesToDirectory($tempFolder, $options);
 
+        $this->info("");
+        $this->info("Repository {$githubRepository} has been installed!");
     }
 
     public function installRepositoryFromUrl($url, $destPath, $subfoldersToExtract)
@@ -36,9 +39,5 @@ trait InstallsRepository
 
     }
 
-    private function getTempZipFileName()
-    {
-
-    }
 
 }

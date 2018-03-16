@@ -13,7 +13,7 @@ class FileHelper
         $bar = ($output) ? $output->createProgressBar(100) : null;
         $content = self::downloadContent($url, $bar, $auth);
 
-        $tempFile = '/tmp/' . uniqid('y7k_', false) . '.zip';
+        $tempFile = DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . uniqid('y7k_', false) . '.zip';
         file_put_contents($tempFile, $content);
 
         return $tempFile;
@@ -33,9 +33,10 @@ class FileHelper
             throw new \RuntimeException("Zip {$zipFile} could not be extracted");
         }
 
+        // Delete the original zip file
         unlink($zipFile);
 
-        if($downloadedFromGithub) {
+        if ($downloadedFromGithub) {
 
             // get the list of directories within our tmp folder
             $dirs = glob($tmpFolder . '/*');
@@ -66,10 +67,49 @@ class FileHelper
     }
 
 
-    public static function extractFilesToDirectory(array $folders, string $destinationPath, array $exclude = [])
+    public static function extractFilesToDirectory(string $sourceFolder, array $options = [])
     {
+        $options = array_merge([
+            'destinationPath' => null,
+            'subfolders' => [DIRECTORY_SEPARATOR],
+            'excluded' => [],
+        ], $options);
 
+        $destinationPath = $options['destinationPath'];
+        $subfolders = $options['subfolders'];
+        $excluded = $options['excluded'];
 
+        if($destinationPath === null) throw new \RuntimeException("No destination path set.");
+
+        // Fix options
+        if(!is_array($subfolders)) $subfolders = [$subfolders];
+        if(!is_array($excluded)) $excluded = [$excluded];
+
+        // Delete Excluded files
+        foreach ($excluded as $directory) {
+            self::deleteDirectory($sourceFolder . DIRECTORY_SEPARATOR . $directory);
+        }
+
+        if (!is_dir($destinationPath)) {
+            if (!mkdir($destinationPath) && !is_dir($destinationPath)) {
+                throw new \RuntimeException(sprintf('Directory "%s" already exists or could not be created', $destinationPath));
+            }
+        }
+
+        // Copy Directories
+        foreach ($subfolders as $directory) {
+
+            $directory = $sourceFolder . DIRECTORY_SEPARATOR . $directory;
+
+            if (!is_dir($directory)) {
+                throw new \RuntimeException("The subdirectory {$directory} could not be found");
+            }
+
+            self::copyDirectory($directory, $destinationPath);
+        }
+
+        // Remove temp folder
+        self::deleteDirectory($sourceFolder);
     }
 
 
@@ -112,6 +152,45 @@ class FileHelper
         }
 
         return $content;
+    }
+
+    protected static function deleteDirectory($dir)
+    {
+        if (is_dir($dir)) {
+            $objects = scandir($dir, SCANDIR_SORT_NONE);
+            foreach ($objects as $object) {
+                if ($object !== "." && $object !== "..") {
+                    if (is_dir($dir . "/" . $object)) {
+                        self::deleteDirectory($dir . "/" . $object);
+                    } else {
+                        if (file_exists($dir . "/" . $object)) unlink($dir . "/" . $object);
+                    }
+                }
+            }
+            rmdir($dir);
+        } else {
+            if (file_exists($dir)) {
+                unlink($dir);
+            }
+        }
+    }
+
+    protected static function copyDirectory($sourcePath, $destinationPath, $subfolder = '')
+    {
+        $newSource = $sourcePath . $subfolder;
+
+        foreach (array_diff(scandir($newSource, SCANDIR_SORT_NONE), ['.', '..']) as $name) {
+
+            $filename = $subfolder . '/' . $name;
+            $destinationName = $destinationPath . $filename;
+            $sourceName = $newSource . '/' . $name;
+
+            if (is_dir($sourceName) && file_exists($destinationName)) {
+                self::copyDirectory($sourcePath, $destinationPath, $subfolder . '/' . $name);
+            } else if (!rename($sourceName, $destinationName)) {
+                throw new \RuntimeException("{$name} could not be copied");
+            }
+        }
     }
 
 
