@@ -24,7 +24,7 @@ class BumpCommand extends BaseCommand
         $this->readAndUpdateProjectVersion();
 
         if ($this->option('nogit')) {
-            $this->writeProjectJsonData();
+            $this->writeProjectJsonDataToFile();
         } else {
             $this->abortIfThereAreUncommitedFiles();
             $this->abortIfNewCommitsAreAvailableToPull();
@@ -78,24 +78,33 @@ class BumpCommand extends BaseCommand
 
         if ($this->isUsingGitFlow()) {
 
+            // Checkout Release Branch
             $this->runProcess("git checkout develop && git checkout -b release/{$projectVersionString} develop");
 
-            $this->writeProjectJsonData();
+            // Write File
+            $this->writeProjectJsonDataToFile();
 
+            // Commit changes, merge and tag release branch
             $this->runProcessSequence([
                 "export GIT_MERGE_AUTOEDIT=no",
-                "git add --all && git commit -m \"Release {$projectVersionString}\"",
-                "git checkout master && git merge release/{$projectVersionString} && git tag -a {$projectVersionString} -m \"{$projectVersionString}\"",
-                "git checkout develop && git merge release/{$projectVersionString} && git branch -d release/{$projectVersionString}",
+                "git add --all",
+                "git commit -m \"Release {$projectVersionString}\"",
+                "git checkout master",
+                "git merge release/{$projectVersionString}",
+                "git tag -a {$projectVersionString} -m \"{$projectVersionString}\"",
+                "git checkout develop",
+                "git merge release/{$projectVersionString}",
+                "git branch -d release/{$projectVersionString}",
                 "unset GIT_MERGE_AUTOEDIT"
             ]);
 
         } else {
 
-            $this->writeProjectJsonData();
+            $this->writeProjectJsonDataToFile();
 
             $this->runProcessSequence([
-                "git add --all && git commit -m \"Release {$projectVersionString}\"",
+                "git add --all",
+                "git commit -m \"Release {$projectVersionString}\"",
                 "git tag -a {$projectVersionString} -m \"{$projectVersionString}\""
             ]);
 
