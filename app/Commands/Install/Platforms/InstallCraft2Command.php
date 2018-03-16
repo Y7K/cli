@@ -2,13 +2,10 @@
 
 namespace App\Commands\Install\Platforms;
 
-use App\Commands\BaseCommand;
-use App\Concerns\InstallsRepository;
+use App\Commands\Install\BaseInstallCommand;
 
-class InstallCraft2Command extends BaseCommand
+class InstallCraft2Command extends BaseInstallCommand
 {
-
-    use InstallsRepository;
 
     protected $signature = 'install:craft2 {path : Where is the output folder?} {--r|remote : Load plate from online repository instead of local source?}';
     protected $description = '⏳  Install Craft 2.* plus some Y7K sugar.';
@@ -22,21 +19,11 @@ class InstallCraft2Command extends BaseCommand
     {
         $destinationPath = $this->argument('path');
 
-        // Check if destination folder exists
-        if (!is_dir($destinationPath) && !mkdir($destinationPath) && !is_dir($destinationPath)) {
-            $this->abort("Directory {$destinationPath} already exists or could not be created");
-        }
+        $this->createDestinationPath($destinationPath);
 
         $this->info('Installing the Craft CMS 2.* Boilerplate...');
 
-        $installRepositorycommand = ($this->option('remote'))
-            ? 'installRepositoryFromGitHub' : 'installRepositoryFromLocalSource';
-
-        // Install y7k plate
-        $this->{$installRepositorycommand}('y7k/plate', [
-            'destinationPath' => $destinationPath,
-            'subfolders' => ['base', 'platforms/craft']
-        ]);
+       $this->installPlate($destinationPath, ['base', 'platforms/craft'], $this->option('remote'));
 
         // Install Craft App folder
         $this->installRepositoryFromUrl('http://craftcms.com/latest.zip?accept_license=yes', [
@@ -44,6 +31,9 @@ class InstallCraft2Command extends BaseCommand
             'subfolders' => ['craft/app']
         ]);
 
+        $this->runPostInstallComposerCommands($destinationPath);
+
+        $this->info('Installed the Craft CMS 2.* Boilerplate!');
     }
 
 }
