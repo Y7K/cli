@@ -13,30 +13,27 @@ trait InstallsRepository
 
     }
 
-    public function installRepositoryFromGitHub($githubRepository, $options)
+    public function installRepositoryFromGitHub($githubRepository, $options, $branch = 'master')
     {
-        $url = 'https://api.github.com/repos/' . $githubRepository . '/zipball/master';
-
-        // Download Repository as Zip
         $this->info("Downloading {$githubRepository} repository from GitHub...");
-        $tempZipFile = FileHelper::downloadToZip($url,  $this->output, env('GITHUB_USER') . ":" . env('GITHUB_TOKEN'));
-        $this->info("");
 
-        $this->unzipAndExtractFiles($tempZipFile, $options, $githubRepository);
+        $url = "https://api.github.com/repos/{$githubRepository}/zipball/{$branch}";
+        $this->downloadAndExtractFiles($url, $options, env('GITHUB_USER') . ":" . env('GITHUB_TOKEN'));
     }
 
     public function installRepositoryFromUrl($url, $options)
     {
-        // Download Repository as Zip
         $this->info("Downloading files from the internets...");
-        $tempZipFile = FileHelper::downloadToZip($url,  $this->output);
-        $this->info("");
-
-        $this->unzipAndExtractFiles($tempZipFile, $options);
+        
+        $this->downloadAndExtractFiles($url, $options);
     }
 
-    private function unzipAndExtractFiles($tempZipFile, $options, $packageName = '')
+    private function downloadAndExtractFiles($url, $options, $auth = false)
     {
+        // Download Repository as Zip
+        $tempZipFile = FileHelper::downloadToZip($url,  $this->output, $auth);
+        $this->info("");
+
         // Unzip content
         $this->info("Unzipping files...");
         $tempFolder = FileHelper::unzip($tempZipFile, true);
@@ -46,7 +43,7 @@ trait InstallsRepository
         FileHelper::extractFilesToDirectory($tempFolder, $options);
 
         $this->info("");
-        $this->info("Package {$$packageName} has been installed!");
+        $this->info("Package has been installed!");
     }
 
 
