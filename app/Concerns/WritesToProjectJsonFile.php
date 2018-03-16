@@ -3,7 +3,7 @@
 namespace App\Concerns;
 
 
-trait InteractsWithProjectJsonFile
+trait WritesToProjectJsonFile
 {
 
     private $projectJsonFilename = 'project.json';

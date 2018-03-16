@@ -2,13 +2,14 @@
 
 namespace App\Commands;
 
+use App\Concerns\HasProcess;
 use App\Concerns\InteractsWithGit;
-use App\Concerns\InteractsWithProjectJsonFile;
+use App\Concerns\WritesToProjectJsonFile;
 
 class BumpCommand extends BaseCommand
 {
 
-    use InteractsWithProjectJsonFile, InteractsWithGit;
+    use WritesToProjectJsonFile, InteractsWithGit, HasProcess;
 
     protected $signature = 'bump {version? : Major, minor or patch} {--g|nogit}';
     protected $description = '🚠  Bump the Project Version';
@@ -81,18 +82,22 @@ class BumpCommand extends BaseCommand
 
             $this->writeProjectJsonData();
 
-            $this->runProcess("export GIT_MERGE_AUTOEDIT=no && " .
-                "git add --all && git commit -m \"Release {$projectVersionString}\" && " .
-                "git checkout master && git merge release/{$projectVersionString} && git tag -a {$projectVersionString} -m \"{$projectVersionString}\" &&" .
-                "git checkout develop && git merge release/{$projectVersionString} && git branch -d release/{$projectVersionString} &&" .
-                "unset GIT_MERGE_AUTOEDIT");
+            $this->runProcessSequence([
+                "export GIT_MERGE_AUTOEDIT=no",
+                "git add --all && git commit -m \"Release {$projectVersionString}\"",
+                "git checkout master && git merge release/{$projectVersionString} && git tag -a {$projectVersionString} -m \"{$projectVersionString}\"",
+                "git checkout develop && git merge release/{$projectVersionString} && git branch -d release/{$projectVersionString}",
+                "unset GIT_MERGE_AUTOEDIT"
+            ]);
 
         } else {
 
             $this->writeProjectJsonData();
 
-            $this->runProcess("git add --all && git commit -m \"Release {$projectVersionString}\" && " .
-                "git tag -a {$projectVersionString} -m \"{$projectVersionString}\"");
+            $this->runProcessSequence([
+                "git add --all && git commit -m \"Release {$projectVersionString}\"",
+                "git tag -a {$projectVersionString} -m \"{$projectVersionString}\""
+            ]);
 
         }
 

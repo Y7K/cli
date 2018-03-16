@@ -20,15 +20,10 @@ trait InstallsRepository
         $contents = FileDownload::download($url, $bar, env('GITHUB_USER') . ":" . env('GITHUB_TOKEN'));
 
         // write the result to the disk
-        file_put_contents('tmp.zip', $contents);
+//        file_put_contents('tmp.zip', $contents);
     }
 
     public function installRepositoryFromUrl($url, $destPath, $subfoldersToExtract)
-    {
-
-    }
-
-    private function generateDownloadOutput()
     {
 
     }
