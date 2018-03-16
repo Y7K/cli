@@ -3,6 +3,7 @@
 namespace App\Commands\Install\Resources;
 
 use App\Commands\Install\BaseInstallCommand;
+use App\Helpers\JsonHelper;
 
 class InstallStylesheetsCommand extends BaseInstallCommand
 {
@@ -26,10 +27,12 @@ class InstallStylesheetsCommand extends BaseInstallCommand
 
         $this->info("Installing the {$this->packageName} boilerplate...");
 
-       $this->installY7KRepo('styles', [
+       $this->installY7KRepo('style', [
            'destinationPath' => $assetsPath,
            'subfolders' => ['source']
        ], $this->option('remote'));
+
+       JsonHelper::mergeJsonFiles($destinationPath . '/package.json', $assetsPath . '/package.json');
 
         $this->info("Installed the {$this->packageName} boilerplate!");
     }
