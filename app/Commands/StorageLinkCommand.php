@@ -22,7 +22,11 @@ class StorageLinkCommand extends BaseCommand
                      'public' => true,
                  ] as $directory => $shouldExist) {
             if (file_exists($this->getWorkingDirectory() . '/' . $directory) !== $shouldExist) {
-                $this->abort(($shouldExist) ? "The [{$directory}] directory does not exist." :  "The [{$directory}] directory already exists.");
+                $this->abort(
+                    ($shouldExist)
+                        ? "The [{$directory}] directory does not exist."
+                        : "The [{$directory}] directory already exists."
+                );
             }
         }
 
