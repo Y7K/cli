@@ -20,7 +20,13 @@ abstract class BaseContentCommand extends BaseCommand
         } else if (!$force && !$this->confirm('Are you really sure you wish to continue?')) {
             $this->abort('Aborted.');
         }
+    }
 
+    public function buildRsyncCommand($source, $destination)
+    {
+        $source = rtrim($source, '/');
+        $destination = rtrim($destination, '/');
+        return "rsync -avz --delete-excluded --include=\".git*\" --exclude=\".*\" {$source}/ {$destination}";
     }
 
 }

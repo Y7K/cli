@@ -1,18 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: joris
- * Date: 16.03.18
- * Time: 18:30
- */
 
 namespace App\Commands\Content\Assets;
 
 
-class AssetsPushCommand extends BaseAssetsCommand
+use App\Commands\Content\BaseContentCommand;
+
+class AssetsPushCommand extends BaseContentCommand
 {
 
-    protected $signature = 'assets:push {environment : Environment name (defined in .y7k-cli.json)} {--f|force}';
+    protected $signature = 'assets:push {environment : Environment name (defined in .y7k-cli.json)}';
     protected $description = '⬆  Push the assets from local to a specified environment';
 
     /**
@@ -29,7 +25,7 @@ class AssetsPushCommand extends BaseAssetsCommand
 
         $this->warn("Uploading assets: Permanently <fg=red>overwrite</> data on  ({$environment}) with (local).");
 
-        $this->confirmAction($remoteEnv, $this->option('force'), 'assets');
+        $this->confirmAction($remoteEnv, false, 'assets');
 
         $command = $this->buildRsyncCommand($localEnv['storage'], "{$remoteEnv['sshuser']}@{$remoteEnv['host']}:{$remoteEnv['storage']}");
 
