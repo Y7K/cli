@@ -166,6 +166,9 @@ class FileHelper
             throw new \RuntimeException("The directory {$sourcePath} could not be found");
         }
 
+        $sourcePath = rtrim($sourcePath, '/');
+        $destinationPath = rtrim($destinationPath, '/');
+
         $excluded[] = ".git";
         $excludedFolders = implode(' --exclude=', $excluded);
 
