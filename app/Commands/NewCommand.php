@@ -64,7 +64,7 @@ class NewCommand extends BaseCommand
             "git commit -m \"⚡️️ Initial Commit\"",
             "git branch -D master",
             "git branch master",
-        ]);
+        ], true);
 
         $this->line("Repository successfully initialized!");
     }
