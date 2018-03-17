@@ -23,12 +23,12 @@ class FileHelper
     public static function unzip(string $zipFile, bool $downloadedFromGithub = false)
     {
         // build the temporary folder path
-        $tmpFolder = preg_replace('!.zip$!', '', $zipFile);
+        $folderName = preg_replace('!.zip$!', '', $zipFile);
 
         $zip = new ZipArchive;
 
         if ($zip->open($zipFile) === true) {
-            $zip->extractTo($tmpFolder);
+            $zip->extractTo($folderName);
             $zip->close();
         } else {
             throw new \RuntimeException("Zip {$zipFile} could not be extracted");
@@ -40,23 +40,15 @@ class FileHelper
         if ($downloadedFromGithub) {
 
             // get the list of directories within our tmp folder
-            $dirs = glob($tmpFolder . '/*');
+            $dirs = glob($folderName . '/*');
 
             // get the source directory from the tmp folder
             if (isset($dirs[0]) && is_dir($dirs[0])) {
 
-                $tmpName = uniqid('y7k_', false);
-
-                // Remove the github creted subfolder
-                $commands = [
-                    "mv {$dirs[0]} /tmp/{$tmpName}",
-                    "rm -rf {$tmpFolder}",
-                ];
-
-                $process = new Process(implode(' && ', $commands));
+                // Remove the github created subfolder
+                $tempFolder = $folderName . "_2";
+                $process = new Process("mv {$dirs[0]} {$tempFolder} && rm -rf {$folderName} && mv {$tempFolder} {$folderName}");
                 $process->run();
-
-                $tmpFolder = '/tmp/' . $tmpName;
 
             } else {
                 throw new \RuntimeException('The source directory could not be found');
@@ -64,7 +56,7 @@ class FileHelper
 
         }
 
-        return $tmpFolder;
+        return $folderName;
     }
 
 
