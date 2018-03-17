@@ -20,15 +20,15 @@ class DatabasePullCommand extends BaseContentCommand
     {
         $environment = $this->argument('environment');
 
-        $localEnv = $this->getValidatedEnvironmentData('local', ['host', 'sshuser', 'dbuser', 'dbpassword', 'db']);
-        $remoteEnv = $this->getValidatedEnvironmentData($environment, ['host', 'sshuser', 'dbuser', 'dbpassword', 'db']);
+        $this->getValidatedEnvironmentData('local', ['host', 'sshuser', 'dbuser', 'dbpassword', 'db']);
+        $this->getValidatedEnvironmentData($environment, ['host', 'sshuser', 'dbuser', 'dbpassword', 'db']);
 
         $this->line("");
         $this->warn("Downloading database: Permanently <fg=red>overwrite</> (local) data with ({$environment}).");
 
-        $this->confirmAction($remoteEnv, $this->option('force'), 'database');
+        $this->confirmAction('local', $this->option('force'), 'database');
 
-        $command = $this->buildMysqldumpCommand($remoteEnv, $localEnv);
+        $command = $this->buildMysqldumpCommand($environment, 'local');
 
         $this->runProcess($command);
 

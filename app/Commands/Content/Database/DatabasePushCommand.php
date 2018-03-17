@@ -20,15 +20,18 @@ class DatabasePushCommand extends BaseContentCommand
     {
         $environment = $this->argument('environment');
 
-        $localEnv = $this->getValidatedEnvironmentData('local', ['host', 'sshuser', 'dbuser', 'dbpassword', 'db']);
-        $remoteEnv = $this->getValidatedEnvironmentData($environment, ['host', 'sshuser', 'dbuser', 'dbpassword', 'db']);
+        // Validate Config
+        $this->getValidatedEnvironmentData('local', ['host', 'sshuser', 'dbuser', 'dbpassword', 'db']);
+        $this->getValidatedEnvironmentData($environment, ['host', 'sshuser', 'dbuser', 'dbpassword', 'db']);
 
         $this->line("");
         $this->warn("Uploading database: Permanently <fg=red>overwrite</> data on ({$environment}) with (local).");
 
-        $this->confirmAction($remoteEnv, false, 'database');
+        // Ask for confirmation
+        $this->confirmAction($environment, false, 'database');
 
-        $command = $this->buildMysqldumpCommand($localEnv, $remoteEnv);
+        // Execute Command
+        $command = $this->buildMysqldumpCommand('local', $environment);
 
         $this->runProcess($command);
 

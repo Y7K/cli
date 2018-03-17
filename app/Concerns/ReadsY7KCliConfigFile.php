@@ -50,4 +50,29 @@ trait ReadsY7KCliConfigFile
         return $this->getCliEnvironmentData($environment);
     }
 
+
+    public function buildSshCommand($environment)
+    {
+        $environmentData = $this->getCliEnvironmentData($environment);
+        $port = (isset($environmentData['port']) && $environmentData['port']) ? " -p " . $environmentData['port'] : '';
+        return "ssh {$environmentData['sshuser']}@{$environmentData['host']}{$port}";
+    }
+
+
+    public function buildRemoteStoragePath($environment)
+    {
+        $environmentData = $this->getCliEnvironmentData($environment);
+        $remotePath = rtrim($environmentData['path'], '/');
+        $remoteStorage = trim($environmentData['storage'], '/');
+        $remoteStoragePath = rtrim($remotePath . '/' . $remoteStorage, '/');
+        return "{$environmentData['sshuser']}@{$environmentData['host']}:{$remoteStoragePath}";
+    }
+
+
+    public function isProduction($environment)
+    {
+        $environmentData = $this->getCliEnvironmentData($environment);
+        return isset($environmentData['production']) && $environmentData['production'];
+    }
+
 }

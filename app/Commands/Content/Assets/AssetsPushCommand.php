@@ -26,9 +26,9 @@ class AssetsPushCommand extends BaseContentCommand
         $this->line("");
         $this->warn("Uploading assets: Permanently <fg=red>overwrite</> data on ({$environment}) with (local).");
 
-        $this->confirmAction($remoteEnv, false, 'assets');
+        $this->confirmAction($environment, false, 'assets');
 
-        $remoteStoragePath = $this->buildRemoteStoragePath($remoteEnv);
+        $remoteStoragePath = $this->buildRemoteStoragePath($environment);
 
         $command = $this->buildRsyncCommand(
             $localEnv['storage'],

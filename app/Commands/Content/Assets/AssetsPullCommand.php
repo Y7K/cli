@@ -26,9 +26,9 @@ class AssetsPullCommand extends BaseContentCommand
         $this->line("");
         $this->warn("Downloading assets: Permanently <fg=red>overwrite</> (local) data with ({$environment}).");
 
-        $this->confirmAction($remoteEnv, $this->option('force'), 'assets');
+        $this->confirmAction('local', $this->option('force'), 'assets');
 
-        $remoteStoragePath = $this->buildRemoteStoragePath($remoteEnv);
+        $remoteStoragePath = $this->buildRemoteStoragePath($environment);
 
         $command = $this->buildRsyncCommand(
             $remoteStoragePath,

@@ -11,9 +11,9 @@ abstract class BaseContentCommand extends BaseCommand
 
     use ReadsY7KCliConfigFile, HasProcess;
 
-    public function confirmAction($remoteEnv, $force, $type)
+    public function confirmAction($destinationEnv, $force, $type)
     {
-        if (isset($remoteEnv['production']) && $remoteEnv['production']) {
+        if ($this->isProduction($destinationEnv)) {
             $fuckingsure = $this->ask("This will <fg=red>OVERWRITE</> production {$type}! Are you really sure? Type <bg=yellow>i fucking know what im doing</> if you want to proceed.");
             if (trim(strtolower($fuckingsure)) !== 'i fucking know what im doing') {
                 $this->abort('Aborted.');
@@ -34,24 +34,12 @@ abstract class BaseContentCommand extends BaseCommand
     {
         $sourceSsh = $this->buildSshCommand($sourceEnv);
         $destinationSsh = $this->buildSshCommand($destinationEnv);
+        $sourceData = $this->getCliEnvironmentData($sourceEnv);
+        $destinationData = $this->getCliEnvironmentData($destinationEnv);
 
         return
-            "{$sourceSsh} \"mysqldump --opt --user={$sourceEnv['dbuser']} --password={$sourceEnv['dbpassword']} {$sourceEnv['db']}\"" .
-            " | {$destinationSsh} \"mysql --user={$destinationEnv['dbuser']} --password={$destinationEnv['dbpassword']} {$destinationEnv['db']}\"";
-    }
-
-    public function buildSshCommand($env)
-    {
-        $port = (isset($env['port']) && $env['port']) ? " -p " . $env['port'] : '';
-        return "ssh {$env['sshuser']}@{$env['host']}{$port}";
-    }
-
-    public function buildRemoteStoragePath($env)
-    {
-        $remotePath = rtrim($env['path'], '/');
-        $remoteStorage = trim($env['storage'], '/');
-        $remoteStoragePath = rtrim($remotePath . '/' . $remoteStorage, '/');
-        return "{$env['sshuser']}@{$env['host']}:{$remoteStoragePath}";
+            "{$sourceSsh} \"mysqldump --opt --user={$sourceData['dbuser']} --password={$sourceData['dbpassword']} {$sourceData['db']}\"" .
+            " | {$destinationSsh} \"mysql --user={$destinationData['dbuser']} --password={$destinationData['dbpassword']} {$destinationData['db']}\"";
     }
 
 }
