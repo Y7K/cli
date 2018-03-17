@@ -27,9 +27,14 @@ class AssetsPushCommand extends BaseContentCommand
 
         $this->confirmAction($remoteEnv, false, 'assets');
 
-        $command = $this->buildRsyncCommand($localEnv['storage'], "{$remoteEnv['sshuser']}@{$remoteEnv['host']}:{$remoteEnv['storage']}");
+        $command = $this->buildRsyncCommand(
+            $localEnv['storage'],
+            "{$remoteEnv['sshuser']}@{$remoteEnv['host']}:{$remoteEnv['storage']}"
+        );
 
         $this->runProcess($command);
+
+        $this->info("Assets on (local) are now in sync with ({$environment})!");
     }
 
 

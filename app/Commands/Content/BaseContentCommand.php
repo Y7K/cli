@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Commands\Content;
 
 use App\Commands\BaseCommand;
@@ -27,6 +28,22 @@ abstract class BaseContentCommand extends BaseCommand
         $source = rtrim($source, '/');
         $destination = rtrim($destination, '/');
         return "rsync -avz --delete-excluded --include=\".git*\" --exclude=\".*\" {$source}/ {$destination}";
+    }
+
+    public function buildMysqldumpCommand($sourceEnv, $destinationEnv)
+    {
+        $sourceSsh = $this->buildSshCommand($sourceEnv);
+        $destinationSsh = $this->buildSshCommand($destinationEnv);
+
+        return
+            "{$sourceSsh} \"mysqldump --opt --user={$sourceEnv['dbuser']} --password={$sourceEnv['password']} {$sourceEnv['db']}\"" .
+            " | {$destinationSsh} \"mysql --user={$destinationEnv['dbuser']} --password={$destinationEnv['password']} {$destinationEnv['db']}\"";
+    }
+
+    public function buildSshCommand($env)
+    {
+        $port = (isset($env['port']) && $env['port']) ? " -p " . $env['port'] : '';
+        return "ssh {$env['sshuser']}@{$env['host']}{$port}";
     }
 
 }

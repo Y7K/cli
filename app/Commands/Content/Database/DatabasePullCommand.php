@@ -27,9 +27,11 @@ class DatabasePullCommand extends BaseContentCommand
 
         $this->confirmAction($remoteEnv, $this->option('force'), 'database');
 
-        $command = $this->buildRsyncCommand("{$remoteEnv['sshuser']}@{$remoteEnv['host']}:{$remoteEnv['storage']}", $localEnv['storage']);
+        $command = $this->buildMysqldumpCommand($remoteEnv, $localEnv);
 
         $this->runProcess($command);
+
+        $this->info("Database on (local) is now in sync with ({$environment})!");
     }
 
 

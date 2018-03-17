@@ -27,10 +27,11 @@ class DatabasePushCommand extends BaseContentCommand
 
         $this->confirmAction($remoteEnv, false, 'database');
 
-        $command = $this->buildRsyncCommand(
-            $localEnv['storage'], "{$remoteEnv['sshuser']}@{$remoteEnv['host']}:{$remoteEnv['storage']}");
+        $command = $this->buildMysqldumpCommand($localEnv, $remoteEnv);
 
         $this->runProcess($command);
+
+        $this->info("Databse on ({$environment}) is now in sync with (local)!");
     }
 
 
