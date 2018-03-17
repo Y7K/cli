@@ -14,7 +14,7 @@ abstract class BaseContentCommand extends BaseCommand
     public function confirmAction($destinationEnv, $force, $type)
     {
         if ($this->isProduction($destinationEnv)) {
-            $fuckingsure = $this->ask("This will <fg=red>OVERWRITE</> production {$type}! Are you really sure? Type <bg=yellow>i fucking know what im doing</> if you want to proceed.");
+            $fuckingsure = $this->ask("This will <fg=red>OVERWRITE</> production {$type}! Are you really sure? Type <bg=yellow>i fucking know what im doing</> if you want to proceed");
             if (trim(strtolower($fuckingsure)) !== 'i fucking know what im doing') {
                 $this->abort('Aborted.');
             }
