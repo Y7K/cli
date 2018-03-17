@@ -9,11 +9,11 @@
 namespace App\Commands\Content\Assets;
 
 
-class AssetsPullCommand extends BaseAssetsCommand
+class AssetsPushCommand extends BaseAssetsCommand
 {
 
-    protected $signature = 'assets:pull {environment : Environment name (defined in .y7k-cli.json)} {--f|force}';
-    protected $description = '⬇  Pull the assets from a specified environment to local';
+    protected $signature = 'assets:push {environment : Environment name (defined in .y7k-cli.json)} {--f|force}';
+    protected $description = '⬆  Push the assets from local to a specified environment';
 
     /**
      * Execute the console command.
@@ -27,11 +27,11 @@ class AssetsPullCommand extends BaseAssetsCommand
         $localEnv = $this->getValidatedEnvironmentData('local', ['storage']);
         $remoteEnv = $this->getValidatedEnvironmentData($environment, ['host', 'sshuser', 'storage']);
 
-        $this->warn("Downloading assets: Permanently <fg=red>overwrite</> (local) data with ({$environment}).");
+        $this->warn("Uploading assets: Permanently <fg=red>overwrite</> data on  ({$environment}) with (local).");
 
         $this->confirmAction($remoteEnv, $this->option('force'), 'assets');
 
-        $command = $this->buildRsyncCommand("{$remoteEnv['sshuser']}@{$remoteEnv['host']}:{$remoteEnv['storage']}", $localEnv['storage']);
+        $command = $this->buildRsyncCommand($localEnv['storage'], "{$remoteEnv['sshuser']}@{$remoteEnv['host']}:{$remoteEnv['storage']}");
 
         $this->runProcess($command);
     }
