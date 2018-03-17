@@ -21,6 +21,7 @@ trait InteractsWithGit
         return $this->runProcess('git rev-parse --abbrev-ref HEAD');
     }
 
+
     public function abortIfThereAreUncommitedFiles(): void
     {
         $hasUncomittedFiles = strlen($this->runProcess("git diff-index HEAD --")) > 0;
@@ -30,13 +31,15 @@ trait InteractsWithGit
         }
     }
 
+
     public function abortIfNewCommitsAreAvailableToPull(): void
     {
+        // Abort if we do not have a remote repo
+        if (strlen($this->runProcess('git remote')) === 0) return;
+
         // Get Branches to check
         $branchesToCheck = ($this->isUsingGitFlow()) ? ['master', 'develop'] : [$this->getCurrentBranch()];
         $outdatedBranches = [];
-
-        if (strlen($this->runProcess('git remote')) === 0) return;
 
         // Check if there's something to pull
         foreach ($branchesToCheck as $branch) {
