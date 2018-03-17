@@ -15,9 +15,9 @@ abstract class BaseInstallCommand extends BaseCommand
         $this->{$installRepositorycommand}('y7k/' . $repoName, $options);
     }
 
-    public function createDestinationPath($destinationPath)
+    public function abortIfDirectoryExists($destinationPath, $createDir = true)
     {
-        if (is_dir($destinationPath) || (!mkdir($destinationPath) && !is_dir($destinationPath))) {
+        if (is_dir($destinationPath) || ($createDir && !mkdir($destinationPath) && !is_dir($destinationPath))) {
             $this->abort("Directory {$destinationPath} already exists or could not be created");
         }
     }

@@ -23,7 +23,7 @@ class InstallJavascriptCommand extends BaseInstallCommand
 
         $assetsPath = $destinationPath . '/resources/assets';
 
-        $this->createDestinationPath($assetsPath);
+        $this->abortIfDirectoryExists($assetsPath . '/js', false);
 
         $this->info("Installing the {$this->packageName} boilerplate...");
 

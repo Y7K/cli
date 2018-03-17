@@ -20,7 +20,7 @@ class InstallCraft2Command extends BaseInstallCommand
     {
         $destinationPath = $this->argument('path');
 
-        $this->createDestinationPath($destinationPath);
+        $this->abortIfDirectoryExists($destinationPath);
 
         $this->info("Installing the {$this->packageName} boilerplate...");
 

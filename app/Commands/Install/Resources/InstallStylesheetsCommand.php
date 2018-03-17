@@ -23,7 +23,7 @@ class InstallStylesheetsCommand extends BaseInstallCommand
 
         $assetsPath = $destinationPath . '/resources/assets';
 
-        $this->createDestinationPath($assetsPath);
+        $this->abortIfDirectoryExists($assetsPath . '/scss', false);
 
         $this->info("Installing the {$this->packageName} boilerplate...");
 
