@@ -36,14 +36,21 @@ abstract class BaseContentCommand extends BaseCommand
         $destinationSsh = $this->buildSshCommand($destinationEnv);
 
         return
-            "{$sourceSsh} \"mysqldump --opt --user={$sourceEnv['dbuser']} --password={$sourceEnv['password']} {$sourceEnv['db']}\"" .
-            " | {$destinationSsh} \"mysql --user={$destinationEnv['dbuser']} --password={$destinationEnv['password']} {$destinationEnv['db']}\"";
+            "{$sourceSsh} \"mysqldump --opt --user={$sourceEnv['dbuser']} --password={$sourceEnv['dbpassword']} {$sourceEnv['db']}\"" .
+            " | {$destinationSsh} \"mysql --user={$destinationEnv['dbuser']} --password={$destinationEnv['dbpassword']} {$destinationEnv['db']}\"";
     }
 
     public function buildSshCommand($env)
     {
         $port = (isset($env['port']) && $env['port']) ? " -p " . $env['port'] : '';
         return "ssh {$env['sshuser']}@{$env['host']}{$port}";
+    }
+
+    public function buildStoragePath($env)
+    {
+        $remotePath = rtrim($env['path'], '/');
+        $remoteStorage = trim($env['storage'], '/');
+        return rtrim($remotePath . '/' . $remoteStorage, '/');
     }
 
 }
