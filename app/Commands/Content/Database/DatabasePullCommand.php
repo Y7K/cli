@@ -23,6 +23,7 @@ class DatabasePullCommand extends BaseContentCommand
         $localEnv = $this->getValidatedEnvironmentData('local', ['storage']);
         $remoteEnv = $this->getValidatedEnvironmentData($environment, ['host', 'sshuser', 'storage']);
 
+        $this->line("");
         $this->warn("Downloading database: Permanently <fg=red>overwrite</> (local) data with ({$environment}).");
 
         $this->confirmAction($remoteEnv, $this->option('force'), 'database');

@@ -17,6 +17,7 @@ trait HasProcess
             $buffer = str_replace(array("\r", "\n"), '', $buffer);
             $this->line($buffer);
         });
+
         return $process->getOutput();
     }
 

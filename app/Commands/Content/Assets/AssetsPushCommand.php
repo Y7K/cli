@@ -23,7 +23,8 @@ class AssetsPushCommand extends BaseContentCommand
         $localEnv = $this->getValidatedEnvironmentData('local', ['storage']);
         $remoteEnv = $this->getValidatedEnvironmentData($environment, ['host', 'sshuser', 'storage']);
 
-        $this->warn("Uploading assets: Permanently <fg=red>overwrite</> data on  ({$environment}) with (local).");
+        $this->line("");
+        $this->warn("Uploading assets: Permanently <fg=red>overwrite</> data on ({$environment}) with (local).");
 
         $this->confirmAction($remoteEnv, false, 'assets');
 
