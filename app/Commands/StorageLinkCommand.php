@@ -15,17 +15,17 @@ class StorageLinkCommand extends BaseCommand
      */
     public function handle(): void
     {
-        if (file_exists($this->getWorkingDirectory() . '/public/storage')) {
-            $this->abort("The [public/storage] directory already exists.");
+
+        foreach ([
+                     'public/storage' => false,
+                     'storage/app/public' => true,
+                     'public' => true,
+                 ] as $directory => $shouldExist) {
+            if (file_exists($this->getWorkingDirectory() . '/' . $directory) !== $shouldExist) {
+                $this->abort(($shouldExist) ? "The [{$directory}] directory does not exist." :  "The [{$directory}] directory already exists.");
+            }
         }
 
-        if (!file_exists($this->getWorkingDirectory() . '/storage/app/public')) {
-            $this->abort("The [storage/app/public] directory does not exist!");
-        }
-
-        if (!file_exists($this->getWorkingDirectory() . '/public')) {
-            $this->abort("The [public] directory does not exist!");
-        }
 
         symlink('../storage/app/public', $this->getWorkingDirectory() . '/public/storage');
 
