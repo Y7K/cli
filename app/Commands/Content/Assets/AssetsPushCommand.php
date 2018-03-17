@@ -28,11 +28,11 @@ class AssetsPushCommand extends BaseContentCommand
 
         $this->confirmAction($remoteEnv, false, 'assets');
 
-        $remoteStoragePath = $this->buildStoragePath($remoteEnv);
+        $remoteStoragePath = $this->buildRemoteStoragePath($remoteEnv);
 
         $command = $this->buildRsyncCommand(
             $localEnv['storage'],
-            "{$remoteEnv['sshuser']}@{$remoteEnv['host']}:{$remoteStoragePath}"
+            $remoteStoragePath
         );
 
         $this->runProcess($command);

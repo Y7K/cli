@@ -28,10 +28,10 @@ class AssetsPullCommand extends BaseContentCommand
 
         $this->confirmAction($remoteEnv, $this->option('force'), 'assets');
 
-        $remoteStoragePath = $this->buildStoragePath($remoteEnv);
+        $remoteStoragePath = $this->buildRemoteStoragePath($remoteEnv);
 
         $command = $this->buildRsyncCommand(
-            "{$remoteEnv['sshuser']}@{$remoteEnv['host']}:{$remoteStoragePath}",
+            $remoteStoragePath,
             $localEnv['storage']
         );
 

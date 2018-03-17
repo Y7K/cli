@@ -46,11 +46,12 @@ abstract class BaseContentCommand extends BaseCommand
         return "ssh {$env['sshuser']}@{$env['host']}{$port}";
     }
 
-    public function buildStoragePath($env)
+    public function buildRemoteStoragePath($env)
     {
         $remotePath = rtrim($env['path'], '/');
         $remoteStorage = trim($env['storage'], '/');
-        return rtrim($remotePath . '/' . $remoteStorage, '/');
+        $remoteStoragePath = rtrim($remotePath . '/' . $remoteStorage, '/');
+        return "{$env['sshuser']}@{$env['host']}:{$remoteStoragePath}";
     }
 
 }
