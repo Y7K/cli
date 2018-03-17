@@ -19,6 +19,7 @@ class FileHelper
         return $tempFile;
     }
 
+
     public static function unzip(string $zipFile, bool $downloadedFromGithub = false)
     {
         // build the temporary folder path

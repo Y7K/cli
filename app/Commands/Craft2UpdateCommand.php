@@ -11,6 +11,7 @@ namespace App\Commands;
 
 use App\Concerns\HasProcess;
 use App\Concerns\InstallsRepository;
+use App\Helpers\FileHelper;
 
 class Craft2UpdateCommand extends BaseCommand
 {
@@ -34,7 +35,7 @@ class Craft2UpdateCommand extends BaseCommand
 
         $this->info('Deleting /craft/app folder...');
 
-        $this->runProcess("rm -rf " . $craftAppDir);
+        FileHelper::deleteDirectory($craftAppDir);
 
         $this->info('Download the lastest Version of Craft...');
 
