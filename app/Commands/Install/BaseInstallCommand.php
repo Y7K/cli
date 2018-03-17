@@ -17,7 +17,7 @@ abstract class BaseInstallCommand extends BaseCommand
 
     public function createDestinationPath($destinationPath)
     {
-        if (!is_dir($destinationPath) && !mkdir($destinationPath) && !is_dir($destinationPath)) {
+        if (is_dir($destinationPath) || (!mkdir($destinationPath) && !is_dir($destinationPath))) {
             $this->abort("Directory {$destinationPath} already exists or could not be created");
         }
     }
@@ -30,10 +30,20 @@ abstract class BaseInstallCommand extends BaseCommand
         $commands = [
             "cd {$destinationPath}",
             "composer install --no-scripts",
-            "composer run-script post-root-package-install"
+            "composer run-script post-root-package-install",
+            "composer run-script post-create-project-cmd",
         ];
 
         $this->runProcessSequence($commands);
     }
+
+    public function customizeEnvAndComposerFile($destinationPath)
+    {
+        $explodedPath = explode('-', $destinationPath,2);
+        $projectCode = $explodedPath[0];
+        $projectName = ucwords(str_replace('-', ' ', $explodedPath[count($explodedPath) - 1]));
+        $repoName = "y7k/" . $destinationPath;
+    }
+
 
 }

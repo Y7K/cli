@@ -26,7 +26,7 @@ class InspiringCommand extends Command
      */
     public function handle(): void
     {
-        $this->info('Simplicity is the ultimate sophistication. - Leonardo da Vinci' . getenv('TEST'));
+        $this->info('Simplicity is the ultimate sophistication. - Leonardo da Vinci');
 
         $this->notify("Hey {$this->argument('name')}", 'Enjoy the fresh b air!');
     }

@@ -20,7 +20,7 @@ class JsonHelper
 
         unlink($fileToMerge);
 
-        file_put_contents($originalFile, json_encode($mergedJson, JSON_PRETTY_PRINT));
+        file_put_contents($originalFile, json_encode($mergedJson, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES));
     }
 
     public static function mergeJsonArrays($priority_json, $merge_json)

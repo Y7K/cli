@@ -10,7 +10,10 @@ trait HasProcess
     public function runProcess(string $command)
     {
         $process = new Process($command);
-        $process->run();
+        $process->run(function ($type, $buffer) {
+            $buffer = str_replace(array("\r", "\n"), '', $buffer);
+            $this->line($buffer);
+        });
         return $process->getOutput();
     }
 
