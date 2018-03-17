@@ -16,6 +16,8 @@ class NewCommand extends BaseCommand
     '{--r|remote : Load from online repository instead of local source?}';
     protected $description = '👻  Install a shiny new Project';
 
+    protected $destinationPath;
+
     /**
      * Execute the console command.
      *
@@ -23,11 +25,20 @@ class NewCommand extends BaseCommand
      */
     public function handle(): void
     {
-        $destinationPath = $this->argument('path');
+        $this->destinationPath = $this->argument('path');
+
+        $this
+            ->installPlatform()
+            ->installResources()
+            ->initialiseRepository();
+    }
+
+    public function installPlatform()
+    {
         $platform = strtolower($this->option('platform'));
 
         $this->line("");
-        $this->line("Path set to <info>{$destinationPath}</info>.");
+        $this->line("Path set to <info>{$this->destinationPath}</info>.");
         $this->line("");
 
         $availablePlatforms = ['craft2', 'craft3', 'laravel', 'plain'];
@@ -38,26 +49,35 @@ class NewCommand extends BaseCommand
 
         $this->line("Platform set to <info>{$platform}</info>.");
 
-        // Install repos
-
+        // Install repo
         $this->call('install:' . $platform, [
-            'path' => $destinationPath,
+            'path' => $this->destinationPath,
             '--remote' => $this->option('remote')
         ]);
 
+        return $this;
+    }
+
+    public function installResources()
+    {
         $this->call('install:javascript', [
-            'path' => $destinationPath,
+            'path' => $this->destinationPath,
             '--remote' => $this->option('remote')
         ]);
 
         $this->call('install:stylesheets', [
-            'path' => $destinationPath,
+            'path' => $this->destinationPath,
             '--remote' => $this->option('remote')
         ]);
 
+        return $this;
+    }
+
+    public function initialiseRepository()
+    {
         // Init git and git flow
         $this->runProcessSequence([
-            "cd {$destinationPath}",
+            "cd {$this->destinationPath}",
             "git init",
             "printf 'master\ndevelop\nfeature/\nrelease/\nhotfix/\support/\n\n' | git-flow init",
             "git add --all",
@@ -67,6 +87,8 @@ class NewCommand extends BaseCommand
         ], true);
 
         $this->line("Repository successfully initialized!");
+
+        return $this;
     }
 
 }
