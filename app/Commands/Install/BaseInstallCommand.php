@@ -5,10 +5,12 @@ namespace App\Commands\Install;
 use App\Commands\BaseCommand;
 use App\Concerns\HasProcess;
 use App\Concerns\InstallsRepository;
+use App\Concerns\InteractsWithGitHubApi;
+use App\Concerns\LoadsDataFromLocalRepository;
 
 abstract class BaseInstallCommand extends BaseCommand
 {
-    use InstallsRepository, HasProcess;
+    use InstallsRepository, HasProcess, InteractsWithGitHubApi, LoadsDataFromLocalRepository;
 
     public function installY7KRepo($repoName, $options, $remote){
         $installRepositorycommand = ($remote) ? 'installRepositoryFromGitHub' : 'installRepositoryFromLocalSource';

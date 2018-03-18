@@ -9,19 +9,11 @@ trait InstallsRepository
 
     public function installRepositoryFromLocalSource($githubRepository, $options)
     {
+        $this->info("Loading {$githubRepository} repository from local source...");
 
-        $availableRepositories = [
-           'y7k/plate' => 'PATH_PLATE',
-           'y7k/scripts' => 'PATH_SCRIPTS',
-           'y7k/style' => 'PATH_STYLE',
-           'y7k/components' => 'PATH_COMPONENTS',
-        ];
+        $repositoryPath = $this->getLocalRepositoryPath($githubRepository);
 
-        if(!array_key_exists($githubRepository, $availableRepositories)) {
-            $this->abort("Tried to install unkown repository from local source: {$githubRepository}.");
-        }
-
-        $this->copyFilesToDestination(env($availableRepositories[$githubRepository]), $options);
+        $this->copyFilesToDestination($repositoryPath,  $options);
 
         $this->info("Package {$githubRepository} has been installed from local source!");
     }
@@ -31,7 +23,7 @@ trait InstallsRepository
     {
         $this->info("Downloading {$githubRepository} repository from GitHub...");
 
-        $url = "https://api.github.com/repos/{$githubRepository}/zipball/{$branch}";
+        $url = $this->generateZipballUrl($githubRepository, $branch);
         $this->downloadAndExtractFiles($url, $options, true);
 
         $this->info("Package {$githubRepository} has been installed from GitHub!");
@@ -50,7 +42,7 @@ trait InstallsRepository
 
     private function downloadAndExtractFiles($url, $options, $downloadFromGitHub = false)
     {
-        $auth = ($downloadFromGitHub) ? env('GITHUB_USER') . ":" . env('GITHUB_TOKEN') : false;
+        $auth = ($downloadFromGitHub) ? $this->getGitHubAuth() : false;
 
         // Download Repository as Zip
         $tempZipFile = FileHelper::downloadToZip($url,  $this->output, $auth);
