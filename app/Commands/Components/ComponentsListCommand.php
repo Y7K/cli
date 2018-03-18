@@ -17,13 +17,21 @@ class ComponentsListCommand extends BaseComponentsCommand
     public function handle(): void
     {
 
-        $componentPaths = ($this->option('remote'))
+        $loadFromRemote = $this->option('remote');
+
+        $components = ($loadFromRemote)
             ? $this->listRemoteComponents()
             : $this->listLocalComponents();
 
-//        var_dump($componentPaths);
+        $componentTable = [];
 
-//        $this->table(['name'], $componentPaths);
+        foreach($components as $component) {
+            $config = $this->getComponentConfig($component, $loadFromRemote);
+            if($config) $componentTable[] = [$config['title'], $component, $config['description']];
+        }
+
+        $this->line("");
+        $this->table(['Name', 'component', 'Description'], $componentTable);
 
     }
 

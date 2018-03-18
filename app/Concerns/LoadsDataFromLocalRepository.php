@@ -29,4 +29,10 @@ trait LoadsDataFromLocalRepository
         return env($availableRepositories[$githubRepository]);
     }
 
+    public function readLocalFile($repo, $filePath)
+    {
+        $path = $this->getLocalRepositoryPath($repo) . '/' . $filePath;
+        return file_get_contents($path);
+    }
+
 }

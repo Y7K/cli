@@ -9,6 +9,7 @@
 namespace App\Concerns;
 
 
+use App\Helpers\FileHelper;
 use App\Helpers\GitHubApiHelper;
 
 trait InteractsWithGitHubApi
@@ -33,6 +34,11 @@ trait InteractsWithGitHubApi
     public function getTreeOfUrl($url)
     {
         return GitHubApiHelper::getTree($url, $this->output, $this->getGitHubAuth());
+    }
+
+    public function readFileOnGitHub($repo, $branch = 'master', $file)
+    {
+        return FileHelper::downloadContent("https://raw.githubusercontent.com/{$repo}/{$branch}/{$file}", null, $this->getGitHubAuth());
     }
 
 }
