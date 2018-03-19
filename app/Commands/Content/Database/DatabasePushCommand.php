@@ -28,7 +28,7 @@ class DatabasePushCommand extends BaseContentCommand
         $this->warn("Uploading database: Permanently <fg=red>overwrite</> data on ({$environment}) with (local).");
 
         // Ask for confirmation
-        $this->confirmAction($environment, false, 'database');
+        $this->confirmSyncingContent($environment, false, 'database');
 
         // Execute Command
         $command = $this->buildMysqldumpCommand('local', $environment);

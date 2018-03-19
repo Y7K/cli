@@ -11,7 +11,7 @@ abstract class BaseContentCommand extends BaseCommand
 
     use ReadsY7KCliConfigFile, HasProcess;
 
-    public function confirmAction($destinationEnv, $force, $type)
+    public function confirmSyncingContent($destinationEnv, $force, $type)
     {
         if ($this->isProduction($destinationEnv)) {
             $fuckingsure = $this->ask("This will <fg=red>OVERWRITE</> production {$type}! Are you really sure? Type <bg=yellow>i fucking know what im doing</> if you want to proceed");

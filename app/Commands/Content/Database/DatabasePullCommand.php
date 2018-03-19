@@ -28,7 +28,7 @@ class DatabasePullCommand extends BaseContentCommand
         $this->warn("Downloading database: Permanently <fg=red>overwrite</> (local) data with ({$environment}).");
 
         // Ask for confirmation
-        $this->confirmAction('local', $this->option('force'), 'database');
+        $this->confirmSyncingContent('local', $this->option('force'), 'database');
 
         // Execute Command
         $command = $this->buildMysqldumpCommand($environment, 'local');
