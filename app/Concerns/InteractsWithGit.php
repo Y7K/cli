@@ -44,8 +44,14 @@ trait InteractsWithGit
         // Check if there's something to pull
         foreach ($branchesToCheck as $branch) {
             $local = $this->runProcess("git rev-parse {$branch}");
-            $remote = $this->runProcess("git rev-parse origin/{$branch}");
-            if ($local !== $remote) $outdatedBranches[] = $branch;
+//            $remote = $this->runProcess("git rev-parse origin/{$branch}");
+            $base = $this->runProcess("git merge-base {$branch} origin/{$branch}");
+            
+            // $local == $remote Everything up to date
+            // $local == $base Need to pull
+            // $remote == $base Need to push
+
+            if ($local === $base) $outdatedBranches[] = $branch;
         }
 
         // Abort if there is
