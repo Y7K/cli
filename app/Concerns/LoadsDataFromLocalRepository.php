@@ -32,7 +32,10 @@ trait LoadsDataFromLocalRepository
     public function readLocalFile($repo, $filePath)
     {
         $path = $this->getLocalRepositoryPath($repo) . '/' . $filePath;
-        return file_get_contents($path);
+        if(is_file($path) && file_exists($path)){
+            return file_get_contents($path);
+        }
+        return null;
     }
 
 }

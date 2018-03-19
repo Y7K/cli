@@ -18,40 +18,41 @@ class ComponentsInstallCommand extends BaseComponentsCommand
 
     protected $component;
     protected $componentConfig;
+    protected $loadFromRemote;
 
     public function handle(): void
     {
 
-        $loadFromRemote = $this->option('remote');
+        $this->loadFromRemote = $this->option('remote');
         $this->component = $this->argument('component');
-        $this->componentConfig = $this->getComponentConfig($this->component, $loadFromRemote);
+        $this->componentConfig = $this->getComponentConfig($this->component, $this->loadFromRemote);
 
         $this->info("Installing Component {$this->componentConfig['name']}...");
 
         $this
-            ->copyFiles($loadFromRemote)
-            ->mergeFiles($loadFromRemote);
-//        $this->installNpmDependencies($this->componentConfig);
-//        $this->installComposerDependencies($this->componentConfig);
+            ->copyFiles()
+            ->mergeFiles()
+            ->installNpmDependencies()
+            ->installComposerDependencies();
 
         $this->info("Component {$this->componentConfig['name']} installed!");
     }
 
 
-    private function copyFiles($loadFromRemote)
+    private function copyFiles()
     {
         $this->info('<fg=blue>Copying files...</>');
 
         $this->installY7KRepo('components', [
             'destinationPath' => $this->getWorkingDirectory(),
             'subfolders' => ['components/' . $this->component . '/source']
-        ], $loadFromRemote);
+        ], $this->loadFromRemote);
 
         return $this;
     }
 
 
-    private function mergeFiles($loadFromRemote)
+    private function mergeFiles()
     {
         $this->line("");
         $this->warn("The following files will be merged:");
@@ -63,8 +64,9 @@ class ComponentsInstallCommand extends BaseComponentsCommand
 
             $this->info('<fg=blue>Merging files...</>');
             $bar = $this->output->createProgressBar(count($this->componentConfig['filemerges']));
+
             foreach ($this->componentConfig['filemerges'] as $fileMerge) {
-                $contensOfFileToMerge = $this->getComponentFile($this->component, $fileMerge['src'], $loadFromRemote);
+                $contensOfFileToMerge = $this->getComponentFile($this->component, $fileMerge['src'], $this->loadFromRemote);
                 FileMergeHelper::applyFileMerges(
                     $this->getWorkingDirectory() . '/' . $fileMerge['dest'],
                     $contensOfFileToMerge
@@ -83,75 +85,36 @@ class ComponentsInstallCommand extends BaseComponentsCommand
     }
 
 
-
-    private function installNpmDependencies($componentConfig)
+    private function installNpmDependencies()
     {
-//
-//        if(empty($componentConfig['npmDependencies']) && empty($componentConfig['npmDevDependencies'])) return;
-//
-//        $this->io->text('<fg=blue>Adding NPM dependencies...</>');
-//
-//        $packageJson = 'package.json';
-//        $originalPackageJson = is_file($packageJson) ? json_decode(file_get_contents($packageJson), true) : [];
-//
-//        $newDependencies = [
-//            'dependencies' => $componentConfig['npmDependencies'] ? $componentConfig['npmDependencies'] : [],
-//            'devDependencies' => $componentConfig['npmDevDependencies'] ? $componentConfig['npmDevDependencies'] : [],
-//        ];
-//
-//        $mergedPackageJson = Util::mergeJsonArrays($originalPackageJson, $newDependencies);
-//        file_put_contents($packageJson, json_encode($mergedPackageJson, JSON_PRETTY_PRINT));
-//
-//
-//        $this->io->text('<fg=blue>Installing dependencies...</>');
-//
-//        if (file_exists('package.json')) {
-//            Util::runCommand('npm install', $this->io);
-//        }
-//
-//        $this->io->newLine();
-//        $this->io->text('<fg=blue>Done adding NPM Packages!</>');
-//        $this->io->newLine(2);
+        if($this->mergeJsonConfigFile('package.json')) {
+            $this->info("Do not forget to run <fg=blue>npm install</>.");
+        };
 
+        return $this;
     }
 
 
-
-    private function installComposerDependencies($componentConfig)
+    private function installComposerDependencies()
     {
-//
-//        if(empty($componentConfig['composerDependencies'])) return;
-//
-//        $this->io->text('<fg=blue>Adding Composer dependencies...</>');
-//
-//        $composerJson = 'composer.json';
-//        $originalComposerJson = is_file($composerJson) ? json_decode(file_get_contents($composerJson), true) : [];
-//
-//        $newComposerRequires = [
-//            'require' => $componentConfig['composerDependencies'] ? $componentConfig['composerDependencies'] : [],
-//        ];
-//
-//        $mergedComposerJson = Util::mergeJsonArrays($originalComposerJson, $newComposerRequires);
-//        file_put_contents($composerJson, json_encode($mergedComposerJson, JSON_PRETTY_PRINT));
-//
-//
-//        $this->io->text('<fg=blue>Installing dependencies...</>');
-//
-//        if (file_exists('composer.json')) {
-//            $cmd = 'composer install';
-//            if (file_exists('composer.lock')) {
-//                $cmd = 'composer update';
-//            }
-//            Util::runCommand($cmd, $this->io);
-//        }
-//
-//        $this->io->newLine();
-//        $this->io->text('<fg=blue>Done adding Composer Packages!</>');
-//        $this->io->newLine(2);
+        if($this->mergeJsonConfigFile('composer.json')) {
+            $this->info("Do not forget to run <fg=blue>composer install</>.");
+        };
 
+        return $this;
     }
 
+    private function mergeJsonConfigFile($fileName) {
 
+        // Read the contents of a file as json
+        $json = json_decode($this->getComponentFile($this->component, $fileName, $this->loadFromRemote));
 
+        if($json) {
+            $this->info("Merging {$fileName} file.");
+            FileMergeHelper::mergeJsonIntoFile($this->getWorkingDirectory() . '/' . $fileName, $json);
+        }
+
+        return ($json !== null);
+    }
 
 }

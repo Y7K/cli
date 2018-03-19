@@ -14,9 +14,14 @@ class FileMergeHelper
 
     public static function mergeJsonFiles($originalFile, $fileToMerge)
     {
-        $originalJson = is_file($originalFile) ? json_decode(file_get_contents($originalFile), true) : [];
         $newJson = is_file($fileToMerge) ? json_decode(file_get_contents($fileToMerge), true) : [];
-        $mergedJson = self::mergeJsonArrays($originalJson, $newJson);
+        self::mergeJsonIntoFile($originalFile, $newJson);
+    }
+
+    public static function mergeJsonIntoFile($originalFile, $jsonToMerge = [])
+    {
+        $originalJson = is_file($originalFile) ? json_decode(file_get_contents($originalFile), true) : [];
+        $mergedJson = self::mergeJsonArrays($originalJson, $jsonToMerge);
 
         file_put_contents($originalFile, json_encode($mergedJson, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES));
     }
