@@ -21,7 +21,11 @@ abstract class BaseComponentsCommand extends BaseCommand
 
         $config = Yaml::parse($configData);
 
-        return (array_key_exists('404', $config)) ? false : $config;
+        if(array_key_exists('404', $config)) {
+            $this->abort("Component {$component} not found!");
+        }
+
+        return $config;
     }
 
 }

@@ -18,8 +18,6 @@ class JsonHelper
         $newJson = is_file($fileToMerge) ? json_decode(file_get_contents($fileToMerge), true) : [];
         $mergedJson = self::mergeJsonArrays($originalJson, $newJson);
 
-        unlink($fileToMerge);
-
         file_put_contents($originalFile, json_encode($mergedJson, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES));
     }
 

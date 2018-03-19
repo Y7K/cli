@@ -33,6 +33,7 @@ class InstallJavascriptCommand extends BaseInstallCommand
        ], $this->option('remote'));
 
         JsonHelper::mergeJsonFiles($destinationPath . '/package.json', $assetsPath . '/package.json');
+        unlink($assetsPath . '/package.json');
 
         $this->info("Installed the {$this->packageName} boilerplate!");
     }

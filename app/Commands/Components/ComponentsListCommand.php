@@ -27,7 +27,7 @@ class ComponentsListCommand extends BaseComponentsCommand
 
         foreach($components as $component) {
             $config = $this->getComponentConfig($component, $loadFromRemote);
-            if($config) $componentTable[] = [$config['title'], $component, $config['description']];
+            $componentTable[] = [$config['name'], $component, $config['description']];
         }
 
         $this->line("");
