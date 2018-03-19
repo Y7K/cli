@@ -12,12 +12,18 @@ class ContentPushCommand extends BaseContentCommand
     public function handle(): void
     {
 
+        $environment = $this->argument('environment');
+
+        $this->line("");
+        $this->warn("Uploading assets and database: Permanently <fg=red>overwrite</> ({$environment}) data with (local).");
+
+
         $this->call('db:push', [
-            'environment' => $this->argument('environment')
+            'environment' => $environment
         ]);
 
         $this->call('assets:push', [
-            'environment' => $this->argument('environment')
+            'environment' => $environment
         ]);
 
     }
