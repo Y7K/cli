@@ -12,11 +12,6 @@ abstract class BaseInstallCommand extends BaseCommand
 {
     use InstallsRepository, HasProcess, InteractsWithGitHubApi, LoadsDataFromLocalRepository;
 
-    public function installY7KRepo($repoName, $options, $remote){
-        $installRepositorycommand = ($remote) ? 'installRepositoryFromGitHub' : 'installRepositoryFromLocalSource';
-        $this->{$installRepositorycommand}('y7k/' . $repoName, $options);
-    }
-
     public function abortIfDirectoryExists($destinationPath, $createDir = true)
     {
         if (is_dir($destinationPath) || ($createDir && !mkdir($destinationPath) && !is_dir($destinationPath))) {

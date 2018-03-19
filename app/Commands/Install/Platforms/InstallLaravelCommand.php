@@ -3,7 +3,7 @@
 namespace App\Commands\Install\Platforms;
 
 use App\Commands\Install\BaseInstallCommand;
-use App\Helpers\JsonHelper;
+use App\Helpers\FileMergeHelper;
 
 class InstallLaravelCommand extends BaseInstallCommand
 {
@@ -35,7 +35,7 @@ class InstallLaravelCommand extends BaseInstallCommand
            'subfolders' => ['base', 'platforms/laravel']
        ], $this->option('remote'));
 
-        JsonHelper::mergeJsonFiles($destinationPath . '/composer.json', $destinationPath . '/composer.merge.json');
+        FileMergeHelper::mergeJsonFiles($destinationPath . '/composer.json', $destinationPath . '/composer.merge.json');
         unlink($destinationPath . '/composer.merge.json');
 
         $this->runPostInstallComposerCommands($destinationPath);

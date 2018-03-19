@@ -9,7 +9,7 @@
 namespace App\Helpers;
 
 
-class JsonHelper
+class FileMergeHelper
 {
 
     public static function mergeJsonFiles($originalFile, $fileToMerge)
@@ -35,4 +35,28 @@ class JsonHelper
         }
         return $priority_json;
     }
+
+    public static function applyFileMerges($destinationFile, $contentsToMerge)
+    {
+
+        if(is_file($destinationFile) && file_exists($destinationFile)) {
+
+            $start = '<<<<<<<' . PHP_EOL;
+            $end = '>>>>>>>';
+            $pattern = "/$start(.*?)$end/s";
+
+            preg_match_all($pattern, $contentsToMerge, $matches);
+
+            foreach ($matches[1] as $mergePair) {
+                $mergePairParts = explode('=======', $mergePair);
+
+                $find = ltrim($mergePairParts[0]);
+                $replace = ltrim($mergePairParts[1]);
+                FileHelper::findAndReplaceInFile($destinationFile, $find, $replace);
+            }
+        }
+
+    }
+
+
 }

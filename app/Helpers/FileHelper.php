@@ -176,5 +176,17 @@ class FileHelper
         $process->run();
     }
 
+    public static function findAndReplaceInFile($file, $find, $replace)
+    {
+        //read the entire string
+        $str = file_get_contents($file);
+
+        //replace something in the file string - this is a VERY simple example
+        $str = str_replace((string)$find, (string)$replace, $str);
+
+        //write the entire string
+        file_put_contents($file, $str);
+    }
+
 
 }

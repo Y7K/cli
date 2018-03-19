@@ -3,7 +3,7 @@
 namespace App\Commands\Install\Resources;
 
 use App\Commands\Install\BaseInstallCommand;
-use App\Helpers\JsonHelper;
+use App\Helpers\FileMergeHelper;
 
 class InstallJavascriptCommand extends BaseInstallCommand
 {
@@ -32,7 +32,7 @@ class InstallJavascriptCommand extends BaseInstallCommand
            'subfolders' => ['source']
        ], $this->option('remote'));
 
-        JsonHelper::mergeJsonFiles($destinationPath . '/package.json', $assetsPath . '/package.json');
+        FileMergeHelper::mergeJsonFiles($destinationPath . '/package.json', $assetsPath . '/package.json');
         unlink($assetsPath . '/package.json');
 
         $this->info("Installed the {$this->packageName} boilerplate!");

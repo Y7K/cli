@@ -13,11 +13,9 @@ abstract class BaseComponentsCommand extends BaseCommand
 
     public function getComponentConfig($component, $loadFromRemote)
     {
-        $configFilePath = "components/{$component}/{$component}.yml";
+        $configFilePath = "{$component}.yml";
 
-        $configData = ($loadFromRemote)
-            ? $this->readFileOnGitHub('y7k/components', 'master', $configFilePath)
-            : $this->readLocalFile('y7k/components', $configFilePath);
+        $configData = $this->getComponentFile($component, $configFilePath, $loadFromRemote);
 
         $config = Yaml::parse($configData);
 
@@ -26,6 +24,15 @@ abstract class BaseComponentsCommand extends BaseCommand
         }
 
         return $config;
+    }
+
+    public function getComponentFile($component, $fileUrl, $loadFromRemote) {
+
+        $fileUrl = "components/{$component}/{$fileUrl}";
+
+        return ($loadFromRemote)
+            ? $this->readFileOnGitHub('y7k/components', 'master', $fileUrl)
+            : $this->readLocalFile('y7k/components', $fileUrl);
     }
 
 }
