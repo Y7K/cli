@@ -22,16 +22,16 @@ class InstallPlainCommand extends BaseInstallCommand
 
         $this->abortIfDirectoryExists($destinationPath);
 
-        $this->info("Installing the {$this->packageName} boilerplate...");
+        $this->task("Install the <fg=green>{$this->packageName}</> boilerplate", function () use ($destinationPath) {
 
-       $this->installY7KRepo('plate', [
-           'destinationPath' => $destinationPath,
-           'subfolders' => ['base', 'platforms/plain']
-       ], $this->option('remote'));
+            $this->installY7KRepo('plate', [
+                'destinationPath' => $destinationPath,
+                'subfolders' => ['base', 'platforms/plain']
+            ], $this->option('remote'));
 
-        $this->runPostInstallComposerCommands($destinationPath);
+            $this->runPostInstallComposerCommands($destinationPath);
 
-        $this->info("Installed the {$this->packageName} boilerplate!");
+        });
     }
 
 }

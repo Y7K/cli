@@ -25,17 +25,19 @@ class InstallJavascriptCommand extends BaseInstallCommand
 
         $this->abortIfDirectoryExists($assetsPath . '/js', false);
 
-        $this->info("Installing the {$this->packageName} boilerplate...");
+        $this->task("Install the <fg=green>{$this->packageName}</> boilerplate", function () use ($destinationPath, $assetsPath) {
 
-       $this->installY7KRepo('scripts', [
-           'destinationPath' => $assetsPath,
-           'subfolders' => ['source']
-       ], $this->option('remote'));
+           $this->installY7KRepo('scripts', [
+               'destinationPath' => $assetsPath,
+               'subfolders' => ['source']
+           ], $this->option('remote'));
 
-        FileMergeHelper::mergeJsonFiles($destinationPath . '/package.json', $assetsPath . '/package.json');
-        unlink($assetsPath . '/package.json');
+            $this->task("Merge package.json", function () use ($destinationPath, $assetsPath) {
+                FileMergeHelper::mergeJsonFiles($destinationPath . '/package.json', $assetsPath . '/package.json');
+                unlink($assetsPath . '/package.json');
+            });
 
-        $this->info("Installed the {$this->packageName} boilerplate!");
+        });
     }
 
 }

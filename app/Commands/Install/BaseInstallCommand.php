@@ -22,25 +22,26 @@ abstract class BaseInstallCommand extends BaseCommand
     public function runPostInstallComposerCommands($destinationPath)
     {
         // Run Composer Commands
-        $this->info('Run Composer...');
+        $this->task("Run Composer scripts", function () use ($destinationPath) {
 
-        $commands = [
-            "cd {$destinationPath}",
-            "composer install --no-scripts",
-            "composer run-script post-root-package-install",
-            "composer run-script post-create-project-cmd",
-        ];
+            $commands = [
+                "cd {$destinationPath}",
+                "composer install --no-scripts",
+                "composer run-script post-root-package-install",
+                "composer run-script post-create-project-cmd",
+            ];
 
-        $this->runProcessSequence($commands);
+            $this->runProcessSequence($commands, true);
+        });
     }
 
-    public function customizeEnvAndComposerFile($destinationPath)
-    {
-        $explodedPath = explode('-', $destinationPath,2);
-        $projectCode = $explodedPath[0];
-        $projectName = ucwords(str_replace('-', ' ', $explodedPath[count($explodedPath) - 1]));
-        $repoName = "y7k/" . $destinationPath;
-    }
+//    public function customizeEnvAndComposerFile($destinationPath)
+//    {
+//        $explodedPath = explode('-', $destinationPath,2);
+//        $projectCode = $explodedPath[0];
+//        $projectName = ucwords(str_replace('-', ' ', $explodedPath[count($explodedPath) - 1]));
+//        $repoName = "y7k/" . $destinationPath;
+//    }
 
 
 }

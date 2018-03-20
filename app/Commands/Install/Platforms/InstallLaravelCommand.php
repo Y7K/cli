@@ -23,22 +23,26 @@ class InstallLaravelCommand extends BaseInstallCommand
 
         $this->abortIfDirectoryExists($destinationPath);
 
-        $this->info("Installing the {$this->packageName} boilerplate...");
+        $this->task("Install the <fg=green>{$this->packageName}</> boilerplate", function () use ($destinationPath) {
 
-        $this->installRepositoryFromGitHub('laravel/laravel',[
-            'destinationPath' => $destinationPath,
-            'exclude' => ['resources/assets', 'public/css', 'public/js', 'resources/views'],
-        ]);
+            $this->installRepositoryFromGitHub('laravel/laravel', [
+                'destinationPath' => $destinationPath,
+                'exclude' => ['resources/assets', 'public/css', 'public/js', 'resources/views'],
+            ]);
 
-       $this->installY7KRepo('plate', [
-           'destinationPath' => $destinationPath,
-           'subfolders' => ['base', 'platforms/laravel']
-       ], $this->option('remote'));
+            $this->installY7KRepo('plate', [
+                'destinationPath' => $destinationPath,
+                'subfolders' => ['base', 'platforms/laravel']
+            ], $this->option('remote'));
 
-        FileMergeHelper::mergeJsonFiles($destinationPath . '/composer.json', $destinationPath . '/composer.merge.json');
-        unlink($destinationPath . '/composer.merge.json');
+            $this->task("Merge composer.json", function () use ($destinationPath) {
+                FileMergeHelper::mergeJsonFiles($destinationPath . '/composer.json', $destinationPath . '/composer.merge.json');
+                unlink($destinationPath . '/composer.merge.json');
+            });
 
-        $this->runPostInstallComposerCommands($destinationPath);
+            $this->runPostInstallComposerCommands($destinationPath);
+
+        });
 
         $this->info("Installed the {$this->packageName} boilerplate!");
     }

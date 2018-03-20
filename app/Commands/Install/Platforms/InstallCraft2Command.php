@@ -22,22 +22,22 @@ class InstallCraft2Command extends BaseInstallCommand
 
         $this->abortIfDirectoryExists($destinationPath);
 
-        $this->info("Installing the {$this->packageName} boilerplate...");
+        $this->task("Install the <fg=green>{$this->packageName}</> boilerplate", function () use ($destinationPath) {
 
-       $this->installY7KRepo('plate', [
-           'destinationPath' => $destinationPath,
-           'subfolders' => ['base', 'platforms/craft']
-       ], $this->option('remote'));
+            $this->installY7KRepo('plate', [
+                'destinationPath' => $destinationPath,
+                'subfolders' => ['base', 'platforms/craft']
+            ], $this->option('remote'));
 
-        // Install Craft App folder
-        $this->installRepositoryFromUrl('http://craftcms.com/latest.zip?accept_license=yes', [
-            'destinationPath' => $destinationPath . '/craft/app',
-            'subfolders' => ['craft/app']
-        ]);
+            // Install Craft App folder
+            $this->installRepositoryFromUrl('http://craftcms.com/latest.zip?accept_license=yes', [
+                'destinationPath' => $destinationPath . '/craft/app',
+                'subfolders' => ['craft/app']
+            ]);
 
-        $this->runPostInstallComposerCommands($destinationPath);
+            $this->runPostInstallComposerCommands($destinationPath);
 
-        $this->info("Installed the {$this->packageName} boilerplate!");
+        });
     }
 
 }
