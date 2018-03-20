@@ -35,7 +35,6 @@ class InstallStylesheetsCommand extends BaseInstallCommand
             $this->task("Merge package.json", function () use ($destinationPath, $assetsPath) {
                 FileMergeHelper::mergeJsonFiles($destinationPath . '/package.json', $assetsPath . '/package.json');
                 unlink($assetsPath . '/package.json');
-                return true;
             });
 
         });

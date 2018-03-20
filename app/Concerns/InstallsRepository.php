@@ -17,7 +17,6 @@ trait InstallsRepository
         $this->task("Loading {$githubRepository} repository from local source", function () use ($githubRepository, $options) {
             $repositoryPath = $this->getLocalRepositoryPath($githubRepository);
             $this->copyFilesToDestination($repositoryPath, $options);
-            return true;
         });
     }
 
@@ -27,7 +26,6 @@ trait InstallsRepository
         $this->task("Downloading {$githubRepository} repository from GitHub", function () use ($githubRepository, $options, $branch) {
             $url = $this->generateZipballUrl($githubRepository, $branch);
             $this->downloadAndExtractFiles($url, $options, true);
-            return true;
         });
     }
 
@@ -36,7 +34,6 @@ trait InstallsRepository
     {
         $this->task("Downloading files from the internets", function () use ($url, $options) {
             $this->downloadAndExtractFiles($url, $options);
-            return true;
         });
     }
 
@@ -64,7 +61,6 @@ trait InstallsRepository
         // Copy Files to Destination
         $this->task("Copying files to destination", function () use ($folder, $options) {
             FileHelper::copyFilesToDirectory($folder, $options);
-            return true;
         });
     }
 
