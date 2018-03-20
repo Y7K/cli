@@ -25,9 +25,9 @@ class AssetsPushCommand extends BaseContentCommand
         $remoteEnv = $this->getValidatedEnvironmentData($environment, ['host', 'sshuser', 'storage']);
 
         // Ask for confirmation
-        $this->confirmSyncingContent('assets', 'local', $environment, $this->option('force'));
+        $this->confirmSyncingContent('assets', 'local', $environment, false);
 
-        $this->task("Uploading assets", function () use ($environment) {
+        $this->task("Uploading assets", function () use ($environment, $localEnv) {
             // Execute Command
             $remoteStoragePath = $this->buildRemoteStoragePath($environment);
 

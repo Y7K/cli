@@ -25,7 +25,7 @@ class DatabasePushCommand extends BaseContentCommand
         $this->getValidatedEnvironmentData($environment, ['host', 'sshuser', 'dbuser', 'dbpassword', 'db']);
 
         // Ask for confirmation
-        $this->confirmSyncingContent('database', 'local', $environment, $this->option('force'));
+        $this->confirmSyncingContent('database', 'local', $environment, false);
 
         $this->task("Uploading database", function () use ($environment) {
             // Execute Command
