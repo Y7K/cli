@@ -44,7 +44,9 @@ class NewCommand extends BaseCommand
         $availablePlatforms = ['craft2', 'craft3', 'laravel', 'plain'];
 
         if(!in_array($platform, $availablePlatforms)) {
-            $platform = $this->choice('Please select which type of application you\'re building', $availablePlatforms, 1);
+//            $platform = $this->choice('Please select which type of application you\'re building', $availablePlatforms, 1);
+            $platform = $this->menu('Application Type', $availablePlatforms)->open();
+            if(!$platform) $this->abort("Aborted.");
         }
 
         $this->line("Platform set to <info>{$platform}</info>.");
