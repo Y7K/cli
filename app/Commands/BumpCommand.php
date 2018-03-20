@@ -23,15 +23,19 @@ class BumpCommand extends BaseCommand
     {
         $this->readAndUpdateProjectVersion();
 
-        if ($this->option('nogit')) {
-            $this->writeProjectJsonDataToFile();
-        } else {
-            $this->abortIfThereAreUncommitedFiles();
-            $this->abortIfNewCommitsAreAvailableToPull();
-            $this->writeProjectJsonAndCommit();
-        }
 
-        $this->info("Version updated to {$this->projectJsonData->version}!");
+        $this->task("Update version to <fg=green>{$this->projectJsonData->version}</>", function () {
+
+            if ($this->option('nogit')) {
+                $this->writeProjectJsonDataToFile();
+            } else {
+                $this->abortIfThereAreUncommitedFiles();
+                $this->abortIfNewCommitsAreAvailableToPull();
+                $this->writeProjectJsonAndCommit();
+            }
+
+        });
+
     }
 
     public function readAndUpdateProjectVersion()
@@ -68,6 +72,7 @@ class BumpCommand extends BaseCommand
         // Save the updated Versin
         $this->projectJsonData->version = implode('.', $projectVersion);
 
+
         return $this;
     }
 
@@ -79,34 +84,41 @@ class BumpCommand extends BaseCommand
         if ($this->isUsingGitFlow()) {
 
             // Checkout Release Branch
-            $this->runProcess("git checkout develop && git checkout -b release/{$projectVersionString} develop");
+
+            $this->task("Create release branch", function () use ($projectVersionString) {
+                $this->runProcess("git checkout develop && git checkout -b release/{$projectVersionString} develop", true);
+            });
 
             // Write File
             $this->writeProjectJsonDataToFile();
 
             // Commit changes, merge and tag release branch
-            $this->runProcessSequence([
-                "export GIT_MERGE_AUTOEDIT=no",
-                "git add --all",
-                "git commit -m \"Release {$projectVersionString}\"",
-                "git checkout master",
-                "git merge release/{$projectVersionString}",
-                "git tag -a {$projectVersionString} -m \"{$projectVersionString}\"",
-                "git checkout develop",
-                "git merge release/{$projectVersionString}",
-                "git branch -d release/{$projectVersionString}",
-                "unset GIT_MERGE_AUTOEDIT"
-            ]);
+            $this->task("Create tag and merge release branch", function () use ($projectVersionString) {
+                $this->runProcessSequence([
+                    "export GIT_MERGE_AUTOEDIT=no",
+                    "git add --all",
+                    "git commit -m \"Release {$projectVersionString}\"",
+                    "git checkout master",
+                    "git merge release/{$projectVersionString}",
+                    "git tag -a {$projectVersionString} -m \"{$projectVersionString}\"",
+                    "git checkout develop",
+                    "git merge release/{$projectVersionString}",
+                    "git branch -d release/{$projectVersionString}",
+                    "unset GIT_MERGE_AUTOEDIT"
+                ], true);
+            });
 
         } else {
 
             $this->writeProjectJsonDataToFile();
 
-            $this->runProcessSequence([
-                "git add --all",
-                "git commit -m \"Release {$projectVersionString}\"",
-                "git tag -a {$projectVersionString} -m \"{$projectVersionString}\""
-            ]);
+            $this->task("Create tag and commit", function () use ($projectVersionString) {
+                $this->runProcessSequence([
+                    "git add --all",
+                    "git commit -m \"Release {$projectVersionString}\"",
+                    "git tag -a {$projectVersionString} -m \"{$projectVersionString}\""
+                ]);
+            });
 
         }
 

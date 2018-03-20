@@ -23,8 +23,9 @@ trait WritesToProjectJsonFile
 
     public function writeProjectJsonDataToFile()
     {
-        $projectJsonFile = $this->getWorkingDirectory() . '/' . $this->projectJsonFilename;
-
-        file_put_contents($projectJsonFile, json_encode($this->projectJsonData, JSON_PRETTY_PRINT));
+        $this->task("Update project.json file", function () {
+            $projectJsonFile = $this->getWorkingDirectory() . '/' . $this->projectJsonFilename;
+            file_put_contents($projectJsonFile, json_encode($this->projectJsonData, JSON_PRETTY_PRINT));
+        });
     }
 }
