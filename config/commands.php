@@ -57,7 +57,15 @@ return [
         Symfony\Component\Console\Command\HelpCommand::class,
         Illuminate\Console\Scheduling\ScheduleRunCommand::class,
         Illuminate\Console\Scheduling\ScheduleFinishCommand::class,
-        Illuminate\Foundation\Console\VendorPublishCommand::class
+        Illuminate\Foundation\Console\VendorPublishCommand::class,
+
+        // Install commands
+        \App\Commands\Install\Platforms\InstallCraft2Command::class,
+        \App\Commands\Install\Platforms\InstallCraft3Command::class,
+        \App\Commands\Install\Platforms\InstallLaravelCommand::class,
+        \App\Commands\Install\Platforms\InstallPlainCommand::class,
+        \App\Commands\Install\Resources\InstallJavascriptCommand::class,
+        \App\Commands\Install\Resources\InstallStylesheetsCommand::class,
     ],
 
     /*
