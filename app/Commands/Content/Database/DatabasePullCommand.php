@@ -24,18 +24,17 @@ class DatabasePullCommand extends BaseContentCommand
         $this->getValidatedEnvironmentData('local', ['host', 'sshuser', 'dbuser', 'dbpassword', 'db']);
         $this->getValidatedEnvironmentData($environment, ['host', 'sshuser', 'dbuser', 'dbpassword', 'db']);
 
-        $this->line("");
-        $this->warn("Downloading database: Permanently <fg=red>overwrite</> (local) data with ({$environment}).");
-
         // Ask for confirmation
-        $this->confirmSyncingContent('local', $this->option('force'), 'database');
+        $this->confirmSyncingContent('database', $environment, 'local', $this->option('force'));
 
-        // Execute Command
-        $command = $this->buildMysqldumpCommand($environment, 'local');
+        $this->task("Downloading database", function () use ($environment) {
 
-        $this->runProcess($command);
+            // Execute Command
+            $command = $this->buildMysqldumpCommand($environment, 'local');
+            $this->runProcess($command);
 
-        $this->info("Database on (local) is now in sync with ({$environment})!");
+            return true;
+        });
     }
 
 

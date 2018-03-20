@@ -24,23 +24,20 @@ class AssetsPushCommand extends BaseContentCommand
         $localEnv = $this->getValidatedEnvironmentData('local', ['storage']);
         $remoteEnv = $this->getValidatedEnvironmentData($environment, ['host', 'sshuser', 'storage']);
 
-        $this->line("");
-        $this->warn("Uploading assets: Permanently <fg=red>overwrite</> data on ({$environment}) with (local).");
-
         // Ask for confirmation
-        $this->confirmSyncingContent($environment, false, 'assets');
+        $this->confirmSyncingContent('assets', 'local', $environment, $this->option('force'));
 
-        // Execute Command
-        $remoteStoragePath = $this->buildRemoteStoragePath($environment);
+        $this->task("Uploading assets", function () use ($environment) {
+            // Execute Command
+            $remoteStoragePath = $this->buildRemoteStoragePath($environment);
 
-        $command = $this->buildRsyncCommand(
-            $localEnv['storage'],
-            $remoteStoragePath
-        );
+            $command = $this->buildRsyncCommand(
+                $localEnv['storage'],
+                $remoteStoragePath
+            );
 
-        $this->runProcess($command);
-
-        $this->info("Assets on (local) are now in sync with ({$environment})!");
+            $this->runProcess($command);
+        });
     }
 
 

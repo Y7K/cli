@@ -24,23 +24,21 @@ class AssetsPullCommand extends BaseContentCommand
         $localEnv = $this->getValidatedEnvironmentData('local', ['storage']);
         $remoteEnv = $this->getValidatedEnvironmentData($environment, ['host', 'sshuser', 'path', 'storage']);
 
-        $this->line("");
-        $this->warn("Downloading assets: Permanently <fg=red>overwrite</> (local) data with ({$environment}).");
-
         // Ask for confirmation
-        $this->confirmSyncingContent('local', $this->option('force'), 'assets');
+        $this->confirmSyncingContent('assets', $environment, 'local', $this->option('force'));
 
-        // Execute Command
-        $remoteStoragePath = $this->buildRemoteStoragePath($environment);
 
-        $command = $this->buildRsyncCommand(
-            $remoteStoragePath,
-            $localEnv['storage']
-        );
+        $this->task("Downloading assets", function () use ($environment, $localEnv) {
+            // Execute Command
+            $remoteStoragePath = $this->buildRemoteStoragePath($environment);
 
-        $this->runProcess($command);
+            $command = $this->buildRsyncCommand(
+                $remoteStoragePath,
+                $localEnv['storage']
+            );
 
-        $this->info("Assets on (local) are now in sync with ({$environment})!");
+            $this->runProcess($command);
+        });
     }
 
 

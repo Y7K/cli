@@ -13,10 +13,7 @@ class ContentPullCommand extends BaseContentCommand
     {
         $environment = $this->argument('environment');
 
-        $this->line("");
-        $this->warn("Downloading assets and database: Permanently <fg=red>overwrite</> (local) data with ({$environment}).");
-
-        $this->confirmSyncingContent('local', $this->option('force'), 'assets and database');
+        $this->confirmSyncingContent('assets and database', $environment, 'local', $this->option('force'));
 
         $this->call('db:pull', [
             'environment' => $environment,

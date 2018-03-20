@@ -11,16 +11,27 @@ abstract class BaseContentCommand extends BaseCommand
 
     use ReadsY7KCliConfigFile, HasProcess;
 
-    public function confirmSyncingContent($destinationEnv, $force, $type)
+    public function confirmSyncingContent($type, $sourceEnv, $destinationEnv, $force)
     {
+
+        $this->line("");
+
         if ($this->isProduction($destinationEnv)) {
-            $fuckingsure = $this->ask("This will <fg=red>OVERWRITE</> production {$type}! Are you really sure? Type <bg=yellow>i fucking know what im doing</> if you want to proceed");
+
+            $this->warn("Permanently <fg=red>OVERWRITE production</> {$type}!");
+            $fuckingsure = $this->ask("Are you really sure? Type <bg=yellow><fg=black>i fucking know what im doing</></> if you want to proceed");
             if (trim(strtolower($fuckingsure)) !== 'i fucking know what im doing') {
                 $this->abort('Aborted.');
             }
-        } else if (!$force && !$this->confirm('Are you really sure you wish to continue?')) {
-            $this->abort('Aborted.');
+
+        } else {
+
+            $this->warn("Permanently <fg=red>overwrite</> <fg=blue>({$destinationEnv})</> {$type} with <fg=blue>({$sourceEnv})</>.");
+            if (!$force && !$this->confirm('Are you sure you wish to continue?')) {
+                $this->abort('Aborted.');
+            }
         }
+
     }
 
     public function buildRsyncCommand($source, $destination)

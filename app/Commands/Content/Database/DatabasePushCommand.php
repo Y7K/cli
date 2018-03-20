@@ -24,18 +24,17 @@ class DatabasePushCommand extends BaseContentCommand
         $this->getValidatedEnvironmentData('local', ['host', 'sshuser', 'dbuser', 'dbpassword', 'db']);
         $this->getValidatedEnvironmentData($environment, ['host', 'sshuser', 'dbuser', 'dbpassword', 'db']);
 
-        $this->line("");
-        $this->warn("Uploading database: Permanently <fg=red>overwrite</> data on ({$environment}) with (local).");
-
         // Ask for confirmation
-        $this->confirmSyncingContent($environment, false, 'database');
+        $this->confirmSyncingContent('database', 'local', $environment, $this->option('force'));
 
-        // Execute Command
-        $command = $this->buildMysqldumpCommand('local', $environment);
+        $this->task("Uploading database", function () use ($environment) {
+            // Execute Command
+            $command = $this->buildMysqldumpCommand('local', $environment);
 
-        $this->runProcess($command);
+            $this->runProcess($command);
+            return true;
+        });
 
-        $this->info("Databse on ({$environment}) is now in sync with (local)!");
     }
 
 
