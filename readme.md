@@ -232,6 +232,8 @@ y7k components:uninstall [COMPONENT] -r
 
 ## Roadmap
 
+* Bring back `composer:info` and `composer:ninstall` commands
+* Make `composer:list` able to filter the list again
 * Make it optional to install dependencies on component install
 * Add more environment commands (like open forge, open deploybot etc.)
 
