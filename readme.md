@@ -23,9 +23,10 @@
 
 ## Update
 
-To update the CLI, pull the latest version:
+To update the CLI, pull the latest version and install the composer dependencies.
 ```
 git pull
+composer install
 ```
 
 ## Commands
