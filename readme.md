@@ -36,7 +36,7 @@ composer install
 Install a new Project from the [Y7K Boilerplate](https://github.com/Y7K/plate).
 
 ```
-y7k new pro01-project
+y7k new pr01-project
 ```
 
 Launches the installation process. You will be prompted for a name and to configure the project stack.
