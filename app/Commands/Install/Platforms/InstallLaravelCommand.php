@@ -27,7 +27,7 @@ class InstallLaravelCommand extends BaseInstallCommand
 
             $this->installRepositoryFromGitHub('laravel/laravel', [
                 'destinationPath' => $destinationPath,
-                'exclude' => ['resources/assets', 'public/css', 'public/js', 'resources/views'],
+                'excluded' => ['resources/assets', 'public/css', 'public/js', 'resources/views'],
             ]);
 
             $this->installY7KRepo('plate', [
