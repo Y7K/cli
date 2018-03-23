@@ -35,24 +35,12 @@ git pull
 Install a new Project from the [Y7K Boilerplate](https://github.com/Y7K/plate).
 
 ```
-y7k new
+y7k new pro01-project
 ```
 
 Launches the installation process. You will be prompted for a name and to configure the project stack.
-You can specify the directory with the second argument and a platform with the `--platform` option:
-
-```
-y7k new pr01-project
-y7k new pr01-project --platform craft
-y7k new pr01-project --platform laravel
-y7k new pr01-project --platform plain
-```
 
 Per default, everything is installed from local sources (except vendor repositories like laravel, craft cms etc.). If you want to install from the remote github versions of the plate, add `-r` or `--remote` to the command.
-
-```
-y7k new pr01-project -r
-```
 
 ### y7k version 
 
@@ -60,7 +48,6 @@ Display the current Version of the Project.
 
 ```
 y7k version
-y7k v 
 ```
 
 ### y7k bump 
@@ -104,11 +91,10 @@ Pulls the database from a remote installation
 y7k db:pull [ENV_NAME]
 y7k db:pull pizza
 y7k db:pull production
-y7k d:pul pizza
+y7k d:pull pizza
 ```
 
 This will overwrite your local database with the one from the [ENV_NAME], defined in `.y7k-cli.yml` of the project.
-
 
 ### y7k db:push
 Pushes the database to a remote installation
@@ -117,11 +103,10 @@ Pushes the database to a remote installation
 y7k db:push [ENV_NAME]
 y7k db:push pizza
 y7k db:push production
-y7k d:pus pizza
+y7k d:push pizza
 ```
 
 This will overwrite the remote database [ENV_NAME] with your local one. The remote is defined in `.y7k-cli.yml` of the project.
-
 
 ### y7k assets:pull
 Pulls storage files from a remote installation
@@ -130,7 +115,7 @@ Pulls storage files from a remote installation
 y7k assets:pull [ENV_NAME]
 y7k assets:pull pizza
 y7k assets:pull production
-y7k a:pul pizza
+y7k a:pull pizza
 ```
 
 This will rsync files from a remote destination [ENV_NAME] to local, defined in `.y7k-cli.yml` of the project.
@@ -143,7 +128,7 @@ Pushes the database to a remote installation
 y7k assets:push [ENV_NAME]
 y7k assets:push pizza
 y7k assets:push production
-y7k a:pus pizza
+y7k a:push pizza
 ```
 
 This will rsync files from local to a remote destination [ENV_NAME], defined in `.y7k-cli.yml` of the project.
@@ -156,7 +141,7 @@ Combination of `db:pull` and `assets:pull`
 y7k content:pull [ENV_NAME]
 y7k content:pull pizza
 y7k content:pull production
-y7k c:pul pizza
+y7k c:pull pizza
 ```
 
 
@@ -168,15 +153,13 @@ Combination of `db:push` and `assets:push`
 y7k content:push [ENV_NAME]
 y7k content:push pizza
 y7k content:push production
-y7k c:pus pizza
+y7k c:push pizza
 ```
-
 
 
 ## y7k components
 
 ### y7k components:list
-The same as `y7k components:search`
 
 Find existing components. You can also search with a search query. It will return a list of found components
 
@@ -185,7 +168,6 @@ Find existing components. You can also search with a search query. It will retur
 y7k components:list
 y7k components:list [SEARCH_KEY]
 y7k components:list image
-y7k components:search lightbox
 ```
 
 Per default, everything is searched in local sources. If you want to search remote github repository of components, add `-r` or `--remote` to the command.
@@ -195,7 +177,7 @@ y7k components:list -r
 ```
 
 
-### y7k components:info
+### y7k components:info \[WIP\]
 Displays information about a specific component
 
 
@@ -227,7 +209,7 @@ y7k components:install [COMPONENT] -r
 ```
 
 
-### y7k components:uninstall
+### y7k components:uninstall \[WIP\]
 Uninstalls a component from a project. This means, it removes all component files from your project.
 
 **Warning!**:
@@ -248,15 +230,11 @@ y7k components:uninstall [COMPONENT] -r
 ```
 
 
-
-
 ## Roadmap
 
-* Add component npm & composer dependencies in json format instead of installing them from component yml file.
 * Make it optional to install dependencies on component install
 * Add more environment commands (like open forge, open deploybot etc.)
 
 -----
 
-Inspired by the [Kirby CLI](https://github.com/getkirby/cli)
-
+Originally inspired by the [Kirby CLI](https://github.com/getkirby/cli), since v3.0 based on [Laravel Zero](http://laravel-zero.com/). 
