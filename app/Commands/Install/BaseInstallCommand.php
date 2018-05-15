@@ -22,13 +22,13 @@ abstract class BaseInstallCommand extends BaseCommand
     public function runPostInstallComposerCommands($destinationPath)
     {
         // Run Composer Commands
-        $this->task("Run Composer scripts", function () use ($destinationPath) {
+        $this->task('Run Composer scripts', function () use ($destinationPath) {
 
             $commands = [
                 "cd {$destinationPath}",
-                "composer install --no-scripts",
-                "composer run-script post-root-package-install",
-                "composer run-script post-create-project-cmd",
+                'composer install --no-scripts',
+                'composer run-script post-root-package-install',
+                'composer run-script post-create-project-cmd',
             ];
 
             $this->runProcessSequence($commands, true);
