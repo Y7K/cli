@@ -3,6 +3,8 @@
 namespace App\Concerns;
 
 
+use stdClass;
+
 trait WritesToJsonFile
 {
 
@@ -11,7 +13,7 @@ trait WritesToJsonFile
         $jsonFile = $this->getWorkingDirectory() . '/' . $jsonFilename;
 
         if (!file_exists($jsonFile)) {
-            return $fileMustExist ? $this->abort("No {$jsonFilename} found!") : [];
+            return $fileMustExist ? $this->abort("No {$jsonFilename} found!") : new stdClass();
         }
 
         // Read  file contents
