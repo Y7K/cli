@@ -2,12 +2,12 @@
 namespace App\Commands;
 
 
-use App\Concerns\WritesToProjectJsonFile;
+use App\Concerns\WritesToJsonFile;
 
 class VersionCommand extends BaseCommand
 {
 
-    use WritesToProjectJsonFile;
+    use WritesToJsonFile;
 
     protected $signature = 'version';
     protected $description = '#⃣  Get the Project Version';
@@ -19,13 +19,13 @@ class VersionCommand extends BaseCommand
      */
     public function handle(): void
     {
-        $this->readProjectJsonData();
+        $projectJsonData = $this->readJsonData('project.json');
 
-        if (!isset($this->projectJsonData->version)) {
+        if (!isset($projectJsonData->version)) {
             $this->abort('No version specified in project.json file!');
         }
 
-        $this->info($this->projectJsonData->version);
+        $this->info($projectJsonData->version);
     }
 
 }
