@@ -21,8 +21,8 @@ class DatabasePushCommand extends BaseContentCommand
         $environment = $this->argument('environment');
 
         // Validate Config
-        $this->getValidatedEnvironmentData('local', ['host', 'sshuser', 'dbuser', 'dbpassword', 'db']);
-        $this->getValidatedEnvironmentData($environment, ['host', 'sshuser', 'dbuser', 'dbpassword', 'db']);
+        $this->getValidatedEnvironmentData('local', ['host', 'sshuser', 'dbuser', 'db']);
+        $this->getValidatedEnvironmentData($environment, ['host', 'sshuser', 'dbuser', 'db']);
 
         // Ask for confirmation
         $this->confirmSyncingContent('database', 'local', $environment, false);

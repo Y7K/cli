@@ -49,8 +49,8 @@ abstract class BaseContentCommand extends BaseCommand
         $destinationData = $this->getCliEnvironmentData($destinationEnv);
 
         return
-            "{$sourceSsh} \"mysqldump --opt --user={$sourceData['dbuser']} --password={$sourceData['dbpassword']} {$sourceData['db']}\"" .
-            " | {$destinationSsh} \"mysql --user={$destinationData['dbuser']} --password={$destinationData['dbpassword']} {$destinationData['db']}\"";
+            "{$sourceSsh} \"mysqldump --opt --user={$sourceData['dbuser']} {$sourceData['db']}\"" .
+            " | {$destinationSsh} \"mysql --user={$destinationData['dbuser']} {$destinationData['db']}\"";
     }
 
 }
