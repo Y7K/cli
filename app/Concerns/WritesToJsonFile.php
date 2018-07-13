@@ -25,7 +25,7 @@ trait WritesToJsonFile
         $this->task("Update {$jsonFilename} file", function () use ($jsonFilename, $jsonData) {
             $jsonFile = $this->getWorkingDirectory() . '/' . $jsonFilename;
             if (file_exists($jsonFile)) {
-                file_put_contents($jsonFile, json_encode($jsonData, JSON_PRETTY_PRINT));
+                file_put_contents($jsonFile, json_encode($jsonData, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES));
             }
         });
     }
