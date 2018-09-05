@@ -21,8 +21,8 @@ class DatabasePullCommand extends BaseContentCommand
         $environment = $this->argument('environment');
 
         // Validate Config
-        $this->getValidatedEnvironmentData('local', ['host', 'sshuser', 'dbuser', 'dbpassword', 'db']);
-        $this->getValidatedEnvironmentData($environment, ['host', 'sshuser', 'dbuser', 'dbpassword', 'db']);
+        $this->getValidatedEnvironmentData('local', ['host', 'sshuser', 'dbuser', 'db']);
+        $this->getValidatedEnvironmentData($environment, ['host', 'sshuser', 'dbuser', 'db']);
 
         // Ask for confirmation
         $this->confirmSyncingContent('database', $environment, 'local', $this->option('force'));

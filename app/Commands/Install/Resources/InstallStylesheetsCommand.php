@@ -29,10 +29,10 @@ class InstallStylesheetsCommand extends BaseInstallCommand
 
             $this->installY7KRepo('style', [
                 'destinationPath' => $assetsPath,
-                'subfolders' => ['source']
+                'subfolders' => ['src']
             ], $this->option('remote'));
 
-            $this->task("Merge package.json", function () use ($destinationPath, $assetsPath) {
+            $this->task('Merge package.json', function () use ($destinationPath, $assetsPath) {
                 FileMergeHelper::mergeJsonFiles($destinationPath . '/package.json', $assetsPath . '/package.json');
                 unlink($assetsPath . '/package.json');
             });

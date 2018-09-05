@@ -1,7 +1,9 @@
 {
     "name": "y7k/cli",
     "description": "The Y7K CLI",
-    "keywords": ["cli"],
+    "keywords": [
+        "cli"
+    ],
     "homepage": "http://y7k.com",
     "type": "project",
     "license": "UNLICENSE",
@@ -36,5 +38,8 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "bin": ["y7k"]
+    "bin": [
+        "y7k"
+    ],
+    "version": "3.0.3"
 }

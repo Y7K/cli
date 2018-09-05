@@ -13,6 +13,7 @@ trait HasProcess
 //        $this->line("Executing command: \"{$command}\"");
 
         $process = new Process($command);
+        $process->setTimeout(3600);
         $process->run(function ($type, $buffer) use ($silent) {
             if(!$silent) {
                 $buffer = str_replace(array("\r", "\n"), '', $buffer);
