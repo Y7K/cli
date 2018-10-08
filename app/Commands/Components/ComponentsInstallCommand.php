@@ -45,7 +45,7 @@ class ComponentsInstallCommand extends BaseComponentsCommand
 
         $this->installY7KRepo('components', [
             'destinationPath' => $this->getWorkingDirectory(),
-            'subfolders' => ['components/' . $this->component . '/source']
+            'subfolders' => ['components/' . $this->component . '/src']
         ], $this->loadFromRemote);
 
         return $this;
