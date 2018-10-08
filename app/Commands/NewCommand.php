@@ -37,7 +37,7 @@ class NewCommand extends BaseCommand
     {
 
         $availablePlatforms = [
-            'craft2' => 'Craft 2',
+            'craft2' => 'Craft 2 (deprecated)',
             'craft3' => 'Craft 3',
             'laravel' => 'Laravel',
             'plain' => 'Plain'
