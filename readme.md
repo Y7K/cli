@@ -4,7 +4,7 @@
 
 1. Clone this repository: `git clone <repo-url> <directory>`
 
-2. Change into the  directory and run `composer install && composer run-script project-created-cmd`
+2. Change into the  directory and run `composer install`
 
 3. Place the directory path in your PATH, e.g. by adding
     ```
@@ -177,23 +177,6 @@ Per default, everything is searched in local sources. If you want to search remo
 y7k components:list -r
 ```
 
-
-### y7k components:info \[WIP\]
-Displays information about a specific component
-
-
-```
-y7k components:info [COMPONENT]
-y7k components:info photoswipe
-```
-
-Per default, info comes from local sources. If you want to search remote github repository of components, add `-r` or `--remote` to the command.
-
-```
-y7k components:info [COMPONENT] -r
-```
-
-
 ### y7k components:install
 Installs a component. It will copy files into your project. It also tries to apply file merges (update existing files) according to merging rules. Checkout the compnent with `y7k components:info [COMPONENT]` first.
 
@@ -233,8 +216,7 @@ y7k components:uninstall [COMPONENT] -r
 
 ## Roadmap
 
-* Bring back `composer:info` and `composer:ninstall` commands
-* Make `composer:list` able to filter the list again
+* Make `component:list` able to filter the list again
 * Make it optional to install dependencies on component install
 * Add more environment commands (like open forge, open deploybot etc.)
 
