@@ -38,7 +38,7 @@ abstract class BaseContentCommand extends BaseCommand
     {
         $source = rtrim($source, '/');
         $destination = rtrim($destination, '/');
-        return "rsync -avz --delete-excluded --include=\".git*\" --exclude=\".*\" {$source}/ {$destination}";
+        return "rsync -pavz --delete-excluded --include=\".git*\" --exclude=\".*\" {$source}/ {$destination}";
     }
 
     public function buildMysqldumpCommand($sourceEnv, $destinationEnv)
