@@ -1,5 +1,10 @@
 # Y7K Components
 
+## Version 5.0.*
+- Reverse "--remote" param to "--local", so remote (github) is default
+- Better error handling on wrong github credentials
+- Rsync preserves folder permissions
+
 ## Version 4.0.*
 - Adjusted CLI to work with new component folder structure
 - Mark Craft2 as deprecated

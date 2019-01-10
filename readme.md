@@ -41,7 +41,9 @@ y7k new pr01-project
 
 Launches the installation process. You will be prompted for a name and to configure the project stack.
 
-Per default, everything is installed from local sources (except vendor repositories like laravel, craft cms etc.). If you want to install from the remote github versions of the plate, add `-r` or `--remote` to the command.
+Per default, everything is installed from remote github sources. If you want to install from the local version of the repository on your filesystem, add `-l` or `--local` to the command.
+
+For this, your local paths must be set in the .env file (See Installation #5)
 
 ### y7k version 
 
@@ -91,8 +93,9 @@ Pulls the database from a remote installation
 ```
 y7k db:pull [ENV_NAME]
 y7k db:pull pizza
+y7k db:pull pizza -f // Forced (no need to confirm )
 y7k db:pull production
-y7k d:pull pizza
+y7k d:pul pizza // Short Version
 ```
 
 This will overwrite your local database with the one from the [ENV_NAME], defined in `.y7k-cli.yml` of the project.
@@ -104,7 +107,7 @@ Pushes the database to a remote installation
 y7k db:push [ENV_NAME]
 y7k db:push pizza
 y7k db:push production
-y7k d:push pizza
+y7k d:pus pizza // Short Version
 ```
 
 This will overwrite the remote database [ENV_NAME] with your local one. The remote is defined in `.y7k-cli.yml` of the project.
@@ -115,8 +118,9 @@ Pulls storage files from a remote installation
 ```
 y7k assets:pull [ENV_NAME]
 y7k assets:pull pizza
+y7k assets:pull pizza -f // Forced (no need to confirm )
 y7k assets:pull production
-y7k a:pull pizza
+y7k a:pul pizza // Short Version
 ```
 
 This will rsync files from a remote destination [ENV_NAME] to local, defined in `.y7k-cli.yml` of the project.
@@ -129,7 +133,7 @@ Pushes the database to a remote installation
 y7k assets:push [ENV_NAME]
 y7k assets:push pizza
 y7k assets:push production
-y7k a:push pizza
+y7k a:pus pizza // Short Version
 ```
 
 This will rsync files from local to a remote destination [ENV_NAME], defined in `.y7k-cli.yml` of the project.
@@ -141,8 +145,9 @@ Combination of `db:pull` and `assets:pull`
 ```
 y7k content:pull [ENV_NAME]
 y7k content:pull pizza
+y7k content:pull pizza -f // Forced (no need to confirm )
 y7k content:pull production
-y7k c:pull pizza
+y7k c:pul pizza // Short Version
 ```
 
 
@@ -154,7 +159,7 @@ Combination of `db:push` and `assets:push`
 y7k content:push [ENV_NAME]
 y7k content:push pizza
 y7k content:push production
-y7k c:push pizza
+y7k c:pus pizza // Short Version
 ```
 
 
