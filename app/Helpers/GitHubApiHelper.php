@@ -9,7 +9,13 @@ class GitHubApiHelper
     {
         $bar = ($output) ? $output->createProgressBar(100) : null;
         $treeRaw = FileHelper::downloadContent($url, $bar, $auth);
-        return json_decode($treeRaw)->tree;
+        $treeRaw = json_decode($treeRaw);
+
+        if (property_exists($treeRaw, 'message')) {
+            throw new \RuntimeException($treeRaw->message);
+        }
+
+        return $treeRaw->tree;
     }
 
 }
