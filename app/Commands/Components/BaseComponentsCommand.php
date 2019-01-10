@@ -11,11 +11,11 @@ abstract class BaseComponentsCommand extends BaseCommand
 
     use InteractsWithGitHubApi, LoadsDataFromLocalRepository;
 
-    public function getComponentConfig($component, $loadFromRemote)
+    public function getComponentConfig($component, $loadFromLocal)
     {
         $configFilePath = "{$component}.yml";
 
-        $configData = $this->getComponentFile($component, $configFilePath, $loadFromRemote);
+        $configData = $this->getComponentFile($component, $configFilePath, $loadFromLocal);
 
         $config = Yaml::parse($configData);
 
@@ -26,13 +26,13 @@ abstract class BaseComponentsCommand extends BaseCommand
         return $config;
     }
 
-    public function getComponentFile($component, $fileUrl, $loadFromRemote) {
+    public function getComponentFile($component, $fileUrl, $loadFromLocal) {
 
         $fileUrl = "components/{$component}/{$fileUrl}";
 
-        return ($loadFromRemote)
-            ? $this->readFileOnGitHub('y7k/components', 'master', $fileUrl)
-            : $this->readLocalFile('y7k/components', $fileUrl);
+        return ($loadFromLocal)
+            ? $this->readLocalFile('y7k/components', $fileUrl)
+            : $this->readFileOnGitHub('y7k/components', 'master', $fileUrl);
     }
 
 }

@@ -13,7 +13,7 @@ class NewCommand extends BaseCommand
     protected $signature = 'new ' .
     '{path : Choose a folder, I\'ll take care of the rest.} ' .
     '{--p|platform : Which Type shall it be: Craft, Laravel or a static Site?} ' .
-    '{--r|remote : Load from online repository instead of local source?}';
+    '{--l|local : Load from local repository instead of remote source?}';
     protected $description = '👻  Install a shiny new Project';
 
     protected $destinationPath;
@@ -50,7 +50,7 @@ class NewCommand extends BaseCommand
         // Install repo
         $this->call('install:' . $platform, [
             'path' => $this->destinationPath,
-            '--remote' => $this->option('remote')
+            '--local' => $this->option('local')
         ]);
 
         return $this;
@@ -60,12 +60,12 @@ class NewCommand extends BaseCommand
     {
         $this->call('install:javascript', [
             'path' => $this->destinationPath,
-            '--remote' => $this->option('remote')
+            '--local' => $this->option('local')
         ]);
 
         $this->call('install:stylesheets', [
             'path' => $this->destinationPath,
-            '--remote' => $this->option('remote')
+            '--local' => $this->option('local')
         ]);
 
         return $this;

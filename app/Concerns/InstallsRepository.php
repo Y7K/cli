@@ -7,8 +7,8 @@ use App\Helpers\FileHelper;
 trait InstallsRepository
 {
 
-    public function installY7KRepo($repoName, $options, $remote){
-        $installRepositorycommand = ($remote) ? 'installRepositoryFromGitHub' : 'installRepositoryFromLocalSource';
+    public function installY7KRepo($repoName, $options, $local){
+        $installRepositorycommand = ($local) ? 'installRepositoryFromLocalSource' : 'installRepositoryFromGitHub';
         $this->{$installRepositorycommand}('y7k/' . $repoName, $options);
     }
 

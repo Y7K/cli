@@ -7,7 +7,7 @@ use App\Commands\Install\BaseInstallCommand;
 class InstallCraft2Command extends BaseInstallCommand
 {
 
-    protected $signature = 'install:craft2 {path : Where is the output folder?} {--r|remote : Load from online repository instead of local source?}';
+    protected $signature = 'install:craft2 {path : Where is the output folder?} {--l|local : Load from local repository instead of remote source?}';
     protected $description = '⏳  Install Craft 2.* plus some Y7K sugar.';
     protected $packageName = 'Craft 2';
 
@@ -27,7 +27,7 @@ class InstallCraft2Command extends BaseInstallCommand
             $this->installY7KRepo('plate', [
                 'destinationPath' => $destinationPath,
                 'subfolders' => ['base', 'platforms/craft']
-            ], $this->option('remote'));
+            ], $this->option('local'));
 
             // Install Craft App folder
             $this->installRepositoryFromUrl('http://craftcms.com/latest.zip?accept_license=yes', [

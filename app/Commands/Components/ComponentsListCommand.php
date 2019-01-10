@@ -10,23 +10,23 @@ class ComponentsListCommand extends BaseComponentsCommand
 {
 
     protected $signature = 'components:list ' .
-    '{--r|remote : Load Components from online repository instead of local source?}';
+    '{--l|local : Load from local repository instead of remote source?}';
     protected $description = '🔍  Lists all components available to install';
 
 
     public function handle(): void
     {
 
-        $loadFromRemote = $this->option('remote');
+        $loadFromLocal = $this->option('local');
 
-        $components = ($loadFromRemote)
-            ? $this->listRemoteComponents()
-            : $this->listLocalComponents();
+        $components = ($loadFromLocal)
+            ? $this->listLocalComponents()
+            : $this->listRemoteComponents();
 
         $componentTable = [];
 
         foreach($components as $component) {
-            $config = $this->getComponentConfig($component, $loadFromRemote);
+            $config = $this->getComponentConfig($component, $loadFromLocal);
             $componentTable[] = [$config['name'], $component, $config['description']];
         }
 

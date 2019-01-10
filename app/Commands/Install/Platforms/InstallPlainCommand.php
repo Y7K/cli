@@ -7,7 +7,7 @@ use App\Commands\Install\BaseInstallCommand;
 class InstallPlainCommand extends BaseInstallCommand
 {
 
-    protected $signature = 'install:plain {path : Where is the output folder?} {--r|remote : Load from online repository instead of local source?}';
+    protected $signature = 'install:plain {path : Where is the output folder?} {--l|local : Load from local repository instead of remote source?}';
     protected $description = '⏳  Install the plain Y7K boilerplate.';
     protected $packageName = 'Plain';
 
@@ -27,7 +27,7 @@ class InstallPlainCommand extends BaseInstallCommand
             $this->installY7KRepo('plate', [
                 'destinationPath' => $destinationPath,
                 'subfolders' => ['base', 'platforms/plain']
-            ], $this->option('remote'));
+            ], $this->option('local'));
 
             $this->runPostInstallComposerCommands($destinationPath);
 

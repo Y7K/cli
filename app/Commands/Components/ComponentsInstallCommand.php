@@ -13,19 +13,19 @@ class ComponentsInstallCommand extends BaseComponentsCommand
 
     protected $signature = 'components:install ' .
     '{component : Component name}' .
-    '{--r|remote : Load Components from online repository instead of local source?}';
+    '{--l|local : Load from local repository instead of remote source?}';
     protected $description = '⏳  Install a new component into the project';
 
     protected $component;
     protected $componentConfig;
-    protected $loadFromRemote;
+    protected $loadFromLocal;
 
     public function handle(): void
     {
 
-        $this->loadFromRemote = $this->option('remote');
+        $this->loadFromLocal = $this->option('local');
         $this->component = $this->argument('component');
-        $this->componentConfig = $this->getComponentConfig($this->component, $this->loadFromRemote);
+        $this->componentConfig = $this->getComponentConfig($this->component, $this->loadFromLocal);
 
         $this->info("Installing Component {$this->componentConfig['name']}...");
 
@@ -46,7 +46,7 @@ class ComponentsInstallCommand extends BaseComponentsCommand
         $this->installY7KRepo('components', [
             'destinationPath' => $this->getWorkingDirectory(),
             'subfolders' => ['components/' . $this->component . '/src']
-        ], $this->loadFromRemote);
+        ], $this->loadFromLocal);
 
         return $this;
     }
@@ -66,7 +66,7 @@ class ComponentsInstallCommand extends BaseComponentsCommand
             $bar = $this->output->createProgressBar(count($this->componentConfig['filemerges']));
 
             foreach ($this->componentConfig['filemerges'] as $fileMerge) {
-                $contensOfFileToMerge = $this->getComponentFile($this->component, $fileMerge['src'], $this->loadFromRemote);
+                $contensOfFileToMerge = $this->getComponentFile($this->component, $fileMerge['src'], $this->loadFromLocal);
                 FileMergeHelper::applyFileMerges(
                     $this->getWorkingDirectory() . '/' . $fileMerge['dest'],
                     $contensOfFileToMerge
@@ -107,7 +107,7 @@ class ComponentsInstallCommand extends BaseComponentsCommand
     private function mergeJsonConfigFile($fileName) {
 
         // Read the contents of a file as json
-        $json = json_decode($this->getComponentFile($this->component, $fileName, $this->loadFromRemote));
+        $json = json_decode($this->getComponentFile($this->component, $fileName, $this->loadFromLocal));
 
         if($json) {
             $this->info("Merging {$fileName} file.");

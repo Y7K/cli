@@ -8,7 +8,7 @@ use App\Helpers\FileMergeHelper;
 class InstallLaravelCommand extends BaseInstallCommand
 {
 
-    protected $signature = 'install:laravel {path : Where is the output folder?} {--r|remote : Load from online repository instead of local source?}';
+    protected $signature = 'install:laravel {path : Where is the output folder?} {--l|local : Load from local repository instead of remote source?}';
     protected $description = '⏳  Install Laravel plus some Y7K sugar.';
     protected $packageName = 'Laravel';
 
@@ -33,7 +33,7 @@ class InstallLaravelCommand extends BaseInstallCommand
             $this->installY7KRepo('plate', [
                 'destinationPath' => $destinationPath,
                 'subfolders' => ['base', 'platforms/laravel']
-            ], $this->option('remote'));
+            ], $this->option('local'));
 
             $this->task("Merge composer.json", function () use ($destinationPath) {
                 FileMergeHelper::mergeJsonFiles($destinationPath . '/composer.json', $destinationPath . '/composer.merge.json');

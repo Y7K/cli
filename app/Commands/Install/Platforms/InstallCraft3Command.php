@@ -7,7 +7,7 @@ use App\Commands\Install\BaseInstallCommand;
 class InstallCraft3Command extends BaseInstallCommand
 {
 
-    protected $signature = 'install:craft3 {path : Where is the output folder?} {--r|remote : Load from online repository instead of local source?}';
+    protected $signature = 'install:craft3 {path : Where is the output folder?} {--l|local : Load from local repository instead of remote source?}';
     protected $description = '⏳  Install Craft 3.* plus some Y7K sugar.';
     protected $packageName = 'Craft 3';
 
@@ -27,7 +27,7 @@ class InstallCraft3Command extends BaseInstallCommand
             $this->installY7KRepo('plate', [
                 'destinationPath' => $destinationPath,
                 'subfolders' => ['base', 'platforms/craft3']
-            ], $this->option('remote'));
+            ], $this->option('local'));
 
             $this->runPostInstallComposerCommands($destinationPath);
 
