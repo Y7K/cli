@@ -34,8 +34,10 @@ class FileMergeHelper
             } elseif (!is_string($merge_content_value)) {
                 $priority_json[$merge_content_key] = self::mergeJsonArrays($priority_json[$merge_content_key], $merge_content_value);
             } else {
-                $value = is_array($merge_content_value) ? $merge_content_value : [$merge_content_value];
-                $priority_json = array_merge($priority_json, $value);
+                // UPDATE: Dont merge intro "priority" file, when key already exists
+
+                // $value = is_array($merge_content_value) ? $merge_content_value : [$merge_content_value];
+                // $priority_json = array_merge($priority_json, $value);
             }
         }
         return $priority_json;
