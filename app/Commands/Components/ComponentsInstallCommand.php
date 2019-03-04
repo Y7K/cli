@@ -54,32 +54,38 @@ class ComponentsInstallCommand extends BaseComponentsCommand
 
     private function mergeFiles()
     {
-        $this->line("");
-        $this->warn("The following files will be merged:");
-        foreach (array_column($this->componentConfig['filemerges'], 'dest') as $row) {
-            $this->line("– " . $row);
-        }
 
-        if($this->confirm("Do you want to proceed?")) {
+        if (array_key_exists('filemerges', $this->componentConfig) && $this->componentConfig['filemerges'] !== null) {
 
-            $this->info('<fg=blue>Merging files...</>');
-            $bar = $this->output->createProgressBar(count($this->componentConfig['filemerges']));
+            $this->line("");
+            $this->warn("The following files will be merged:");
 
-            foreach ($this->componentConfig['filemerges'] as $fileMerge) {
-                $contensOfFileToMerge = $this->getComponentFile($this->component, $fileMerge['src'], $this->loadFromLocal);
-                FileMergeHelper::applyFileMerges(
-                    $this->getWorkingDirectory() . '/' . $fileMerge['dest'],
-                    $contensOfFileToMerge
-                );
-                $bar->advance();
+            foreach (array_column($this->componentConfig['filemerges'], 'dest') as $row) {
+                $this->line("– " . $row);
             }
 
-            $this->info("Files merged!");
-            $this->warn("Please check the merged files!");
+            if($this->confirm("Do you want to proceed?")) {
 
-        } else {
-            $this->info("No files were merged!");
+                $this->info('<fg=blue>Merging files...</>');
+                $bar = $this->output->createProgressBar(count($this->componentConfig['filemerges']));
+
+                foreach ($this->componentConfig['filemerges'] as $fileMerge) {
+                    $contensOfFileToMerge = $this->getComponentFile($this->component, $fileMerge['src'], $this->loadFromLocal);
+                    FileMergeHelper::applyFileMerges(
+                        $this->getWorkingDirectory() . '/' . $fileMerge['dest'],
+                        $contensOfFileToMerge
+                    );
+                    $bar->advance();
+                }
+
+                $this->info("Files merged!");
+                $this->warn("Please check the merged files!");
+
+            } else {
+                $this->info("No files were merged!");
+            }
         }
+
 
         return $this;
     }
