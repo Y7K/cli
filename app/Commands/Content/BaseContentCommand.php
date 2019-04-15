@@ -18,8 +18,20 @@ abstract class BaseContentCommand extends BaseCommand
 
         if ($this->isProduction($destinationEnv)) {
 
+            $envData = $this->getValidatedEnvironmentData($destinationEnv, ['host', 'sshuser', 'dbuser', 'db']);
+            $dbName = $envData['db'];
+            $host = $envData['host'];
+
             $this->warn("Permanently <fg=red>OVERWRITE production</> {$type}!");
+
+            $askDbName = $this->ask("You are about to override <bg=red>{$dbName}</> on <bg=red>{$host}</>! type the DB-name to proceed.");
+
+            if ($askDbName !== $dbName) {
+                $this->abort('Aborted.');
+            }
+
             $fuckingsure = $this->ask("Are you really sure? Type <bg=yellow><fg=black>i fucking know what im doing</></> if you want to proceed");
+
             if (trim(strtolower($fuckingsure)) !== 'i fucking know what im doing') {
                 $this->abort('Aborted.');
             }
