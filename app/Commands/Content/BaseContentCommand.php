@@ -62,7 +62,7 @@ abstract class BaseContentCommand extends BaseCommand
             // source is reachable without ssh
             $destinationSsh = $this->buildSshCommand($destinationEnv);
             return
-            "mysqldump --single-transaction --opt --user={$sourceData['dbuser']} --password={$destinationData['dbpassword']} {$sourceData['db']}" .
+            "mysqldump --single-transaction --opt --user={$sourceData['dbuser']} --password={$sourceData['dbpassword']} {$sourceData['db']}" .
             " | {$destinationSsh} \"mysql --user={$destinationData['dbuser']} {$destinationData['db']}\"";
         } elseif (!array_key_exists('sshuser', $destinationData)) {
             // destination is reachable without ssh
