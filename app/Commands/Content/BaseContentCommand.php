@@ -43,14 +43,28 @@ abstract class BaseContentCommand extends BaseCommand
 
     public function buildMysqldumpCommand($sourceEnv, $destinationEnv)
     {
-        $sourceSsh = $this->buildSshCommand($sourceEnv);
-        $destinationSsh = $this->buildSshCommand($destinationEnv);
         $sourceData = $this->getCliEnvironmentData($sourceEnv);
         $destinationData = $this->getCliEnvironmentData($destinationEnv);
 
-        return
+        if (!array_key_exists('sshuser', $sourceData)) {
+            // source is reachable without ssh
+            $destinationSsh = $this->buildSshCommand($destinationEnv);
+            return
+            "mysqldump --single-transaction --opt --user={$sourceData['dbuser']} --password={$destinationData['dbpassword']} {$sourceData['db']}" .
+            " | {$destinationSsh} \"mysql --user={$destinationData['dbuser']} {$destinationData['db']}\"";
+        } elseif (!array_key_exists('sshuser', $destinationData)) {
+            // destination is reachable without ssh
+            $sourceSsh = $this->buildSshCommand($sourceEnv);
+            return
+            "{$sourceSsh} \"mysqldump --single-transaction --opt --user={$sourceData['dbuser']} {$sourceData['db']}\"" .
+            "| mysql --user={$destinationData['dbuser']} --password={$destinationData['dbpassword']} {$destinationData['db']}";
+        } else {
+            $sourceSsh = $this->buildSshCommand($sourceEnv);
+            $destinationSsh = $this->buildSshCommand($destinationEnv);
+            return
             "{$sourceSsh} \"mysqldump --single-transaction --opt --user={$sourceData['dbuser']} {$sourceData['db']}\"" .
             " | {$destinationSsh} \"mysql --user={$destinationData['dbuser']} {$destinationData['db']}\"";
+        }
     }
 
 }
