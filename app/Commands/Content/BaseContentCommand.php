@@ -18,8 +18,20 @@ abstract class BaseContentCommand extends BaseCommand
 
         if ($this->isProduction($destinationEnv)) {
 
+            $envData = $this->getValidatedEnvironmentData($destinationEnv, ['host', 'sshuser', 'dbuser', 'db']);
+            $dbName = $envData['db'];
+            $host = $envData['host'];
+
             $this->warn("Permanently <fg=red>OVERWRITE production</> {$type}!");
+
+            $askDbName = $this->ask("You are about to override <bg=red>{$dbName}</> on <bg=red>{$host}</>! type the DB-name to proceed.");
+
+            if ($askDbName !== $dbName) {
+                $this->abort('Aborted.');
+            }
+
             $fuckingsure = $this->ask("Are you really sure? Type <bg=yellow><fg=black>i fucking know what im doing</></> if you want to proceed");
+
             if (trim(strtolower($fuckingsure)) !== 'i fucking know what im doing') {
                 $this->abort('Aborted.');
             }
@@ -43,14 +55,28 @@ abstract class BaseContentCommand extends BaseCommand
 
     public function buildMysqldumpCommand($sourceEnv, $destinationEnv)
     {
-        $sourceSsh = $this->buildSshCommand($sourceEnv);
-        $destinationSsh = $this->buildSshCommand($destinationEnv);
         $sourceData = $this->getCliEnvironmentData($sourceEnv);
         $destinationData = $this->getCliEnvironmentData($destinationEnv);
 
-        return
+        if (!array_key_exists('sshuser', $sourceData)) {
+            // source is reachable without ssh
+            $destinationSsh = $this->buildSshCommand($destinationEnv);
+            return
+            "mysqldump --single-transaction --opt --user={$sourceData['dbuser']} --password={$sourceData['dbpassword']} {$sourceData['db']}" .
+            " | {$destinationSsh} \"mysql --user={$destinationData['dbuser']} {$destinationData['db']}\"";
+        } elseif (!array_key_exists('sshuser', $destinationData)) {
+            // destination is reachable without ssh
+            $sourceSsh = $this->buildSshCommand($sourceEnv);
+            return
+            "{$sourceSsh} \"mysqldump --single-transaction --opt --user={$sourceData['dbuser']} {$sourceData['db']}\"" .
+            "| mysql --user={$destinationData['dbuser']} --password={$destinationData['dbpassword']} {$destinationData['db']}";
+        } else {
+            $sourceSsh = $this->buildSshCommand($sourceEnv);
+            $destinationSsh = $this->buildSshCommand($destinationEnv);
+            return
             "{$sourceSsh} \"mysqldump --single-transaction --opt --user={$sourceData['dbuser']} {$sourceData['db']}\"" .
             " | {$destinationSsh} \"mysql --user={$destinationData['dbuser']} {$destinationData['db']}\"";
+        }
     }
 
 }
