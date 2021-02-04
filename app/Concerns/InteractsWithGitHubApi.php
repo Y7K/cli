@@ -36,7 +36,7 @@ trait InteractsWithGitHubApi
         return GitHubApiHelper::getTree($url, $this->output, $this->getGitHubAuth());
     }
 
-    public function readFileOnGitHub($repo, $branch = 'master', $file)
+    public function readFileOnGitHub($repo, $branch, $file)
     {
         return FileHelper::downloadContent("https://raw.githubusercontent.com/{$repo}/{$branch}/{$file}", null, $this->getGitHubAuth());
     }

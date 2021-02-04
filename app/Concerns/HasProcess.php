@@ -12,7 +12,7 @@ trait HasProcess
 //        var_dump($this->verbosity);
 //        $this->line("Executing command: \"{$command}\"");
 
-        $process = new Process($command);
+        $process = Process::fromShellCommandline($command);
         $process->setTimeout(3600);
         $process->run(function ($type, $buffer) use ($silent) {
             if(!$silent) {
