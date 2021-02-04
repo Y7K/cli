@@ -11,14 +11,8 @@
     export PATH=$PATH:$HOME/path/to/cli
     ```
     to your `~/.bash_profile` or `~/.zshrc` file.
-    
+
     This will allow you to run the `y7k` command globally.
-
-4. Create a [Personal GitHub Access Token](https://github.com/settings/tokens) with `repo` privileges and add it along with your GitHub Username to the `.env` file.
-
-5. Update the paths of the boilerplate repositories in your `.env` file. To install from local sources, you need to specify the paths (absolute), e.g.
-
-`PATH_SCRIPTS=/Users/yourname/code/plates/scripts`
 
 
 ## Update
@@ -31,21 +25,7 @@ composer install
 
 ## Commands
 
-### y7k new
-
-Install a new Project from the [Y7K Boilerplate](https://github.com/Y7K/plate).
-
-```
-y7k new pr01-project
-```
-
-Launches the installation process. You will be prompted for a name and to configure the project stack.
-
-Per default, everything is installed from remote github sources. If you want to install from the local version of the repository on your filesystem, add `-l` or `--local` to the command.
-
-For this, your local paths must be set in the .env file (See Installation #5)
-
-### y7k version 
+### y7k version
 
 Display the current Version of the Project.
 
@@ -53,7 +33,7 @@ Display the current Version of the Project.
 y7k version
 ```
 
-### y7k bump 
+### y7k bump
 
 Bump the current Version of the Project. The version will be bumped (project.json) and the change will be commited to git.
 
@@ -67,23 +47,13 @@ y7k b [major|minor|patch] [-g]
 ```
 
 
-### y7k storage:link 
+### y7k storage:link
 
 Create a symbolic link from "public/storage" to "storage/app/public".
 
 ```
-y7k storage:link 
+y7k storage:link
 ```
-
-### y7k craft2:update 
-
-Update to the latest version of Craft 2.*.
-This command deletes the `craft/app` directory and replaces it with the most recent version. Make sure to log into the control panel after performing the update to ensure the database is updated, too.
-
-```
-y7k craft2:update
-```
-
 
 ## Content Sync
 
@@ -162,69 +132,6 @@ y7k content:push production
 y7k c:pus pizza // Short Version
 ```
 
-
-## y7k components
-
-### y7k components:list
-
-Find existing components. You can also search with a search query. It will return a list of found components
-
-
-```
-y7k components:list
-y7k components:list [SEARCH_KEY]
-y7k components:list image
-```
-
-Per default, everything is searched in local sources. If you want to search remote github repository of components, add `-r` or `--remote` to the command.
-
-```
-y7k components:list -r
-```
-
-### y7k components:install
-Installs a component. It will copy files into your project. It also tries to apply file merges (update existing files) according to merging rules. Checkout the compnent with `y7k components:info [COMPONENT]` first.
-
-
-```
-y7k components:install [COMPONENT]
-y7k components:install photoswipe
-```
-
-Per default, the component is installed from local sources. If you want to install from the remote github repository of components, add `-r` or `--remote` to the command.
-
-```
-y7k components:install [COMPONENT] -r
-```
-
-
-### y7k components:uninstall \[WIP\]
-Uninstalls a component from a project. This means, it removes all component files from your project.
-
-**Warning!**:
-
-- It does not revert file merges. Checkout this files manually to remove traces.
-- It does not uninstall NPM or Component packages, nor removes them from package.json or composer.json. You have to do this yourself.
-
-
-```
-y7k components:uninstall [COMPONENT]
-y7k components:uninstall photoswipe
-```
-
-Per default, the component is uninstalled based on the component info file from local sources. If you want to uninstall with infos from the remote github repository of components, add `-r` or `--remote` to the command.
-
-```
-y7k components:uninstall [COMPONENT] -r
-```
-
-
-## Roadmap
-
-* Make `component:list` able to filter the list again
-* Make it optional to install dependencies on component install
-* Add more environment commands (like open forge, open deploybot etc.)
-
 -----
 
-Originally inspired by the [Kirby CLI](https://github.com/getkirby/cli), since v3.0 based on [Laravel Zero](http://laravel-zero.com/). 
+Originally inspired by the [Kirby CLI](https://github.com/getkirby/cli), since v3.0 based on [Laravel Zero](http://laravel-zero.com/).
